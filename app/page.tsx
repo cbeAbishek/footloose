@@ -12,9 +12,9 @@ export default function HomePage() {
         <HeroSection />
         <StatsSection />
         <ServicesOverview />
-        <ThemesPreview />
+        {/* <ThemesPreview /> */}
         <TestimonialsSection />
-        <CTASection /> 
+        {/* <CTASection />  */}
     </div>
   )
 }

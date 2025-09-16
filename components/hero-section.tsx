@@ -59,7 +59,7 @@ export function HeroSection() {
         }}
       />
 
-      <div className="container mx-auto px-4 py-20 relative z-10">
+      <div className="container mx-auto px-4 py-40 relative z-10">
         <div className="flex flex-col items-center justify-center text-center max-w-5xl mx-auto">
           {/* Main Content */}
           <div className="space-y-8 animate-fade-in-up">
@@ -91,7 +91,7 @@ export function HeroSection() {
             </div>
 
             {/* Key Features */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 animate-fade-in-up animation-delay-400 justify-center">
+            {/* <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 animate-fade-in-up animation-delay-400 justify-center">
               {[
                 { icon: Users, text: "All Ages Welcome" },
                 { icon: Calendar, text: "Flexible Scheduling" },
@@ -109,11 +109,11 @@ export function HeroSection() {
                   </span>
                 </div>
               ))}
-            </div>
+            </div> */}
 
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 animate-fade-in-up animation-delay-600 justify-center">
-              <Button
+              {/* <Button
                 size="lg"
                 className="text-lg px-8 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white border-0 shadow-lg hover:shadow-purple-500/25 transition-all duration-300 group"
                 asChild
@@ -125,26 +125,46 @@ export function HeroSection() {
                   <MessageCircle className="h-5 w-5 mr-2 group-hover:animate-bounce" />
                   Book Consultation
                 </Link>
-              </Button>
-              <Button
-                variant="outline"
-                size="lg"
-                className="text-lg px-8 bg-transparent border-white/30 text-white hover:bg-white/10 hover:border-white/50 backdrop-blur-sm transition-all duration-300 group"
-                asChild
-              >
-                <Link href="/services">
-                  <span className="group-hover:mr-2 transition-all duration-300">
-                    Explore Services
-                  </span>
-                  <ArrowDown className="h-4 w-4 opacity-0 group-hover:opacity-100 group-hover:rotate-90 transition-all duration-300" />
-                </Link>
-              </Button>
+              </Button> */}
+              <div className="flex flex-col sm:flex-row gap-4 items-center justify-center">
+                <Button
+                  size="lg"
+                  className="group flex items-center text-lg px-6 py-3 rounded-full bg-gradient-to-r from-purple-600 to-blue-600 text-white border-0 shadow-lg hover:from-purple-700 hover:to-blue-700 transform-gpu hover:-translate-y-0.5 transition-all duration-200"
+                  asChild
+                >
+                  <Link
+                    href="https://wa.me/1234567890?text=Hi!%20I'd%20like%20to%20book%20a%20consultation."
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Book Consultation on WhatsApp"
+                  >
+                    <span className="flex items-center">
+                      <MessageCircle className="h-5 w-5 mr-3" />
+                      <span className="font-medium">Book Consultation</span>
+                    </span>
+                  </Link>
+                </Button>
+
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="group flex items-center text-lg px-6 py-3 rounded-full border-white/20 text-white bg-transparent hover:bg-white/6 backdrop-blur-sm shadow-sm hover:shadow-md transition-all duration-200"
+                  asChild
+                >
+                  <Link href="/services" aria-label="Explore Services">
+                    <span className="flex items-center">
+                      <span className="font-medium">Explore Services</span>
+                      <ArrowDown className="h-4 w-4 ml-3 transform transition-transform duration-200 group-hover:rotate-90" />
+                    </span>
+                  </Link>
+                </Button>
+              </div>
             </div>
 
             {/* Social Proof */}
             <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-8 text-sm text-gray-400 animate-fade-in-up animation-delay-800">
               <div className="flex items-center space-x-3 group hover:scale-105 transition-transform duration-300">
-                <div className="flex -space-x-2">
+                {/* <div className="flex -space-x-2">
                   {[1, 2, 3, 4].map((i) => (
                     <div
                       key={i}
@@ -154,9 +174,9 @@ export function HeroSection() {
                       {i}
                     </div>
                   ))}
-                </div>
+                </div> */}
                 <span className="group-hover:text-gray-300 transition-colors duration-300">
-                  500+ Happy Clients
+                  5000+ Happy Clients
                 </span>
               </div>
               <div className="flex items-center space-x-2 group">
@@ -170,16 +190,17 @@ export function HeroSection() {
                   ))}
                 </div>
                 <span className="group-hover:text-gray-300 transition-colors duration-300">
-                  4.9/5 Rating
+                  4.8/5 Rating
                 </span>
               </div>
             </div>
           </div>
         </div>
       </div>
+      
 
       {/* Enhanced Scroll Indicator */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce-slow cursor-pointer group">
+      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce-slow cursor-pointer group ">
         <div className="w-8 h-12 border-2 border-white/30 rounded-full flex justify-center relative overflow-hidden bg-white/5 backdrop-blur-sm group-hover:border-white/50 transition-all duration-300">
           <div className="w-1.5 h-4 bg-gradient-to-b from-purple-400 to-blue-400 rounded-full mt-2 animate-scroll-indicator"></div>
         </div>

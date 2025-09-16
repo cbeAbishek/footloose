@@ -9,28 +9,28 @@ const navigationItems = [
   { name: "Home", href: "/" },
   {
     name: "Services",
-    href: "/services",
+    href: "/gallery",
     submenu: [
-      { name: "Dance Classes", href: "/services/classes" },
-      { name: "Props & Design", href: "/services/props" },
-      { name: "Choreography", href: "/services/choreography" },
-      { name: "ChaircoCISE Fitness", href: "/services/chaircoCISE" },
+      { name: "Dance Classes", href: "/gallery" },
+      { name: "Props & Design", href: "/gallery" },
+      { name: "Choreography", href: "/gallery" },
+      { name: "ChaircoCISE Fitness", href: "/gallery" },
     ],
   },
   {
     name: "Themes",
-    href: "/themes",
+    href: "/gallery",
     submenu: [
-      { name: "Edwin's AI", href: "/themes/edwins-ai" },
-      { name: "Dinosaur Adventure", href: "/themes/dinosaur" },
-      { name: "Avengers", href: "/themes/avengers" },
-      { name: "Snow White", href: "/themes/snow-white" },
+      { name: "Edwin's AI", href: "/gallery" },
+      { name: "Dinosaur Adventure", href: "/gallery" },
+      { name: "Avengers", href: "/gallery" },
+      { name: "Snow White", href: "/gallery" },
     ],
   },
   { name: "Gallery", href: "/gallery" },
-  { name: "Blog", href: "/blog" },
-  { name: "About", href: "/about" },
-  { name: "Contact", href: "/contact" },
+  { name: "Blog", href: "/gallery" },
+  { name: "About", href: "/gallery" },
+  { name: "Contact", href: "/gallery" },
 ]
 
 export function Navigation() {
