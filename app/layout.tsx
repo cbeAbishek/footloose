@@ -10,11 +10,16 @@ import { Footer } from "@/components/footer"
 import { WhatsAppFloat } from "@/components/whatsapp-float"
 
 export const metadata: Metadata = {
-  title: "Footloose Edwin's Dance Company | 30 Years of Dance Excellence",
+  metadataBase: new URL("https://footloose-edwin.vercel.app"),
+  title: {
+    default: "Footloose Edwin's Dance Company | 30 Years of Dance Excellence",
+    template: `%s | Footloose Edwin's Dance Company`,
+  },
   description:
     "Professional dance company offering themed performances, choreography, props, and specialized fitness programs like ChaircoCISE. Serving schools, corporates, and individuals for 30 years.",
   generator: "Next.js",
-  manifest: "/manifest.json",
+  applicationName: "Footloose Edwin's Dance Company",
+  referrer: "origin-when-cross-origin",
   keywords: [
     "dance",
     "choreography",
@@ -24,8 +29,9 @@ export const metadata: Metadata = {
     "corporate events",
     "school performances",
     "themed dance",
+    "dance company",
   ],
-  authors: [{ name: "Footloose Edwin's Dance Company" }],
+  authors: [{ name: "Footloose Edwin's Dance Company", url: "https://footloose-edwin.vercel.app" }],
   creator: "Footloose Edwin's Dance Company",
   publisher: "Footloose Edwin's Dance Company",
   formatDetection: {
@@ -33,33 +39,47 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL("https://footloose-edwin.vercel.app"),
   alternates: {
     canonical: "/",
   },
+  manifest: "/manifest.json",
   icons: {
     icon: "/logo.svg",
+    shortcut: "/logo.svg",
     apple: "/logo.svg",
   },
   openGraph: {
-    title: "Footloose Edwin's Dance Company",
-    description: "Professional dance company with 30 years of experience in themed performances and choreography",
+    title: "Footloose Edwin's Dance Company | 30 Years of Dance Excellence",
+    description:
+      "Professional dance company with 30 years of experience in themed performances, choreography, and fitness.",
     url: "https://footloose-edwin.vercel.app",
     siteName: "Footloose Edwin's Dance Company",
+    images: [
+      {
+        url: "https://i.ibb.co/84DmJmx7/footloose.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Footloose Edwin's Dance Company performing on stage",
+      },
+    ],
     locale: "en_US",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Footloose Edwin's Dance Company",
-    description: "Professional dance company with 30 years of experience",
+    title: "Footloose Edwin's Dance Company | 30 Years of Dance Excellence",
+    description:
+      "Professional dance company with 30 years of experience in themed performances, choreography, and fitness.",
+    images: ["https://i.ibb.co/84DmJmx7/footloose.jpg"],
   },
   robots: {
     index: true,
     follow: true,
+    nocache: true,
     googleBot: {
       index: true,
       follow: true,
+      noimageindex: false,
       "max-video-preview": -1,
       "max-image-preview": "large",
       "max-snippet": -1,
