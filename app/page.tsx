@@ -9,15 +9,12 @@ import { CTASection } from "@/components/cta-section"
 export default function HomePage() {
   return (
     <div className="min-h-screen">
-     
-      <main>
         <HeroSection />
         <StatsSection />
         <ServicesOverview />
         <ThemesPreview />
         <TestimonialsSection />
-        <CTASection />
-      </main>
+        <CTASection /> 
     </div>
   )
 }

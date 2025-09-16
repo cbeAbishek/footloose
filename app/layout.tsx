@@ -37,6 +37,10 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/",
   },
+  icons: {
+    icon: "/logo.svg",
+    apple: "/logo.svg",
+  },
   openGraph: {
     title: "Footloose Edwin's Dance Company",
     description: "Professional dance company with 30 years of experience in themed performances and choreography",
