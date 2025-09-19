@@ -8,6 +8,8 @@ import { Suspense } from "react"
 import { Navigation } from "@/components/navigation"
 import { Footer } from "@/components/footer"
 import { WhatsAppFloat } from "@/components/whatsapp-float"
+import InstallPopup from "@/components/install-popup"
+import NotificationProvider from "@/components/notification-provider"
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://footloose-edwin.vercel.app"),
@@ -106,11 +108,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`font-sans ${GeistSans.variable} ${GeistMono.variable} antialiased`}>
-      <Navigation />
-      <Suspense fallback={null}>{children}</Suspense>
-      <Footer />
-      <WhatsAppFloat />
-      <Analytics />
+      <NotificationProvider>
+        <Navigation />
+        <Suspense fallback={null}>{children}</Suspense>
+        <Footer />
+        <WhatsAppFloat />
+        <InstallPopup />
+        <Analytics />
+      </NotificationProvider>
       </body>
     </html>
   )

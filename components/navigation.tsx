@@ -9,28 +9,28 @@ const navigationItems = [
   { name: "Home", href: "/" },
   {
     name: "Services",
-    href: "/gallery",
+    href: "/services",
     submenu: [
-      { name: "Dance Classes", href: "/gallery" },
-      { name: "Props & Design", href: "/gallery" },
-      { name: "Choreography", href: "/gallery" },
-      { name: "ChaircoCISE Fitness", href: "/gallery" },
+      { name: "Dance Classes", href: "/services/classes" },
+      { name: "Props & Design", href: "/services/props" },
+      { name: "Choreography", href: "/services/choreography" },
+      { name: "ChaircoCISE Fitness", href: "/services/chaircoCISE" },
     ],
   },
   {
     name: "Themes",
-    href: "/gallery",
+    href: "/themes",
     submenu: [
-      { name: "Edwin's AI", href: "/gallery" },
-      { name: "Dinosaur Adventure", href: "/gallery" },
-      { name: "Avengers", href: "/gallery" },
-      { name: "Snow White", href: "/gallery" },
+      { name: "Edwin's AI", href: "/themes/edwins-ai" },
+      { name: "Dinosaur Adventure", href: "/themes/dinosaur" },
+      { name: "Avengers", href: "/themes/avengers" },
+      { name: "Snow White", href: "/themes/snow-white" },
     ],
   },
   { name: "Gallery", href: "/gallery" },
-  { name: "Blog", href: "/gallery" },
-  { name: "About", href: "/gallery" },
-  { name: "Contact", href: "/gallery" },
+  { name: "Blog", href: "/blog" },
+  { name: "About", href: "/about" },
+  { name: "Contact", href: "/contact" },
 ]
 
 export function Navigation() {
@@ -41,7 +41,16 @@ export function Navigation() {
   const toggleMenu = () => setIsOpen(!isOpen)
   
   const toggleSubmenu = (itemName: string) => {
+    // If clicking the same submenu, close it; otherwise, open the new one and close others
     setOpenSubmenu(openSubmenu === itemName ? null : itemName)
+  }
+
+  const closeAllMenus = () => {
+    setIsOpen(false)
+    // Delay closing submenu to allow for smoother animation
+    setTimeout(() => {
+      setOpenSubmenu(null)
+    }, 300)
   }
 
   useEffect(() => {
@@ -54,10 +63,10 @@ export function Navigation() {
 
   // Close menu when clicking outside
   useEffect(() => {
-    const handleClickOutside = () => {
-      if (isOpen) {
-        setIsOpen(false)
-        setOpenSubmenu(null)
+    const handleClickOutside = (event: MouseEvent) => {
+      const nav = document.querySelector('nav')
+      if (isOpen && nav && !nav.contains(event.target as Node)) {
+        closeAllMenus()
       }
     }
     
@@ -138,6 +147,21 @@ export function Navigation() {
                 opacity: 0; 
                 transform: translateY(-100%); 
                 }
+              }
+
+              @keyframes slideInFromLeft {
+                from {
+                  opacity: 0;
+                  transform: translateX(-20px);
+                }
+                to {
+                  opacity: 1;
+                  transform: translateX(0);
+                }
+              }
+
+              .mobile-menu-item {
+                animation: slideInFromLeft 0.3s ease-out forwards;
               }
 
               @media (max-width: 1023px) {
@@ -224,101 +248,152 @@ export function Navigation() {
           </div>
 
           {/* Mobile Hamburger */}
-          <div className="lg:hidden text-gray-300">
+          <div className="lg:hidden">
             <button 
               onClick={(e) => {
                 e.stopPropagation()
                 toggleMenu()
               }} 
-              className="focus:outline-none hover:text-white transition-colors p-2 rounded-lg hover:bg-gray-800/30"
+              className="relative p-2 rounded-lg text-gray-300 hover:text-white hover:bg-gray-800/30 transition-all duration-300 focus:outline-none group"
             >
-              {isOpen ? <X size={24} /> : <Menu size={24} />}
+              <div className="relative w-6 h-6 flex items-center justify-center">
+                <span className={`absolute h-0.5 w-6 bg-current transform transition-all duration-300 ${
+                  isOpen ? 'rotate-45' : '-translate-y-2'
+                }`} />
+                <span className={`absolute h-0.5 w-6 bg-current transform transition-all duration-300 ${
+                  isOpen ? 'opacity-0' : 'opacity-100'
+                }`} />
+                <span className={`absolute h-0.5 w-6 bg-current transform transition-all duration-300 ${
+                  isOpen ? '-rotate-45' : 'translate-y-2'
+                }`} />
+              </div>
             </button>
           </div>
         </div>
 
       {/* Mobile Menu */}
       <div
-        className={`lg:hidden overflow-hidden transition-all duration-500 ease-in-out rounded-xl bg-gray-900/95 backdrop-blur-md border border-gray-700/50 mt-4 ${
+        className={`lg:hidden overflow-hidden transition-all duration-500 ease-in-out ${
           isOpen
-            ? "max-h-[600px] py-4 px-4 opacity-100"
-            : "max-h-0 py-0 px-4 opacity-0"
+            ? "max-h-[700px] mt-4 opacity-100"
+            : "max-h-0 mt-0 opacity-0"
         }`}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex flex-col space-y-2">
-          {navigationItems.map((item) => (
-            <div key={item.name} className="group">
-              <div className="flex items-center justify-between">
-                <Link
-                  href={item.href}
-                  onClick={() => !item.submenu && setIsOpen(false)}
-                  className={`block text-gray-300 py-2 text-base hover:text-white font-medium transition-colors flex-1 ${
-                    active === item.name
-                      ? "text-blue-400 underline underline-offset-4 decoration-blue-400"
-                      : ""
-                  }`}
-                >
-                  {item.name}
-                </Link>
+        <div className="bg-gray-900/95 backdrop-blur-md border border-gray-700/50 rounded-xl p-4">
+          <div className="flex flex-col space-y-1">
+            {navigationItems.map((item, index) => (
+              <div key={item.name} className="mobile-menu-item" style={{ animationDelay: `${index * 50}ms` }}>
+                <div className="flex items-center justify-between">
+                  {item.submenu ? (
+                    // If item has submenu, make it a button to toggle submenu
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        toggleSubmenu(item.name)
+                      }}
+                      className={`flex-1 text-left py-3 px-3 text-base font-medium transition-all duration-200 rounded-lg flex items-center justify-between group ${
+                        active === item.name
+                          ? "text-blue-400 bg-blue-400/10"
+                          : "text-gray-300 hover:text-white hover:bg-gray-800/50"
+                      }`}
+                    >
+                      <span>{item.name}</span>
+                      <ChevronDown className={`h-4 w-4 transition-all duration-300 ${
+                        openSubmenu === item.name ? "rotate-180 text-blue-400" : "text-gray-400 group-hover:text-white"
+                      }`} />
+                    </button>
+                  ) : (
+                    // If no submenu, make it a regular link
+                    <Link
+                      href={item.href}
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        closeAllMenus()
+                      }}
+                      className={`flex-1 py-3 px-3 text-base font-medium transition-all duration-200 rounded-lg block ${
+                        active === item.name
+                          ? "text-blue-400 bg-blue-400/10"
+                          : "text-gray-300 hover:text-white hover:bg-gray-800/50"
+                      }`}
+                    >
+                      {item.name}
+                    </Link>
+                  )}
+                </div>
+                
+                {/* Mobile Submenu */}
                 {item.submenu && (
-                  <button
-                    onClick={() => toggleSubmenu(item.name)}
-                    className="p-2 text-gray-400 hover:text-white transition-colors"
+                  <div
+                    className={`overflow-hidden transition-all duration-400 ease-in-out ${
+                      openSubmenu === item.name
+                        ? "max-h-80 mt-2 mb-2 opacity-100"
+                        : "max-h-0 mt-0 mb-0 opacity-0"
+                    }`}
                   >
-                    <ChevronDown className={`h-4 w-4 transition-transform ${
-                      openSubmenu === item.name ? "rotate-180" : ""
-                    }`} />
-                  </button>
+                    <div className="ml-4 pl-4 border-l-2 border-gray-600/50 space-y-1">
+                      {/* Add "View All" option for parent category */}
+                      <Link
+                        href={item.href}
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          closeAllMenus()
+                        }}
+                        className="block rounded-lg px-3 py-2 text-sm font-semibold text-blue-400 hover:text-blue-300 hover:bg-blue-400/10 transition-all duration-200 border border-blue-400/20 hover:border-blue-400/40"
+                      >
+                        View All {item.name}
+                      </Link>
+                      {item.submenu.map((subItem, index) => (
+                        <Link
+                          key={subItem.name}
+                          href={subItem.href}
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            closeAllMenus()
+                          }}
+                          className="block rounded-lg px-3 py-2 text-sm text-gray-400 hover:text-white hover:bg-gray-800/50 transition-all duration-200 transform hover:translate-x-1"
+                          style={{
+                            animationDelay: `${index * 50}ms`,
+                          }}
+                        >
+                          {subItem.name}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
                 )}
               </div>
-              
-              {/* Mobile Submenu */}
-              {item.submenu && (
-                <div
-                  className={`overflow-hidden transition-all duration-300 ease-in-out ml-4 border-l border-gray-600 pl-4 ${
-                    openSubmenu === item.name
-                      ? "max-h-48 mt-2 space-y-1 opacity-100"
-                      : "max-h-0 mt-0 space-y-0 opacity-0"
-                  }`}
-                >
-                  {item.submenu.map((subItem) => (
-                    <Link
-                      key={subItem.name}
-                      href={subItem.href}
-                      onClick={() => setIsOpen(false)}
-                      className="block rounded-lg px-2 py-2 text-sm text-gray-400 hover:text-white hover:bg-gray-800/50 transition-all duration-200"
-                    >
-                      {subItem.name}
-                    </Link>
-                  ))}
-                </div>
-              )}
-            </div>
-          ))}
+            ))}
 
-          {/* Mobile CTA Buttons */}
-          <div className="pt-4 space-y-2 border-t border-gray-700/50">
-            <Button 
-              variant="ghost" 
-              className="w-full justify-start bg-gray-800/50 hover:bg-gray-700/70 border border-gray-600/50 text-gray-300 hover:text-white transition-all duration-300"
-              asChild
-            >
-              <Link href="tel:+919842222467" onClick={() => setIsOpen(false)}>
-                <Phone className="h-4 w-4 mr-3" />
-                Call Now
-              </Link>
-            </Button>
-            
-            <Button 
-              className="w-full justify-start bg-gradient-to-r from-blue-600 to-purple-700 hover:from-blue-700 hover:to-purple-800 text-white border-0 shadow-lg shadow-blue-900/25 hover:shadow-blue-900/40 transition-all duration-300"
-              asChild
-            >
-              <Link href="https://wa.me/+919842222467" target="_blank" onClick={() => setIsOpen(false)}>
-                <MessageCircle className="h-4 w-4 mr-3" />
-                WhatsApp
-              </Link>
-            </Button>
+            {/* Mobile CTA Buttons */}
+            <div className="pt-6 mt-4 space-y-3 border-t border-gray-700/50">
+              <Button 
+                variant="ghost" 
+                className="w-full justify-start bg-gray-800/50 hover:bg-gray-700/70 border border-gray-600/50 text-gray-300 hover:text-white transition-all duration-300 py-3 px-4 rounded-lg"
+                asChild
+              >
+                <Link href="tel:+919842222467" onClick={(e) => {
+                  e.stopPropagation()
+                  closeAllMenus()
+                }}>
+                  <Phone className="h-4 w-4 mr-3" />
+                  Call Now
+                </Link>
+              </Button>
+              
+              <Button 
+                className="w-full justify-start bg-gradient-to-r from-blue-600 to-purple-700 hover:from-blue-700 hover:to-purple-800 text-white border-0 shadow-lg shadow-blue-900/25 hover:shadow-blue-900/40 transition-all duration-300 py-3 px-4 rounded-lg"
+                asChild
+              >
+                <Link href="https://wa.me/+919842222467" target="_blank" onClick={(e) => {
+                  e.stopPropagation()
+                  closeAllMenus()
+                }}>
+                  <MessageCircle className="h-4 w-4 mr-3" />
+                  WhatsApp Us
+                </Link>
+              </Button>
+            </div>
           </div>
         </div>
       </div>

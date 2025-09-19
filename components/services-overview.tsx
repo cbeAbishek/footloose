@@ -149,11 +149,11 @@ export function ServicesOverview() {
         </div>
 
         {/* Services Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-8 mb-16 h-150">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-6 lg:gap-8 mb-16">
           {services.map((service, index) => (
             <Card
               key={service.id}
-              className={`group relative overflow-hidden bg-gray-900/50 border-gray-700/50 backdrop-blur-sm hover:bg-gray-800/70 transition-all duration-700 hover:scale-105 hover:shadow-2xl cursor-pointer animate-fade-in-up flex flex-col h-full ${
+              className={`group relative overflow-hidden bg-gray-900/50 border-gray-700/50 backdrop-blur-sm hover:bg-gray-800/70 transition-all duration-700 hover:scale-105 hover:shadow-2xl cursor-pointer animate-fade-in-up flex flex-col min-h-[500px] sm:min-h-[550px] lg:min-h-[600px] xl:min-h-[550px] ${
                 isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
               }`}
               style={{
@@ -164,10 +164,10 @@ export function ServicesOverview() {
             >
               {/* Animated Border */}
               <div className={`absolute inset-0 bg-gradient-to-r ${service.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-border-glow`} />
-              <div className="absolute inset-[1px] rounded-lg bg-gray-900/90 backdrop-blur-sm flex flex-col h-full">
+              <div className="absolute inset-[1px] rounded-lg bg-gray-900/90 backdrop-blur-sm flex flex-col min-h-full">
                 
                 {/* Image Container */}
-                <div className="relative h-48 md:h-56 lg:h-64 xl:h-72 overflow-hidden rounded-t-lg flex-shrink-0">
+                <div className="relative h-48 sm:h-52 md:h-56 lg:h-60 xl:h-52 overflow-hidden rounded-t-lg flex-shrink-0">
                   <Image
                     src={service.image}
                     alt={service.title}
@@ -179,18 +179,18 @@ export function ServicesOverview() {
                   <div className={`absolute inset-0 bg-gradient-to-t ${service.hoverGradient} opacity-0 group-hover:opacity-100 transition-all duration-500`} />
                   
                   {/* Floating Icon */}
-                  <div className="absolute top-4 left-4">
-                    <div className={`relative p-3 rounded-xl bg-gray-900/80 backdrop-blur-sm border border-gray-700/50 group-hover:scale-110 transition-all duration-300`}>
-                      <service.icon className={`h-6 w-6 ${service.iconColor} group-hover:rotate-12 transition-all duration-300`} />
+                  <div className="absolute top-3 left-3 sm:top-4 sm:left-4">
+                    <div className={`relative p-2 sm:p-3 rounded-xl bg-gray-900/80 backdrop-blur-sm border border-gray-700/50 group-hover:scale-110 transition-all duration-300`}>
+                      <service.icon className={`h-4 w-4 sm:h-6 sm:w-6 ${service.iconColor} group-hover:rotate-12 transition-all duration-300`} />
                       <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-purple-500/20 to-blue-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     </div>
                   </div>
                   
                   {/* Badge */}
                   {service.badge && (
-                    <div className="absolute top-4 right-4">
-                      <Badge className={`${service.badgeColor} backdrop-blur-sm hover:scale-110 transition-all duration-300 font-semibold`}>
-                        <Star className="h-3 w-3 mr-1 fill-current" />
+                    <div className="absolute top-3 right-3 sm:top-4 sm:right-4">
+                      <Badge className={`${service.badgeColor} backdrop-blur-sm hover:scale-110 transition-all duration-300 font-semibold text-xs`}>
+                        <Star className="h-2 w-2 sm:h-3 sm:w-3 mr-1 fill-current" />
                         {service.badge}
                       </Badge>
                     </div>
@@ -211,41 +211,47 @@ export function ServicesOverview() {
                 </div>
                 
                 {/* Card Content */}
-                <CardContent className="p-6 relative flex-grow">
-                  <h3 className="text-xl font-bold mb-3 text-white group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-purple-300 group-hover:to-blue-300 group-hover:bg-clip-text transition-all duration-300">
-                    {service.title}
-                  </h3>
+                <CardContent className="p-4 sm:p-5 lg:p-6 relative flex-grow flex flex-col justify-between">
+                  <div className="flex-grow">
+                    <h3 className="text-lg sm:text-xl font-bold mb-2 sm:mb-3 text-white group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-purple-300 group-hover:to-blue-300 group-hover:bg-clip-text transition-all duration-300">
+                      {service.title}
+                    </h3>
+                    
+                    <p className="text-sm text-gray-400 leading-relaxed mb-3 sm:mb-4 group-hover:text-gray-300 transition-colors duration-300">
+                      {renderDescription(service.description)}
+                    </p>
+                    
+                    {/* Features */}
+                    <ul className="space-y-1.5 sm:space-y-2 mb-4 sm:mb-6">
+                      {service.features.map((feature, featureIndex) => (
+                        <li 
+                          key={featureIndex} 
+                          className="flex items-start text-xs text-gray-500 group-hover:text-gray-400 transition-all duration-300"
+                          style={{ animationDelay: `${featureIndex * 100}ms` }}
+                        >
+                          <div className={`h-1.5 w-1.5 rounded-full mr-2 sm:mr-3 mt-1.5 ${service.iconColor.replace('text-', 'bg-')} group-hover:scale-125 transition-all duration-300 flex-shrink-0`} />
+                          <span className="leading-relaxed">{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                   
-                  <p className="text-sm text-gray-400 leading-relaxed mb-4 group-hover:text-gray-300 transition-colors duration-300 line-clamp-3">
-                    {renderDescription(service.description)}
-                  </p>
-                  
-                  {/* Features */}
-                  <ul className="space-y-2 mb-6">
-                    {service.features.map((feature, featureIndex) => (
-                      <li 
-                        key={featureIndex} 
-                        className="flex items-center text-xs text-gray-500 group-hover:text-gray-400 transition-all duration-300"
-                        style={{ animationDelay: `${featureIndex * 100}ms` }}
-                      >
-                        <div className={`h-1.5 w-1.5 rounded-full mr-3 ${service.iconColor.replace('text-', 'bg-')} group-hover:scale-125 transition-all duration-300`} />
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>
                   
                   {/* Action Button */}
-                  <Button
-                    variant="ghost"
-                    className={`w-full group-hover:bg-gradient-to-r group-hover:${service.buttonGradient} group-hover:text-white transition-all duration-500 transform translate-y-2 group-hover:translate-y-0 opacity-70 group-hover:opacity-100 border border-gray-700/50 group-hover:border-transparent group-hover:shadow-lg`}
-                    asChild
-                  >
-                    <Link href={service.href}>
-                      <span className="mr-2">Explore</span>
-                      <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform duration-300" />
-                      <Zap className="h-3 w-3 ml-1 opacity-0 group-hover:opacity-100 transition-all duration-300" />
-                    </Link>
-                  </Button>
+                  <div className="mt-auto">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className={`w-full group-hover:bg-gradient-to-r group-hover:${service.buttonGradient} group-hover:text-white transition-all duration-500 transform translate-y-2 group-hover:translate-y-0 opacity-70 group-hover:opacity-100 border border-gray-700/50 group-hover:border-transparent group-hover:shadow-lg text-sm py-2.5 sm:py-3`}
+                      asChild
+                    >
+                      <Link href={service.href}>
+                        <span className="mr-2">Explore</span>
+                        <ArrowRight className="h-3 w-3 sm:h-4 sm:w-4 group-hover:translate-x-1 transition-transform duration-300" />
+                        <Zap className="h-2 w-2 sm:h-3 sm:w-3 ml-1 opacity-0 group-hover:opacity-100 transition-all duration-300" />
+                      </Link>
+                    </Button>
+                  </div>
                 </CardContent>
               </div>
             </Card>
