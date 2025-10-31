@@ -1,0 +1,9 @@
+/* TEAM */
+Owner: Footloose Edwin's Dance Company
+Contact: hello@footlooseedwin.com | +91-00000-00000
+Location: Chennai, Tamil Nadu, India
+
+/* SITE */
+Standards: HTML5, CSS3, ESNext, PWA
+Components: Next.js, Tailwind CSS, Supabase, Next-PWA
+Last-Updated: 2025-11-01

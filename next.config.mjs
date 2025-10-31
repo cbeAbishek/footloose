@@ -1,4 +1,5 @@
 import withPWA from 'next-pwa';
+import runtimeCaching from 'next-pwa/cache.js';
 
 const isProd = process.env.NODE_ENV === 'production';
 const appEnv = process.env.APP_ENV || (isProd ? 'prod' : 'dev');
@@ -24,6 +25,12 @@ export default withPWA({
   dest: 'public',
   register: true,
   skipWaiting: true,
+  sw: 'service-worker.js',
+  runtimeCaching,
+  buildExcludes: [/middleware-manifest\.json$/],
+  fallbacks: {
+    document: '/offline',
+  },
   // disable PWA in non-production
   disable: !isProd,
 })(nextConfig);
