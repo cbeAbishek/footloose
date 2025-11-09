@@ -1,51 +1,82 @@
 import type { Metadata } from "next"
-
-import GalleryPageClient from "./gallery-page-client"
-
-const pageUrl = "https://footloose.online/gallery"
+import { GalleryMain } from "@/components/gallery/GalleryMain"
 
 export const metadata: Metadata = {
-  title: "Dance Event Gallery | Footloose Edwin's Performances and Productions",
+  title: "Gallery - Footloose Moments | Edwin's Dance & Costume Company",
   description:
-    "Browse the Footloose Edwin's Dance Company gallery featuring corporate dance entertainment, school shows, themed performances, and ChaircoCISE wellness sessions in Chennai and across India.",
+    "Explore 5,000+ photos and 150+ videos from Footloose performances, events, and behind-the-scenes moments. Browse Annual Day shows, theme performances, ESP showcases, corporate events, fashion shows, workshops, costume galleries, and student spotlights.",
   keywords: [
-    "dance event gallery",
-    "Chennai dance performances",
-    "corporate entertainment photos",
-    "Footloose Edwin's productions",
-    "ChaircoCISE gallery",
+    "Footloose gallery",
+    "Edwin's Dance photos",
+    "dance performance videos",
+    "Annual Day Coimbatore",
+    "theme show gallery",
+    "ESP showcase",
+    "corporate event photos",
+    "dance costume gallery",
+    "backstage moments",
+    "student spotlight",
+    "dance videos",
+    "Western dance photos",
+    "Bollywood performance",
+    "Chair-Co-Cise gallery",
+    "kids dance photos",
+    "LED dance videos",
+    "dance school memories",
+    "performance albums",
+    "dance workshop photos",
+    "fashion show gallery",
   ],
-  alternates: {
-    canonical: pageUrl,
-    languages: {
-      "en-IN": pageUrl,
-      "en-US": pageUrl,
-    },
-  },
+  authors: [{ name: "Edwin's Dance & Costume Company" }],
+  creator: "Edwin's Dance & Costume Company",
+  publisher: "Footloose Edwin's Dance Company",
   openGraph: {
-    title: "Footloose Edwin's Dance Company Gallery",
+    title: "Gallery - Footloose Moments | Edwin's Dance & Costume Company",
     description:
-      "View photos and highlights from Footloose Edwin's corporate events, school performances, themed productions, and wellness programs in Chennai, India.",
-    url: pageUrl,
-    type: "article",
+      "Explore 5,000+ photos and 150+ videos from Footloose performances, events, and behind-the-scenes moments. Annual Day shows, theme performances, costume galleries, and student spotlights.",
+    url: "https://footloose.online/gallery",
+    siteName: "Footloose Edwin's Dance Company",
+    type: "website",
+    locale: "en_IN",
     images: [
       {
         url: "https://i.ibb.co/84DmJmx7/footloose.jpg",
         width: 1200,
         height: 630,
-        alt: "Footloose Edwin's Dance Company gallery montage",
+        alt: "Footloose Gallery - Dance performances, costumes, and behind-the-scenes moments",
+      },
+      {
+        url: "https://i.ibb.co/84DmJmx7/footloose.jpg",
+        width: 1920,
+        height: 1080,
+        alt: "Footloose performance gallery showcase",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Footloose Edwin's Dance Company Gallery",
+    title: "Gallery - Footloose Moments | Edwin's Dance & Costume Company",
     description:
-      "Catch a glimpse of Footloose Edwin's themed dance performances, classes, and live events across India.",
+      "Explore 5,000+ photos and 150+ videos from Footloose performances and events. Annual Day shows, theme performances, and student spotlights.",
     images: ["https://i.ibb.co/84DmJmx7/footloose.jpg"],
+    creator: "@footloosedance",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  alternates: {
+    canonical: "https://footloose.online/gallery",
   },
 }
 
 export default function GalleryPage() {
-  return <GalleryPageClient />
+  return <GalleryMain />
 }

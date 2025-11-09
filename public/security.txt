@@ -1,4 +1,4 @@
 Contact: mailto:security@footlooseedwin.com
 Expires: 2026-11-01T00:00:00Z
 Preferred-Languages: en
-Canonical: https://footloose.online/security.txt
+Canonical: http://footloose.online//security.txt

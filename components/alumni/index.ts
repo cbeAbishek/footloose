@@ -1,0 +1,12 @@
+export { AlumniHero } from "./AlumniHero"
+export { FeaturedAlumni } from "./FeaturedAlumni"
+export { AlumniDirectory } from "./AlumniDirectory"
+export { AlumniMap } from "./AlumniMap"
+export { TestimonialsMemories } from "./TestimonialsMemories"
+export { AlumniNetwork } from "./AlumniNetwork"
+export { CareerOpportunities } from "./CareerOpportunities"
+export { RecognitionAwards } from "./RecognitionAwards"
+export { AlumniCTA } from "./AlumniCTA"
+
+export * from "./types"
+export * from "./data"

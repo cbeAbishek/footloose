@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button"
 import { Menu, X, Phone, MessageCircle, ChevronDown } from "lucide-react"
 
 const navigationItems = [
-  { name: "Home", href: "/" },
   {
     name: "Services",
     href: "/services",
