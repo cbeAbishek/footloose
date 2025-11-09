@@ -225,7 +225,7 @@ export function ClassesShowsEventsSection() {
           {filteredEvents.map((event, index) => (
             <Card
               key={event.id}
-              className={`group relative overflow-hidden bg-white dark:bg-gray-950 border-2 border-gray-200 dark:border-gray-800 hover:border-purple-600 dark:hover:border-purple-400 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/20 ${
+              className={`group relative overflow-hidden bg-gray-900/80 dark:bg-gray-900/80 backdrop-blur-sm border border-gray-800 dark:border-gray-800 hover:border-purple-500 dark:hover:border-purple-500 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/20 ${
                 isVisible
                   ? "opacity-100 translate-y-0"
                   : "opacity-0 translate-y-10"
@@ -257,57 +257,48 @@ export function ClassesShowsEventsSection() {
 
               <CardContent className="p-6">
                 {/* Title */}
-                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
+                <h3 className="text-2xl font-bold text-white mb-6 line-clamp-2 min-h-[3.5rem]">
                   {event.title}
                 </h3>
 
-                {/* Info */}
-                <div className="space-y-3 mb-6">
-                  <div className="flex items-start gap-3 text-sm text-gray-600 dark:text-gray-400">
-                    <Calendar className="h-4 w-4 flex-shrink-0 mt-0.5 text-purple-600 dark:text-purple-400" />
+                {/* Info - Essential details only, no icons */}
+                <div className="space-y-2 mb-6">
+                  <div className="flex items-center gap-2 text-sm text-gray-400">
+                    <Calendar className="h-4 w-4 flex-shrink-0 text-purple-400" />
                     <span>{event.date}</span>
                   </div>
                   
-                  <div className="flex items-start gap-3 text-sm text-gray-600 dark:text-gray-400">
-                    <Clock className="h-4 w-4 flex-shrink-0 mt-0.5 text-blue-600 dark:text-blue-400" />
+                  <div className="flex items-center gap-2 text-sm text-gray-400">
+                    <Clock className="h-4 w-4 flex-shrink-0 text-purple-400" />
                     <span>{event.time}</span>
                   </div>
                   
-                  <div className="flex items-start gap-3 text-sm text-gray-600 dark:text-gray-400">
-                    <MapPin className="h-4 w-4 flex-shrink-0 mt-0.5 text-cyan-600 dark:text-cyan-400" />
+                  <div className="flex items-center gap-2 text-sm text-gray-400">
+                    <MapPin className="h-4 w-4 flex-shrink-0 text-purple-400" />
                     <span>{event.location}</span>
                   </div>
-
-                  {event.spots && (
-                    <div className="flex items-start gap-3 text-sm text-gray-600 dark:text-gray-400">
-                      <Users className="h-4 w-4 flex-shrink-0 mt-0.5 text-green-600 dark:text-green-400" />
-                      <span>{event.spots} spots available</span>
-                    </div>
-                  )}
                 </div>
 
-                {/* Footer */}
-                <div className="flex items-center justify-between pt-4 border-t border-gray-200 dark:border-gray-800">
-                  <div>
-                    <div className="text-xs text-gray-500 dark:text-gray-500 mb-1">
-                      {event.category === "class" ? "Per Class" : "Price"}
-                    </div>
-                    <div className="text-lg font-bold text-gray-900 dark:text-white">
-                      {event.price}
-                    </div>
+                {/* Price Section */}
+                <div className="mb-6">
+                  <div className="text-xs text-gray-500 mb-1">
+                    Price
                   </div>
-
-                  <Button
-                    size="sm"
-                    className={`bg-gradient-to-r ${event.color} hover:opacity-90 text-white rounded-full shadow-md`}
-                    asChild
-                  >
-                    <Link href="/contact">
-                      {event.category === "class" ? "Enroll" : event.category === "show" ? "Get Tickets" : "Register"}
-                      <ArrowRight className="ml-1 h-4 w-4" />
-                    </Link>
-                  </Button>
+                  <div className="text-2xl font-bold text-white">
+                    {event.price}
+                  </div>
                 </div>
+
+                {/* CTA Button */}
+                <Button
+                  className={`w-full bg-gradient-to-r ${event.color} hover:opacity-90 text-white rounded-full shadow-md group-hover:shadow-lg transition-all font-semibold`}
+                  asChild
+                >
+                  <Link href="/contact">
+                    {event.category === "class" ? "Enroll Now" : event.category === "show" ? "Get Tickets" : "Register"}
+                    <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                  </Link>
+                </Button>
               </CardContent>
 
               {/* Shine Effect */}
