@@ -1,0 +1,191 @@
+"use client"
+
+import { useState } from "react"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { z } from "zod"
+
+import { submitForm } from "@/lib/form-submit"
+import { toast } from "@/hooks/use-toast"
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
+import { Button } from "@/components/ui/button"
+
+const eventBookingSchema = z.object({
+  organization: z.string().min(2, "Enter your organisation"),
+  contact_name: z.string().min(2, "Enter the main contact"),
+  email: z.string().email(),
+  phone: z.string().min(6),
+  event_date: z.string().min(4, "Provide a tentative date"),
+  location: z.string().min(2, "Provide the venue or city"),
+  audience_size: z.string().min(1, "Approximate audience size helps us plan"),
+  notes: z.string().max(600).optional().or(z.literal("")),
+})
+
+export type EventBookingValues = z.infer<typeof eventBookingSchema>
+
+export function EventBookingForm() {
+  const [isSubmitting, setSubmitting] = useState(false)
+
+  const form = useForm<EventBookingValues>({
+    resolver: zodResolver(eventBookingSchema),
+    defaultValues: {
+      organization: "",
+      contact_name: "",
+      email: "",
+      phone: "",
+      event_date: "",
+      location: "",
+      audience_size: "",
+      notes: "",
+    },
+  })
+
+  const handleSubmit = async (values: EventBookingValues) => {
+    setSubmitting(true)
+    const result = await submitForm("event_bookings", values)
+    setSubmitting(false)
+
+    if (result.success) {
+      toast({
+        title: "Event brief received",
+        description: "Our production desk will reach out with next steps.",
+      })
+      form.reset()
+      return
+    }
+
+    toast({
+      title: "Unable to submit",
+      description: result.error ?? "Please try again shortly.",
+    })
+  }
+
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
+        <div className="grid gap-6 sm:grid-cols-2">
+          <FormField
+            control={form.control}
+            name="organization"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Organisation / brand</FormLabel>
+                <FormControl>
+                  <Input placeholder="Company or institution" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="contact_name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Primary contact</FormLabel>
+                <FormControl>
+                  <Input placeholder="Name of the coordinator" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+        <div className="grid gap-6 sm:grid-cols-2">
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <Input type="email" autoComplete="email" placeholder="contact@example.com" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="phone"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Phone</FormLabel>
+                <FormControl>
+                  <Input autoComplete="tel" placeholder="Include country/area code" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+        <div className="grid gap-6 sm:grid-cols-3">
+          <FormField
+            control={form.control}
+            name="event_date"
+            render={({ field }) => (
+              <FormItem className="sm:col-span-1">
+                <FormLabel>Event date</FormLabel>
+                <FormControl>
+                  <Input placeholder="DD/MM/YYYY" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="location"
+            render={({ field }) => (
+              <FormItem className="sm:col-span-1">
+                <FormLabel>Location</FormLabel>
+                <FormControl>
+                  <Input placeholder="City / venue" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="audience_size"
+            render={({ field }) => (
+              <FormItem className="sm:col-span-1">
+                <FormLabel>Audience size</FormLabel>
+                <FormControl>
+                  <Input placeholder="Approximate numbers" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+        <FormField
+          control={form.control}
+          name="notes"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Event notes (optional)</FormLabel>
+              <FormControl>
+                <Textarea rows={4} placeholder="Describe objectives, themes, or technical requests" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <Button type="submit" className="rounded-full" disabled={isSubmitting}>
+          {isSubmitting ? "Submitting..." : "Request proposal"}
+        </Button>
+      </form>
+    </Form>
+  )
+}

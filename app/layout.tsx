@@ -2,17 +2,20 @@ import type React from "react"
 import type { Metadata, Viewport } from "next"
 import { GeistSans } from "geist/font/sans"
 import { GeistMono } from "geist/font/mono"
-import { Analytics } from "@vercel/analytics/next"
-import "./globals.css"
 import { Suspense } from "react"
 import Script from "next/script"
-import { Navigation } from "@/components/navigation"
-import { Footer } from "@/components/footer"
-import { WhatsAppFloat } from "@/components/whatsapp-float"
-import NotificationProvider from "@/components/notification-provider"
-import PushManager from "@/components/pwa/push-manager"
+import { Analytics } from "@vercel/analytics/next"
 
-const siteUrl = "https://footloose.online"
+import { SiteFooter } from "@/components/layout/site-footer"
+import { SiteHeader } from "@/components/layout/site-header"
+import { ThemeProvider } from "@/components/theme-provider"
+import { Toaster } from "@/components/ui/toaster"
+import { LoadingScreen } from "@/components/loading-screen"
+import { KidsClassOfferPopup } from "@/components/kids-class-offer-popup"
+
+import "./globals.css"
+
+const siteUrl = "http://localhost:3000/"
 const businessName = "Footloose Edwin's Dance Company"
 const businessGeo = {
   latitude: 13.0827,
@@ -27,14 +30,14 @@ const structuredData = [
     url: siteUrl,
     logo: `${siteUrl}/logo.svg`,
     sameAs: [
-      "https://www.facebook.com/footlooseedwin",
-      "https://www.instagram.com/footlooseedwin",
-      "https://www.youtube.com/@footlooseedwin",
+      "https://www.facebook.com/p/Footloose-Edwins-Dance-School-100063675714869",
+      "https://www.instagram.com/fedsi_official",
+      "https://www.youtube.com/@eddyedwin",
     ],
     contactPoint: [
       {
         "@type": "ContactPoint",
-        telephone: "+91-00000-00000",
+        telephone: "+91-98422-22467",
         contactType: "customer service",
         areaServed: ["IN"],
         availableLanguage: ["English"],
@@ -50,7 +53,7 @@ const structuredData = [
     url: siteUrl,
     telephone: "+91-98422-22467",
     priceRange: "₹₹",
-    image: [`${siteUrl}/icon-512.jpg`],
+    image: [`${siteUrl}/icon.png`],
     address: {
       "@type": "PostalAddress",
       streetAddress: "Footloose Studio",
@@ -212,31 +215,52 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
-      <body className={`font-sans ${GeistSans.variable} ${GeistMono.variable} antialiased`}>
-        <NotificationProvider>
-          <Navigation />
-          <Suspense fallback={null}>{children}</Suspense>
-          <Footer />
-          <WhatsAppFloat />
-          <Script src="https://www.googletagmanager.com/gtag/js?id=G-S8XNFD36GG" strategy="afterInteractive" />
-          <Script id="ga-gtag" strategy="afterInteractive">
-            {`
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
+    <html lang="en" suppressHydrationWarning>
+      <body
+        className={`font-sans ${GeistSans.variable} ${GeistMono.variable} antialiased`}
+      >
+        <Script src="https://www.googletagmanager.com/gtag/js?id=G-S8XNFD36GG" strategy="afterInteractive" />
+        <Script id="ga-gtag" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
 
-              gtag('config', 'G-S8XNFD36GG');
-            `}
-          </Script>
+            gtag('config', 'G-S8XNFD36GG');
+          `}
+        </Script>
+        <ThemeProvider attribute="class" enableSystem defaultTheme="system">
+          <div className="flex min-h-screen flex-col bg-background text-foreground">
+            <a
+              href="#main-content"
+              className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-foreground focus:px-4 focus:py-2 focus:text-background"
+            >
+              Skip to content
+            </a>
+            <SiteHeader />
+            <main id="main-content" className="flex-1 pt-14 sm:pt-16 md:pt-20">
+              <Suspense fallback={<LoadingScreen />}>{children}</Suspense>
+            </main>
+            <SiteFooter />
+          </div>
           <Analytics />
-          <PushManager />
-          <script
-            type="application/ld+json"
-            suppressHydrationWarning
-            dangerouslySetInnerHTML={{ __html: structuredDataJson }}
+          <Toaster />
+          <KidsClassOfferPopup />
+          <Script id="chtl-config" strategy="afterInteractive">
+            {`window.chtlConfig = { chatbotId: "9881176774" }`}
+          </Script>
+          <Script
+            id="chtl-script"
+            src="https://chatling.ai/js/embed.js"
+            data-id="9881176774"
+            strategy="afterInteractive"
           />
-        </NotificationProvider>
+        </ThemeProvider>
+        <script
+          type="application/ld+json"
+          suppressHydrationWarning
+          dangerouslySetInnerHTML={{ __html: structuredDataJson }}
+        />
       </body>
     </html>
   )
