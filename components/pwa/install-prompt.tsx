@@ -44,7 +44,7 @@ const isMobile = () => {
   return /android|iphone|ipad|ipod/i.test(window.navigator.userAgent)
 }
 
-export function InstallPrompt() {
+export default function InstallPrompt() {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null)
   const [showAndroidPrompt, setShowAndroidPrompt] = useState(false)
   const [showIosPrompt, setShowIosPrompt] = useState(false)
@@ -262,5 +262,3 @@ export function InstallPrompt() {
     </AnimatePresence>
   )
 }
-
-export default InstallPrompt

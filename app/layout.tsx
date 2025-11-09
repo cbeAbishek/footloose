@@ -12,7 +12,7 @@ import { ThemeProvider } from "@/components/theme-provider"
 import { Toaster } from "@/components/ui/toaster"
 import { LoadingScreen } from "@/components/loading-screen"
 import { KidsClassOfferPopup } from "@/components/kids-class-offer-popup"
-import { InstallPrompt } from "@/components/pwa/install-prompt"
+import InstallPrompt from "@/components/pwa/install-prompt"
 
 import "./globals.css"
 

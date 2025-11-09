@@ -3,7 +3,7 @@
 import { motion, useScroll, useTransform } from "framer-motion"
 import Image from "next/image"
 import { MapPin, Users, Sparkles } from "lucide-react"
-import { useRef } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 
 interface AlumniHeroProps {
   totalAlumni?: number
@@ -19,6 +19,38 @@ export function AlumniHero({ totalAlumni = 500, globalLocations = 25 }: AlumniHe
 
   const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"])
   const opacity = useTransform(scrollYProgress, [0, 0.5, 1], [1, 0.8, 0])
+
+  const [viewport, setViewport] = useState({ width: 0, height: 0 })
+
+  useEffect(() => {
+    const updateViewport = () => {
+      setViewport({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      })
+    }
+
+    updateViewport()
+    window.addEventListener("resize", updateViewport)
+    return () => window.removeEventListener("resize", updateViewport)
+  }, [])
+
+  const particles = useMemo(
+    () =>
+      Array.from({ length: 20 }).map(() => ({
+        initialX: Math.random(),
+        initialY: Math.random(),
+        targetX: Math.random(),
+        targetY: Math.random(),
+        duration: Math.random() * 20 + 10,
+      })),
+    []
+  )
+
+  const fallbackWidth = viewport.width || 1920
+  const fallbackHeight = viewport.height || 1080
+  const toX = (value: number) => value * fallbackWidth
+  const toY = (value: number) => value * fallbackHeight
 
   return (
     <section ref={sectionRef} className="pt-10 relative min-h-[100vh] overflow-hidden bg-black dark:bg-white">
@@ -37,20 +69,20 @@ export function AlumniHero({ totalAlumni = 500, globalLocations = 25 }: AlumniHe
 
       {/* Floating Particles */}
       <div className="absolute inset-0 overflow-hidden">
-        {Array.from({ length: 20 }).map((_, i) => (
+        {particles.map((particle, i) => (
           <motion.div
             key={i}
             className="absolute h-2 w-2 rounded-full bg-white/20 dark:bg-black/20"
             initial={{
-              x: Math.random() * window.innerWidth,
-              y: Math.random() * window.innerHeight,
+              x: toX(particle.initialX),
+              y: toY(particle.initialY),
             }}
             animate={{
-              y: [Math.random() * window.innerHeight, Math.random() * window.innerHeight],
-              x: [Math.random() * window.innerWidth, Math.random() * window.innerWidth],
+              y: [toY(particle.initialY), toY(particle.targetY)],
+              x: [toX(particle.initialX), toX(particle.targetX)],
             }}
             transition={{
-              duration: Math.random() * 20 + 10,
+              duration: particle.duration,
               repeat: Infinity,
               ease: "linear",
             }}
