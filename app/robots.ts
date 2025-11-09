@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next"
 
-const baseUrl = "http://localhost:3000/"
+const baseUrl = "http://footloose.online/"
 
 export default function robots(): MetadataRoute.Robots {
   return {

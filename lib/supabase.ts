@@ -1,14 +1,22 @@
 import { createBrowserClient, createServerClient } from "@supabase/ssr"
+import { createClient } from "@supabase/supabase-js"
 import type { CookieOptions } from "@supabase/ssr"
 import type { ReadonlyRequestCookies } from "next/dist/server/web/spec-extension/adapters/request-cookies"
 import { cookies } from "next/headers"
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
 
 if (!supabaseUrl || !supabaseAnonKey) {
   console.warn(
     "Supabase keys are not configured. Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY to enable data features.",
+  )
+}
+
+if (!supabaseServiceRoleKey) {
+  console.warn(
+    "SUPABASE_SERVICE_ROLE_KEY not configured. Server-side form submissions will use anon key policies.",
   )
 }
 
@@ -46,6 +54,23 @@ export function createSupabaseServerClient(cookieStore?: ReadonlyRequestCookies)
           console.warn("Unable to remove Supabase cookie", error)
         }
       },
+    },
+  })
+}
+
+export function createSupabaseServiceClient() {
+  if (!supabaseUrl) {
+    throw new Error("Supabase URL is missing")
+  }
+
+  if (!supabaseServiceRoleKey) {
+    return createSupabaseServerClient()
+  }
+
+  return createClient(supabaseUrl, supabaseServiceRoleKey, {
+    auth: {
+      persistSession: false,
+      autoRefreshToken: false,
     },
   })
 }

@@ -1,13 +1,10 @@
-import Link from 'next/link';
+import { Events } from "@/components/services/Events"
 
-export default function AboutPage(): JSX.Element {
-    return (
-        <main style={{ padding: 24, fontFamily: 'system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial' }}>
-            <h1>About</h1>
-            <p>A simple about page.</p>
-            <p>
-                <Link href="/">← Back to home</Link>
-            </p>
-        </main>
-    );
+export const metadata = {
+  title: "Event Management | Footloose Edwin's Dance Company",
+  description: "End-to-end event production for schools, corporates, and private celebrations. Professional choreography, performers, props, and costumes.",
+}
+
+export default function EventsPage() {
+  return <Events />
 }

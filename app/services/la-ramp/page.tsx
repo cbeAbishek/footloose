@@ -1,13 +1,10 @@
-import Link from 'next/link';
+import { LaRamp } from "@/components/services/LaRamp"
 
-export default function AboutPage(): JSX.Element {
-    return (
-        <main style={{ padding: 24, fontFamily: 'system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial' }}>
-            <h1>About</h1>
-            <p>A simple about page.</p>
-            <p>
-                <Link href="/">← Back to home</Link>
-            </p>
-        </main>
-    );
+export const metadata = {
+  title: "La Ramp | Footloose Edwin's Dance Company",
+  description: "Fashion show choreography and production services combining runway aesthetics with theatrical dance elements.",
+}
+
+export default function LaRampPage() {
+  return <LaRamp />
 }

@@ -1,13 +1,10 @@
-import Link from 'next/link';
+import { ChairCoCise } from "@/components/services/ChairCoCise"
 
-export default function AboutPage(): JSX.Element {
-    return (
-        <main style={{ padding: 24, fontFamily: 'system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial' }}>
-            <h1>About</h1>
-            <p>A simple about page.</p>
-            <p>
-                <Link href="/">← Back to home</Link>
-            </p>
-        </main>
-    );
+export const metadata = {
+  title: "Chair Co-cise | Footloose Edwin's Dance Company",
+  description: "Revolutionary chair-based exercise program combining dance movements with fitness routines. Perfect for seniors and office workers.",
+}
+
+export default function ChairCoCisePage() {
+  return <ChairCoCise />
 }

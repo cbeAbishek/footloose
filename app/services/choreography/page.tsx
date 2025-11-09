@@ -1,13 +1,10 @@
-import Link from 'next/link';
+import { Choreography } from "@/components/services/Choreography"
 
-export default function AboutPage(): JSX.Element {
-    return (
-        <main style={{ padding: 24, fontFamily: 'system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial' }}>
-            <h1>About</h1>
-            <p>A simple about page.</p>
-            <p>
-                <Link href="/">← Back to home</Link>
-            </p>
-        </main>
-    );
+export const metadata = {
+  title: "Choreography Services | Footloose Edwin's Dance Company",
+  description: "Custom choreography for weddings, corporate events, films, and music videos. Award-winning choreographers with 30+ years experience.",
+}
+
+export default function ChoreographyPage() {
+  return <Choreography />
 }

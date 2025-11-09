@@ -1,13 +1,10 @@
-import Link from 'next/link';
+import { DanceClasses } from "@/components/services/DanceClasses"
 
-export default function AboutPage(): JSX.Element {
-    return (
-        <main style={{ padding: 24, fontFamily: 'system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial' }}>
-            <h1>About</h1>
-            <p>A simple about page.</p>
-            <p>
-                <Link href="/">← Back to home</Link>
-            </p>
-        </main>
-    );
+export const metadata = {
+  title: "Dance Classes | Footloose Edwin's Dance Company",
+  description: "Professional dance training for all ages and skill levels. Learn from certified instructors in classical, contemporary, hip-hop, and more.",
+}
+
+export default function DanceClassPage() {
+  return <DanceClasses />
 }

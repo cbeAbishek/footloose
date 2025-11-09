@@ -1,21 +1,29 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
-
-import { Container } from "@/components/layout/container"
-import { Separator } from "@/components/ui/separator"
-import { getBlogPost, getBlogPosts } from "@/lib/queries"
+import { BlogPostView } from "@/components/blog/BlogPostView"
+import { sampleBlogPosts, getRelatedPosts, calculateReadingTime } from "@/components/blog/data"
+import { BlogPost as BlogPostType } from "@/components/blog/types"
 
 interface BlogPostPageProps {
   params: { slug: string }
 }
 
+// For demo purposes, we'll use sample data
+// In production, you would fetch from Supabase
+async function getPost(slug: string): Promise<BlogPostType | null> {
+  return sampleBlogPosts.find((post) => post.slug === slug && post.published) || null
+}
+
 export async function generateStaticParams() {
-  const posts = await getBlogPosts()
-  return posts.map((post) => ({ slug: post.slug }))
+  return sampleBlogPosts
+    .filter((post) => post.published)
+    .map((post) => ({
+      slug: post.slug,
+    }))
 }
 
 export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {
-  const post = await getBlogPost(params.slug)
+  const post = await getPost(params.slug)
 
   if (!post) {
     return {
@@ -24,13 +32,28 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
   }
 
   return {
-    title: post.title,
+    title: `${post.title} | Edwin's Dance Company Blog`,
     description: post.summary,
+    keywords: [
+      post.title,
+      ...post.tags,
+      "Edwin's Dance Company",
+      "Footloose",
+      "dance blog",
+      post.category,
+    ],
+    authors: [{ name: post.author_name }],
+    creator: post.author_name,
+    publisher: "Edwin's Dance & Costume Company",
     openGraph: {
       title: post.title,
       description: post.summary,
-      url: `http://localhost:3000//blog/${post.slug}`,
+      url: `https://footloose.online/blog/${post.slug}`,
+      siteName: "Footloose Edwin's Dance Company",
       type: "article",
+      publishedTime: post.published_at || post.created_at,
+      authors: [post.author_name],
+      locale: "en_IN",
       images: post.thumbnail_url
         ? [
             {
@@ -39,44 +62,55 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
               height: 630,
               alt: post.title,
             },
+            {
+              url: post.thumbnail_url,
+              width: 1920,
+              height: 1080,
+              alt: post.title,
+            },
           ]
-        : undefined,
+        : [
+            {
+              url: "https://i.ibb.co/84DmJmx7/footloose.jpg",
+              width: 1200,
+              height: 630,
+              alt: post.title,
+            },
+          ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description: post.summary,
+      images: post.thumbnail_url
+        ? [post.thumbnail_url]
+        : ["https://i.ibb.co/84DmJmx7/footloose.jpg"],
+      creator: "@footloosedance",
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+      },
+    },
+    alternates: {
+      canonical: `https://footloose.online/blog/${post.slug}`,
     },
   }
 }
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
-  const post = await getBlogPost(params.slug)
+  const post = await getPost(params.slug)
 
   if (!post) {
     notFound()
   }
 
-  const publishedAt = post.created_at ? new Date(post.created_at).toLocaleDateString() : ""
+  const relatedPosts = getRelatedPosts(post, sampleBlogPosts)
 
-  return (
-    <Container className="space-y-10 py-16">
-      <article className="mx-auto max-w-3xl space-y-8">
-        <header className="space-y-3">
-          <p className="text-xs uppercase tracking-[0.3em] text-foreground/60">Footloose Blog</p>
-          <h1 className="text-4xl font-semibold tracking-tight text-foreground sm:text-5xl">{post.title}</h1>
-          <div className="flex flex-wrap items-center gap-4 text-sm text-foreground/60">
-            <span>By {post.author_name}</span>
-            {publishedAt ? <span>{publishedAt}</span> : null}
-            {post.source_link ? (
-              <a href={post.source_link} target="_blank" rel="noreferrer" className="underline">
-                Source link
-              </a>
-            ) : null}
-          </div>
-        </header>
-        <Separator />
-        <div className="prose prose-invert max-w-none text-sm leading-relaxed text-foreground/80">
-          {post.body.split("\n\n").map((paragraph) => (
-            <p key={paragraph}>{paragraph}</p>
-          ))}
-        </div>
-      </article>
-    </Container>
-  )
+  return <BlogPostView post={post} relatedPosts={relatedPosts} />
 }

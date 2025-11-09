@@ -1,13 +1,10 @@
-import Link from 'next/link';
+import { ESPShowcase } from "@/components/services/ESPShowcase"
 
-export default function AboutPage(): JSX.Element {
-    return (
-        <main style={{ padding: 24, fontFamily: 'system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial' }}>
-            <h1>About</h1>
-            <p>A simple about page.</p>
-            <p>
-                <Link href="/">← Back to home</Link>
-            </p>
-        </main>
-    );
+export const metadata = {
+  title: "ESP Showcase | Footloose Edwin's Dance Company",
+  description: "Specialized performance program for schools showcasing student talent through professionally produced dance presentations.",
+}
+
+export default function ESPShowcasePage() {
+  return <ESPShowcase />
 }

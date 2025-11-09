@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next"
 
 import { getBlogPosts } from "@/lib/queries"
 
-const baseUrl = "http://localhost:3000/"
+const baseUrl = "http://footloose.online/"
 
 const staticRoutes: Array<{
   path: string

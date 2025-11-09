@@ -2,7 +2,7 @@ import { randomUUID } from "crypto"
 import { NextResponse } from "next/server"
 import { z } from "zod"
 
-import { createSupabaseServerClient } from "@/lib/supabase"
+import { createSupabaseServiceClient } from "@/lib/supabase"
 
 export const runtime = "nodejs"
 
@@ -11,6 +11,34 @@ type TableConfig = {
   fileField?: string
   storageField?: string
   bucket?: string
+}
+
+function normalizeDate(value: string): string | null {
+  const trimmed = value.trim()
+
+  if (!trimmed) {
+    return null
+  }
+
+  // Already ISO formatted (YYYY-MM-DD)
+  if (/^\d{4}-\d{2}-\d{2}$/.test(trimmed)) {
+    return trimmed
+  }
+
+  // Handle common DD/MM/YYYY or DD-MM-YYYY inputs
+  const dayFirstMatch = trimmed.match(/^(\d{2})[\/\-](\d{2})[\/\-](\d{4})$/)
+  if (dayFirstMatch) {
+    const [, day, month, year] = dayFirstMatch
+    return `${year}-${month}-${day}`
+  }
+
+  // Fallback to Date parsing
+  const parsed = new Date(trimmed)
+  if (!Number.isNaN(parsed.getTime())) {
+    return parsed.toISOString().slice(0, 10)
+  }
+
+  return null
 }
 
 const tableSchemas: Record<string, TableConfig> = {
@@ -140,11 +168,11 @@ export async function POST(
   }
 
   const contentType = request.headers.get("content-type") || ""
-  const supabase = createSupabaseServerClient()
+  const supabase = createSupabaseServiceClient()
 
   try {
-  let payload: Record<string, unknown> = {}
-  let file: File | undefined
+    let payload: Record<string, unknown> = {}
+    let file: File | undefined
 
     if (contentType.includes("multipart/form-data")) {
       const formData = await request.formData()
@@ -162,6 +190,17 @@ export async function POST(
     }
 
     const parsed = config.schema.parse(payload) as Record<string, unknown>
+
+    if (typeof parsed.event_date === "string") {
+      const normalized = normalizeDate(parsed.event_date)
+      if (!normalized) {
+        return NextResponse.json(
+          { error: "Invalid event date format" },
+          { status: 422 },
+        )
+      }
+      parsed.event_date = normalized
+    }
 
     const storageField = config.storageField
 
@@ -216,6 +255,11 @@ export async function POST(
 
     console.error(`[forms:${params.table}]`, error)
 
-    return NextResponse.json({ error: "Unable to submit form" }, { status: 500 })
+    const message =
+      typeof error === "object" && error !== null && "message" in error
+        ? String((error as { message?: string }).message)
+        : "Unable to submit form"
+
+    return NextResponse.json({ error: message }, { status: 500 })
   }
 }

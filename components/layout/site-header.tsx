@@ -34,7 +34,7 @@ const primaryNav = [
       { href: "/services/la-ramp", label: "La Ramp" },
     ],
   },
-  { href: "/costume-design", label: "Costume Design", icon: Palette },
+  // { href: "/costume-design", label: "Costume Design", icon: Palette },
   { href: "/costume-rental", label: "Costume Rental", icon: Shirt },
   { href: "/gallery", label: "Gallery", icon: Image },
   { href: "/blog", label: "Blog", icon: BookOpen },

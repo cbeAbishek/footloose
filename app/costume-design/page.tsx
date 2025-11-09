@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     openGraph: {
         title: "Footloose Costume Design",
         description: "Concept, fabricate, and deliver performance-ready costumes with Footloose labs.",
-        url: "http://localhost:3000//costume-design",
+        url: "http://footloose.online//costume-design",
         images: [
             {
                 url: "https://i.ibb.co/84DmJmx7/footloose.jpg",

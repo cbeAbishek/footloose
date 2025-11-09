@@ -17,7 +17,7 @@ export const metadata: Metadata = {
         title: "Footloose Alumni Community",
         description:
             "Stories, achievements, and journeys from Footloose alumni who continue to advance dance, movement, and storytelling.",
-        url: "http://localhost:3000//alumni",
+        url: "http://footloose.online//alumni",
         images: [
             {
                 url: "https://i.ibb.co/84DmJmx7/footloose.jpg",

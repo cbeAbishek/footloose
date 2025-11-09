@@ -15,7 +15,7 @@ import { KidsClassOfferPopup } from "@/components/kids-class-offer-popup"
 
 import "./globals.css"
 
-const siteUrl = "http://localhost:3000/"
+const siteUrl = "http://footloose.online/"
 const businessName = "Footloose Edwin's Dance Company"
 const businessGeo = {
   latitude: 13.0827,

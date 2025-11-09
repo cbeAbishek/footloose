@@ -15,7 +15,7 @@ export const metadata: Metadata = {
         title: "Connect with Footloose",
         description:
             "Book choreography, classes, and movement experiences with Footloose Edwin's Dance Company.",
-        url: "http://localhost:3000//contact",
+        url: "http://footloose.online//contact",
         images: [
             {
                 url: "https://i.ibb.co/84DmJmx7/footloose.jpg",
