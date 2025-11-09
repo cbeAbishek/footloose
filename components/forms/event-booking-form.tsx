@@ -70,79 +70,79 @@ export function EventBookingForm() {
   }
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
-        <div className="grid gap-6 sm:grid-cols-2">
-          <FormField
-            control={form.control}
-            name="organization"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Organisation / brand</FormLabel>
-                <FormControl>
-                  <Input placeholder="Company or institution" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="contact_name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Primary contact</FormLabel>
-                <FormControl>
-                  <Input placeholder="Name of the coordinator" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-        <div className="grid gap-6 sm:grid-cols-2">
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Email</FormLabel>
-                <FormControl>
-                  <Input type="email" autoComplete="email" placeholder="contact@example.com" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="phone"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Phone</FormLabel>
-                <FormControl>
-                  <Input autoComplete="tel" placeholder="Include country/area code" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-        <div className="grid gap-6 sm:grid-cols-3">
-          <FormField
-            control={form.control}
-            name="event_date"
-            render={({ field }) => (
-              <FormItem className="sm:col-span-1">
-                <FormLabel>Event date</FormLabel>
-                <FormControl>
-                  <Input placeholder="DD/MM/YYYY" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
+    <div className="w-full max-w-4xl mx-auto"></div>
+      <div className="rounded-2xl border border-border bg-card shadow-lg transition-shadow duration-300 hover:shadow-xl">
+        <div className="p-8 md:p-10 lg:p-12">
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <FormField
+                  control={form.control}
+                  name="organization"
+                  render={({ field }) => (
+                    <FormItem className="space-y-2">
+                      <FormLabel className="text-sm font-medium text-foreground">
+                        Organisation / brand
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Company or institution"
+                          className="w-full rounded-lg border-input bg-background px-4 py-3 text-sm transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage className="text-xs" />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="contact_name"
+                  render={({ field }) => (
+                    <FormItem className="space-y-2">
+                      <FormLabel className="text-sm font-medium text-foreground">
+                        Primary contact
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Name of the coordinator"
+                          className="w-full rounded-lg border-input bg-background px-4 py-3 text-sm transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage className="text-xs" />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem className="space-y-2">
+                      <FormLabel className="text-sm font-medium text-foreground">
+                        Email
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          type="email"
+                          autoComplete="email"
+                          placeholder="contact@example.com"
+                          className="w-full rounded-lg border-input bg-background px-4 py-3 text-sm transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage className="text-xs" />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="phone"
+                  render={({ field }) => (
+                    <FormItem className="space-y-2">
             control={form.control}
             name="location"
             render={({ field }) => (
