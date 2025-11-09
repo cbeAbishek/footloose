@@ -106,10 +106,10 @@ export function AlumniCTA() {
                     </p>
 
                     {/* CTA Button */}
-                    <button className="group inline-flex items-center gap-2 text-sm font-bold text-white transition-all hover:gap-3 dark:text-black">
+                    {/* <button className="group inline-flex items-center gap-2 text-sm font-bold text-white transition-all hover:gap-3 dark:text-black">
                       {action.action}
                       <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                    </button>
+                    </button> */}
                   </div>
                 </Card>
               </motion.div>
@@ -131,18 +131,18 @@ export function AlumniCTA() {
           <p className="mb-8 text-lg text-black/80 dark:text-white/80">
             Update your profile, explore opportunities, and stay connected with the global Footloose family.
           </p>
-          <div className="flex flex-wrap items-center justify-center gap-4">
+          {/* <div className="flex flex-wrap items-center justify-center gap-4">
             <button className="rounded-full bg-black px-8 py-4 font-bold text-white transition-transform hover:scale-105 dark:bg-white dark:text-black">
               Update Your Profile
             </button>
             <button className="rounded-full border-2 border-black px-8 py-4 font-bold text-black transition-all hover:bg-black hover:text-white dark:border-white dark:text-white dark:hover:bg-white dark:hover:text-black">
               Contact Alumni Team
             </button>
-          </div>
+          </div> */}
         </motion.div>
 
         {/* Social Proof */}
-        <motion.div
+        {/* <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
@@ -165,7 +165,7 @@ export function AlumniCTA() {
               <p className="text-xs">Annual Events</p>
             </div>
           </div>
-        </motion.div>
+        </motion.div> */}
       </div>
     </section>
   )

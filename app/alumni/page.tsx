@@ -99,7 +99,7 @@ export default function AlumniPage() {
       {/* <CareerOpportunities opportunities={sampleOpportunities} /> */}
 
       {/* Recognition & Awards */}
-      <RecognitionAwards awards={sampleAwards} />
+      {/* <RecognitionAwards awards={sampleAwards} /> */}
 
       {/* Final Call to Action */}
       <AlumniCTA />

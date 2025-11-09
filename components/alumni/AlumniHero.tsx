@@ -179,7 +179,7 @@ export function AlumniHero({ totalAlumni = 500, globalLocations = 25 }: AlumniHe
           </motion.div>
 
           {/* CTA Buttons with Advanced Interactions */}
-          <motion.div
+          {/* <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.9, duration: 0.8 }}
@@ -225,7 +225,7 @@ export function AlumniHero({ totalAlumni = 500, globalLocations = 25 }: AlumniHe
                 Submit Your Story
               </span>
             </motion.button>
-          </motion.div>
+          </motion.div> */}
         </motion.div>
       </div>
 

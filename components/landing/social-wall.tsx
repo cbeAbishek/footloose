@@ -54,7 +54,7 @@ const socialMedia = [
     followers: "8.7K",
     color: "bg-[#0A66C2]",
     hoverColor: "hover:bg-[#004182]",
-    link: "https://linkedin.com/company/edwinsdance",
+    link: "https://www.linkedin.com/in/abishek2005/",
     bio: "Professional network & career opportunities",
   },
   {
@@ -63,7 +63,7 @@ const socialMedia = [
     followers: "4.8K",
     color: "bg-white",
     hoverColor: "hover:scale-110",
-    link: "https://g.page/edwinsdance",
+    link: "https://maps.app.goo.gl/znADVh3GYoVvfQiA9",
     bio: "Reviews, ratings & business information",
     textColor: "text-black",
   },
@@ -92,7 +92,7 @@ export function SocialWall() {
   return (
     <section
       ref={sectionRef}
-      className="py-20 mb-32 md:py-32 bg-white dark:bg-black relative overflow-visible"
+      className="py-20 mb-8 md:mb-16 lg:mb-24 md:py-32 bg-white dark:bg-black relative overflow-hidden md:overflow-visible"
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12 md:mb-16">
@@ -165,7 +165,7 @@ export function SocialWall() {
 
                 {/* Preview Card - Shows on Hover/Touch */}
                 <div
-                  className={`absolute left-1/2 -translate-x-1/2 top-full mt-4 z-[100] pointer-events-none transition-all duration-300 ${
+                  className={`hidden md:block absolute left-1/2 -translate-x-1/2 top-full mt-4 z-[100] pointer-events-none transition-all duration-300 ${
                     isHovered 
                       ? "opacity-100 translate-y-0" 
                       : "opacity-0 translate-y-2"

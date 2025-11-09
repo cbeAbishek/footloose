@@ -63,7 +63,7 @@ export const sampleAlumni: AlumniProfile[] = [
     graduation_year: 2012,
     email: "lakshmi@wellnessflow.com",
     website: "https://wellnessflow.com",
-    photo_url: "/alumni/lakshmi.jpg",
+    photo_url: "/alumni/naveen.jpeg",
     dance_specialization: "Chair-Co-Cise, Wellness Dance",
     current_role: "Founder & CEO at Wellness Flow",
     location: "Bengaluru, India",

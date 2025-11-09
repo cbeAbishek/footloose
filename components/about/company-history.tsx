@@ -111,7 +111,7 @@ export function CompanyHistory() {
                     <div className={`${isLeft ? "md:text-right md:pr-12" : "md:col-start-2 md:pl-12"}`}>
                       <div className="inline-block mb-3">
                         <div className={`inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r ${milestone.color} bg-opacity-10 border-2 rounded-full`}>
-                          <span className={`text-sm md:text-base font-bold bg-gradient-to-r ${milestone.color} bg-clip-text text-transparent`}>
+                          <span className={`text-sm md:text-base font-bold bg-gradient-to-r ${milestone.color} bg-clip-text text-white`}>
                             {milestone.year}
                           </span>
                         </div>

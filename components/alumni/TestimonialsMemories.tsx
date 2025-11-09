@@ -103,7 +103,7 @@ export function TestimonialsMemories({ testimonials }: TestimonialsMemoriesProps
         </div>
 
         {/* Call to Action */}
-        <motion.div
+        {/* <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -121,7 +121,7 @@ export function TestimonialsMemories({ testimonials }: TestimonialsMemoriesProps
               Submit Your Story
             </button>
           </Card>
-        </motion.div>
+        </motion.div> */}
       </div>
     </section>
   )

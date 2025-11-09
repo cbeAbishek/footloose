@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react"
 import { Card, CardContent } from "@/components/ui/card"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Quote, Heart, Briefcase, GraduationCap, Users } from "lucide-react"
 
 export function FounderSection() {
@@ -51,8 +51,9 @@ export function FounderSection() {
                 <div className="relative group flex-shrink-0">
                   <div className="absolute -inset-2 bg-gradient-to-r from-purple-600 via-blue-600 to-cyan-600 rounded-full blur-lg opacity-50 group-hover:opacity-75 transition-opacity animate-pulse" />
                   <Avatar className="relative w-28 h-28 sm:w-32 sm:h-32 md:w-36 md:h-36 border-4 border-white dark:border-gray-900 shadow-xl">
+                    <AvatarImage src="/founder_edwin.png" alt="M. Edwin" className="object-cover" />
                     <AvatarFallback className="text-4xl sm:text-5xl font-bold bg-gradient-to-br from-purple-600 to-blue-600 text-white">
-                      ME
+                        ME
                     </AvatarFallback>
                   </Avatar>
                 </div>

@@ -44,10 +44,10 @@ const linkGroups = [
 ]
 
 const socialLinks = [
-  { label: "Instagram", href: "https://www.instagram.com/footloose", icon: Instagram },
-  { label: "Facebook", href: "https://www.facebook.com/footloose", icon: Facebook },
-  { label: "YouTube", href: "https://www.youtube.com/@footloose", icon: Youtube },
-  { label: "LinkedIn", href: "https://www.linkedin.com/company/footloose", icon: Linkedin },
+  { label: "Instagram", href: "https://www.instagram.com/fedsi_official/", icon: Instagram },
+  { label: "Facebook", href: "https://www.facebook.com/people/Footloose-Edwins-Dance-School/100063675714869/", icon: Facebook },
+  { label: "YouTube", href: "https://www.youtube.com/c/eddyedwin", icon: Youtube },
+  { label: "LinkedIn", href: "https://www.linkedin.com/in/abishek2005/", icon: Linkedin },
   { label: "WhatsApp", href: "https://wa.me/919842222467", icon: MessageCircle },
 ]
 

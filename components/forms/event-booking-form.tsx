@@ -70,12 +70,12 @@ export function EventBookingForm() {
   }
 
   return (
-    <div className="w-full max-w-4xl mx-auto"></div>
+    <div className="w-full max-w-4xl mx-auto">
       <div className="rounded-2xl border border-border bg-card shadow-lg transition-shadow duration-300 hover:shadow-xl">
         <div className="p-8 md:p-10 lg:p-12">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-8">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                 <FormField
                   control={form.control}
                   name="organization"
@@ -116,7 +116,7 @@ export function EventBookingForm() {
                 />
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                 <FormField
                   control={form.control}
                   name="email"
@@ -143,49 +143,114 @@ export function EventBookingForm() {
                   name="phone"
                   render={({ field }) => (
                     <FormItem className="space-y-2">
-            control={form.control}
-            name="location"
-            render={({ field }) => (
-              <FormItem className="sm:col-span-1">
-                <FormLabel>Location</FormLabel>
-                <FormControl>
-                  <Input placeholder="City / venue" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="audience_size"
-            render={({ field }) => (
-              <FormItem className="sm:col-span-1">
-                <FormLabel>Audience size</FormLabel>
-                <FormControl>
-                  <Input placeholder="Approximate numbers" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+                        <FormLabel className="text-sm font-medium text-foreground">
+                          Phone
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            type="tel"
+                            autoComplete="tel"
+                            placeholder="Contact number"
+                            className="w-full rounded-lg border-input bg-background px-4 py-3 text-sm transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage className="text-xs" />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                <FormField
+                  control={form.control}
+                  name="event_date"
+                  render={({ field }) => (
+                    <FormItem className="space-y-2">
+                      <FormLabel className="text-sm font-medium text-foreground">
+                        Event date
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          type="text"
+                          placeholder="Preferred date or range"
+                          className="w-full rounded-lg border-input bg-background px-4 py-3 text-sm transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage className="text-xs" />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="location"
+                  render={({ field }) => (
+                    <FormItem className="space-y-2">
+                      <FormLabel className="text-sm font-medium text-foreground">
+                        Location
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="City / venue"
+                          className="w-full rounded-lg border-input bg-background px-4 py-3 text-sm transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage className="text-xs" />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <FormField
+                control={form.control}
+                name="audience_size"
+                render={({ field }) => (
+                  <FormItem className="space-y-2">
+                    <FormLabel className="text-sm font-medium text-foreground">
+                      Audience size
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Approximate numbers"
+                        className="w-full rounded-lg border-input bg-background px-4 py-3 text-sm transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage className="text-xs" />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="notes"
+                render={({ field }) => (
+                  <FormItem className="space-y-2">
+                    <FormLabel className="text-sm font-medium text-foreground">
+                      Event notes (optional)
+                    </FormLabel>
+                    <FormControl>
+                      <Textarea
+                        rows={4}
+                        placeholder="Describe objectives, themes, or technical requests"
+                        className="min-h-[120px] rounded-lg border-input bg-background px-4 py-3 text-sm transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage className="text-xs" />
+                  </FormItem>
+                )}
+              />
+
+              <Button type="submit" className="rounded-full" disabled={isSubmitting}>
+                {isSubmitting ? "Submitting..." : "Request proposal"}
+              </Button>
+            </form>
+          </Form>
         </div>
-        <FormField
-          control={form.control}
-          name="notes"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Event notes (optional)</FormLabel>
-              <FormControl>
-                <Textarea rows={4} placeholder="Describe objectives, themes, or technical requests" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <Button type="submit" className="rounded-full" disabled={isSubmitting}>
-          {isSubmitting ? "Submitting..." : "Request proposal"}
-        </Button>
-      </form>
-    </Form>
+      </div>
+    </div>
   )
 }

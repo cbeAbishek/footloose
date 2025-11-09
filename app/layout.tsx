@@ -12,6 +12,7 @@ import { ThemeProvider } from "@/components/theme-provider"
 import { Toaster } from "@/components/ui/toaster"
 import { LoadingScreen } from "@/components/loading-screen"
 import { KidsClassOfferPopup } from "@/components/kids-class-offer-popup"
+import { InstallPrompt } from "@/components/pwa/install-prompt"
 
 import "./globals.css"
 
@@ -246,6 +247,7 @@ export default function RootLayout({
           <Analytics />
           <Toaster />
           <KidsClassOfferPopup />
+          <InstallPrompt />
           <Script id="chtl-config" strategy="afterInteractive">
             {`window.chtlConfig = { chatbotId: "9881176774" }`}
           </Script>
