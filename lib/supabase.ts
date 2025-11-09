@@ -7,6 +7,25 @@ import { cookies } from "next/headers"
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+const supabaseStaticKey = supabaseServiceRoleKey ?? supabaseAnonKey
+
+const isProductionBuildPhase = () => process.env.NEXT_PHASE === "phase-production-build"
+
+export const isSupabaseStaticClientEnabled = () => {
+  if (!supabaseUrl || !supabaseStaticKey) {
+    return false
+  }
+
+  if (process.env.SUPABASE_DISABLE_STATIC_CLIENT === "true") {
+    return false
+  }
+
+  if (isProductionBuildPhase() && process.env.SUPABASE_ALLOW_BUILD_FETCH !== "true") {
+    return false
+  }
+
+  return true
+}
 
 if (!supabaseUrl || !supabaseAnonKey) {
   console.warn(
@@ -68,6 +87,23 @@ export function createSupabaseServiceClient() {
   }
 
   return createClient(supabaseUrl, supabaseServiceRoleKey, {
+    auth: {
+      persistSession: false,
+      autoRefreshToken: false,
+    },
+  })
+}
+
+export function createSupabaseStaticClient() {
+  if (!supabaseUrl) {
+    throw new Error("Supabase URL is missing")
+  }
+
+  if (!supabaseStaticKey) {
+    throw new Error("No Supabase key available for static client")
+  }
+
+  return createClient(supabaseUrl, supabaseStaticKey, {
     auth: {
       persistSession: false,
       autoRefreshToken: false,

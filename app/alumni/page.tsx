@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { AlumniForm } from "@/components/forms/alumni-form"
 import { getFeaturedAlumni } from "@/lib/queries"
+import { fallbackAlumni } from "@/lib/static-content"
 
 export const metadata: Metadata = {
     title: "Alumni Network",
@@ -53,7 +54,7 @@ export default async function AlumniPage() {
                         </div>
                     </div>
                     <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
-                        {(alumni.length ? alumni : placeholderAlumni).map((person) => (
+                        {(alumni.length ? alumni : fallbackAlumni).map((person) => (
                             <Card key={person.id} className="flex h-full flex-col border-border/70">
                                 <CardHeader className="flex flex-row items-start gap-4">
                                     <div className="relative h-16 w-16 overflow-hidden rounded-full border border-border/70 bg-muted">
@@ -124,39 +125,6 @@ export default async function AlumniPage() {
         </>
     )
 }
-
-const placeholderAlumni = [
-    {
-        id: "placeholder-1",
-        full_name: "Priya Nambiar",
-        headline: "Choreographer, New Delhi",
-        bio: "Priya crafts interdisciplinary works fusing contemporary Indian movement with theatre design. She mentors Footloose students through the residency program each summer.",
-        graduation_year: 2005,
-        email: "",
-        website: "",
-        photo_url: "",
-    },
-    {
-        id: "placeholder-2",
-        full_name: "Marcus Densel",
-        headline: "Movement Director, Singapore",
-        bio: "Marcus leads movement direction for fashion campaigns in Southeast Asia and hosts workshops on precision-based choreography for Footloose cohorts.",
-        graduation_year: 2008,
-        email: "",
-        website: "",
-        photo_url: "",
-    },
-    {
-        id: "placeholder-3",
-        full_name: "Lakshmi Rao",
-        headline: "Wellness Coach, Bengaluru",
-        bio: "Lakshmi builds corporate wellness and mindfulness programs inspired by Chair-Co-Cise. She drives ergonomics training for remote-first organisations.",
-        graduation_year: 2012,
-        email: "",
-        website: "",
-        photo_url: "",
-    },
-]
 
 function initials(name: string) {
     return name

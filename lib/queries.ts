@@ -2,19 +2,23 @@ import "server-only"
 
 import { cache } from "react"
 
-import { createSupabaseServerClient } from "@/lib/supabase"
+import { createSupabaseStaticClient, isSupabaseStaticClientEnabled } from "@/lib/supabase"
+import { fallbackAlumni, fallbackBlogPosts, fallbackFeedback } from "@/lib/static-content"
 import type {
   AlumniRecord,
   BlogPostRecord,
   FeedbackRecord,
 } from "@/types/tables"
 
-const withFallback = <T>(value: T | null | undefined, fallback: T): T =>
-  value ?? fallback
-
 export const getFeedback = cache(async (limit = 8): Promise<FeedbackRecord[]> => {
+  const fallback = fallbackFeedback.slice(0, limit)
+
+  if (!isSupabaseStaticClientEnabled()) {
+    return fallback
+  }
+
   try {
-    const supabase = createSupabaseServerClient()
+    const supabase = createSupabaseStaticClient()
     const { data, error } = await supabase
       .from("feedback")
       .select("id, created_at, full_name, role, testimonial, rating, image_url")
@@ -22,20 +26,28 @@ export const getFeedback = cache(async (limit = 8): Promise<FeedbackRecord[]> =>
       .limit(limit)
 
     if (error) {
-      console.error("[queries:getFeedback]", error)
-      return []
+      console.warn("[queries:getFeedback] Falling back to static testimonials.", error.message ?? error)
+      return fallback
     }
 
-    return data ?? []
+    return data ?? fallback
   } catch (error) {
-    console.error("[queries:getFeedback]", error)
-    return []
+    console.warn("[queries:getFeedback] Falling back to static testimonials.",
+      error instanceof Error ? error.message : error,
+    )
+    return fallback
   }
 })
 
 export const getFeaturedAlumni = cache(async (limit = 12): Promise<AlumniRecord[]> => {
+  const fallback = fallbackAlumni.slice(0, limit)
+
+  if (!isSupabaseStaticClientEnabled()) {
+    return fallback
+  }
+
   try {
-    const supabase = createSupabaseServerClient()
+    const supabase = createSupabaseStaticClient()
     const { data, error } = await supabase
       .from("alumni")
       .select(
@@ -45,20 +57,32 @@ export const getFeaturedAlumni = cache(async (limit = 12): Promise<AlumniRecord[
       .limit(limit)
 
     if (error) {
-      console.error("[queries:getFeaturedAlumni]", error)
-      return []
+      console.warn(
+        "[queries:getFeaturedAlumni] Falling back to static alumni showcase.",
+        error.message ?? error,
+      )
+      return fallback
     }
 
-    return data ?? []
+    return data ?? fallback
   } catch (error) {
-    console.error("[queries:getFeaturedAlumni]", error)
-    return []
+    console.warn(
+      "[queries:getFeaturedAlumni] Falling back to static alumni showcase.",
+      error instanceof Error ? error.message : error,
+    )
+    return fallback
   }
 })
 
 export const getBlogPosts = cache(async (): Promise<BlogPostRecord[]> => {
+  const fallback = fallbackBlogPosts
+
+  if (!isSupabaseStaticClientEnabled()) {
+    return fallback
+  }
+
   try {
-    const supabase = createSupabaseServerClient()
+    const supabase = createSupabaseStaticClient()
     const { data, error } = await supabase
       .from("blog_posts")
       .select(
@@ -67,20 +91,29 @@ export const getBlogPosts = cache(async (): Promise<BlogPostRecord[]> => {
       .order("created_at", { ascending: false })
 
     if (error) {
-      console.error("[queries:getBlogPosts]", error)
-      return []
+      console.warn("[queries:getBlogPosts] Falling back to static article feed.", error.message ?? error)
+      return fallback
     }
 
-    return data ?? []
+    return data ?? fallback
   } catch (error) {
-    console.error("[queries:getBlogPosts]", error)
-    return []
+    console.warn(
+      "[queries:getBlogPosts] Falling back to static article feed.",
+      error instanceof Error ? error.message : error,
+    )
+    return fallback
   }
 })
 
 export const getBlogPost = cache(async (slug: string): Promise<BlogPostRecord | null> => {
+  const fallback = fallbackBlogPosts.find((post) => post.slug === slug) ?? null
+
+  if (!isSupabaseStaticClientEnabled()) {
+    return fallback
+  }
+
   try {
-    const supabase = createSupabaseServerClient()
+    const supabase = createSupabaseStaticClient()
     const { data, error } = await supabase
       .from("blog_posts")
       .select(
@@ -90,13 +123,19 @@ export const getBlogPost = cache(async (slug: string): Promise<BlogPostRecord | 
       .maybeSingle()
 
     if (error) {
-      console.error(`[queries:getBlogPost:${slug}]`, error)
-      return null
+      console.warn(
+        `[queries:getBlogPost:${slug}] Falling back to static article feed.`,
+        error.message ?? error,
+      )
+      return fallback
     }
 
-    return withFallback(data, null)
+    return data ?? fallback
   } catch (error) {
-    console.error(`[queries:getBlogPost:${slug}]`, error)
-    return null
+    console.warn(
+      `[queries:getBlogPost:${slug}] Falling back to static article feed.`,
+      error instanceof Error ? error.message : error,
+    )
+    return fallback
   }
 })
