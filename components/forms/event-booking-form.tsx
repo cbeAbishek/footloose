@@ -70,7 +70,7 @@ export function EventBookingForm() {
   }
 
   return (
-    <div className="w-full max-w-4xl mx-auto"></div>
+    <div className="w-full max-w-4xl mx-auto">
       <div className="rounded-2xl border border-border bg-card shadow-lg transition-shadow duration-300 hover:shadow-xl">
         <div className="p-8 md:p-10 lg:p-12">
           <Form {...form}>
