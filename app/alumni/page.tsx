@@ -1,136 +1,108 @@
-import Image from "next/image"
 import type { Metadata } from "next"
-
-import { PageHeader } from "@/components/layout/page-header"
-import { Container } from "@/components/layout/container"
-import { Badge } from "@/components/ui/badge"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Separator } from "@/components/ui/separator"
-import { AlumniForm } from "@/components/forms/alumni-form"
-import { getFeaturedAlumni } from "@/lib/queries"
-import { fallbackAlumni } from "@/lib/static-content"
+import {
+  AlumniHero,
+  FeaturedAlumni,
+  AlumniDirectory,
+  AlumniMap,
+  TestimonialsMemories,
+  AlumniNetwork,
+  CareerOpportunities,
+  RecognitionAwards,
+  AlumniCTA,
+  sampleAlumni,
+  sampleTestimonials,
+  sampleEvents,
+  sampleOpportunities,
+  sampleAwards,
+} from "@/components/alumni"
 
 export const metadata: Metadata = {
-    title: "Alumni Network",
+  title: "Alumni Network - Footloose Family Around the World | Edwin's Dance Company",
+  description:
+    "Celebrating Footloose alumni making an impact worldwide. Connect with dancers, choreographers, and creative professionals from our global alumni community. Join the network, explore opportunities, and stay connected.",
+  keywords: [
+    "Footloose alumni",
+    "Edwin's Dance alumni",
+    "dance alumni network",
+    "Coimbatore dance alumni",
+    "global dance community",
+    "alumni success stories",
+    "dance career opportunities",
+    "alumni mentorship",
+    "dance industry jobs",
+    "choreographer network",
+    "alumni directory",
+    "dance community India",
+  ],
+  openGraph: {
+    title: "Alumni Network - Footloose Family Around the World",
     description:
-        "Discover Footloose alumni shaping stages, studios, and creative ventures worldwide. Submit your profile to join the showcase.",
-    openGraph: {
-        title: "Footloose Alumni Community",
-        description:
-            "Stories, achievements, and journeys from Footloose alumni who continue to advance dance, movement, and storytelling.",
-        url: "http://footloose.online//alumni",
-        images: [
-            {
-                url: "https://i.ibb.co/84DmJmx7/footloose.jpg",
-                width: 1200,
-                height: 630,
-                alt: "Footloose Alumni",
-            },
-        ],
+      "Connect with Footloose alumni shaping dance, choreography, and creative industries worldwide. Stories, achievements, opportunities, and community.",
+    url: "http://footloose.online/alumni",
+    siteName: "Footloose Edwin's Dance Company",
+    type: "website",
+    locale: "en_IN",
+    images: [
+      {
+        url: "https://i.ibb.co/84DmJmx7/footloose.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Footloose Alumni Network - Global Dance Community",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Alumni Network - Footloose Family Around the World",
+    description:
+      "Connect with alumni, explore opportunities, and stay connected with the global Footloose dance community.",
+    images: ["https://i.ibb.co/84DmJmx7/footloose.jpg"],
+    creator: "@footloosedance",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
     },
+  },
+  alternates: {
+    canonical: "http://footloose.online/alumni",
+  },
 }
 
-export default async function AlumniPage() {
-    const alumni = await getFeaturedAlumni(18)
+export default function AlumniPage() {
+  return (
+    <main className="min-h-screen">
+      {/* Hero Section */}
+      <AlumniHero totalAlumni={500} globalLocations={25} />
 
-    return (
-        <>
-            <PageHeader
-                eyebrow="Community"
-                title="Footloose Alumni Collective"
-                description="A living archive of performers, choreographers, educators, and creative technologists who started at Footloose. Explore their journeys and share your own story to join the next cohort."
-            />
-            <Container className="space-y-16 py-16">
-                <section className="space-y-6">
-                    <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-                        <div className="space-y-2">
-                            <p className="text-xs uppercase tracking-[0.3em] text-foreground/60">Alumni spotlights</p>
-                            <h2 className="text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
-                                Featured profiles
-                            </h2>
-                            <p className="max-w-2xl text-sm text-foreground/70">
-                                The alumni program keeps us connected through touring projects, faculty residencies, and digital showcases. Every quarter we highlight individuals pushing dance, wellness, and creative education into new spaces.
-                            </p>
-                        </div>
-                    </div>
-                    <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
-                        {(alumni.length ? alumni : fallbackAlumni).map((person) => (
-                            <Card key={person.id} className="flex h-full flex-col border-border/70">
-                                <CardHeader className="flex flex-row items-start gap-4">
-                                    <div className="relative h-16 w-16 overflow-hidden rounded-full border border-border/70 bg-muted">
-                                        {person.photo_url ? (
-                                            <Image
-                                                src={person.photo_url}
-                                                alt={person.full_name}
-                                                fill
-                                                sizes="64px"
-                                                className="object-cover"
-                                            />
-                                        ) : (
-                                            <div className="flex h-full w-full items-center justify-center text-sm uppercase text-foreground/30">
-                                                {initials(person.full_name)}
-                                            </div>
-                                        )}
-                                    </div>
-                                    <div className="space-y-1">
-                                        <CardTitle className="text-xl font-semibold text-foreground">{person.full_name}</CardTitle>
-                                        <p className="text-sm text-foreground/70">{person.headline}</p>
-                                        <Badge variant="outline" className="rounded-full border-border px-3 py-1 text-xs uppercase">
-                                            Class of {person.graduation_year}
-                                        </Badge>
-                                    </div>
-                                </CardHeader>
-                                <CardContent className="space-y-4">
-                                    <p className="text-sm leading-relaxed text-foreground/70">{person.bio}</p>
-                                                        <div className="text-xs text-foreground/60">
-                                                            {person.email ? <p>Email: {person.email}</p> : null}
-                                                            {person.website ? (
-                                                                <p>
-                                                                    Link: <a href={person.website} className="underline" target="_blank" rel="noreferrer">
-                                                                        Portfolio
-                                                                    </a>
-                                                                </p>
-                                                            ) : null}
-                                    </div>
-                                </CardContent>
-                            </Card>
-                        ))}
-                    </div>
-                </section>
+      {/* Featured Alumni Highlights */}
+      <FeaturedAlumni alumni={sampleAlumni} />
 
-                <Separator />
+      {/* Comprehensive Alumni Directory */}
+      {/* <AlumniDirectory alumni={sampleAlumni} /> */}
 
-                <section className="grid gap-12 lg:grid-cols-[minmax(0,_2fr)_minmax(0,_3fr)]">
-                    <div className="space-y-4">
-                        <p className="text-xs uppercase tracking-[0.3em] text-foreground/60">Add your profile</p>
-                        <h2 className="text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
-                            Join the alumni showcase
-                        </h2>
-                        <p className="text-sm text-foreground/70">
-                            Submit your biography, current focus areas, and contact details. Our alumni desk reviews entries weekly before publishing them to the showcase.
-                        </p>
-                                    <ul className="space-y-2 text-sm text-foreground/60">
-                                        <li>- Highlight notable performances, collaborations, or awards</li>
-                                        <li>- Share what support you can extend to the Footloose community</li>
-                                        <li>- Optional photo uploads help audiences connect with you instantly</li>
-                        </ul>
-                    </div>
-                    <Card className="border-border/70">
-                        <CardContent className="p-6">
-                            <AlumniForm />
-                        </CardContent>
-                    </Card>
-                </section>
-            </Container>
-        </>
-    )
-}
+      {/* Interactive Global Map */}
+      {/* <AlumniMap alumni={sampleAlumni} /> */}
 
-function initials(name: string) {
-    return name
-        .split(" ")
-        .filter(Boolean)
-        .slice(0, 2)
-        .map((part) => part[0]?.toUpperCase())
-        .join("")
+      {/* Testimonials & Memories */}
+      <TestimonialsMemories testimonials={sampleTestimonials} />
+
+      {/* Alumni Network & Community */}
+      <AlumniNetwork events={sampleEvents} />
+
+      {/* Career & Collaboration Opportunities */}
+      {/* <CareerOpportunities opportunities={sampleOpportunities} /> */}
+
+      {/* Recognition & Awards */}
+      <RecognitionAwards awards={sampleAwards} />
+
+      {/* Final Call to Action */}
+      <AlumniCTA />
+    </main>
+  )
 }

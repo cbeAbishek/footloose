@@ -18,7 +18,7 @@ const socialMedia = [
     followers: "15.2K",
     color: "bg-[#FF0000]",
     hoverColor: "hover:bg-[#CC0000]",
-    link: "https://youtube.com/@edwinsdance",
+    link: "https://www.youtube.com/c/eddyedwin",
     bio: "Watch our dance performances & tutorials",
   },
   {
@@ -27,25 +27,25 @@ const socialMedia = [
     followers: "28.5K",
     color: "bg-gradient-to-br from-[#833AB4] via-[#FD1D1D] to-[#F77737]",
     hoverColor: "hover:scale-110",
-    link: "https://instagram.com/edwinsdance",
+    link: "https://www.instagram.com/fedsi_official/",
     bio: "Daily updates & behind-the-scenes moments",
   },
-  {
-    platform: "Twitter",
-    icon: Twitter,
-    followers: "12.8K",
-    color: "bg-[#1DA1F2]",
-    hoverColor: "hover:bg-[#1A8CD8]",
-    link: "https://twitter.com/edwinsdance",
-    bio: "Latest news & announcements",
-  },
+//   {
+//     platform: "Twitter",
+//     icon: Twitter,
+//     followers: "12.8K",
+//     color: "bg-[#1DA1F2]",
+//     hoverColor: "hover:bg-[#1A8CD8]",
+//     link: "https://twitter.com/edwinsdance",
+//     bio: "Latest news & announcements",
+//   },
   {
     platform: "Facebook",
     icon: Facebook,
     followers: "45.3K",
     color: "bg-[#1877F2]",
     hoverColor: "hover:bg-[#166FE5]",
-    link: "https://facebook.com/edwinsdance",
+    link: "https://www.facebook.com/people/Footloose-Edwins-Dance-School/100063675714869/",
     bio: "Community updates & event highlights",
   },
   {
@@ -118,7 +118,7 @@ export function SocialWall() {
         </div>
 
         {/* Social Media Cards */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4 sm:gap-6 md:gap-8 max-w-7xl mx-auto">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 sm:gap-6 md:gap-8 max-w-7xl mx-auto">
           {socialMedia.map((social, index) => {
             const Icon = social.icon
             const isHovered = hoveredIndex === index

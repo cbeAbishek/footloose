@@ -28,38 +28,53 @@ export function ClientsSection() {
   }, [])
 
   // Real client/partner data with brand folder logos
-  const clients = [
+const clients = [
     { 
-      name: "Adithya Institutions", 
-      logo: "/brand/Adithiya_is.jpeg",
-      fallback: "AI"
+        name: "Adithya Institutions", 
+        logo: "/brand/Adithiya_is.jpeg",
+        fallback: "AI"
     },
     { 
-      name: "Peepal", 
-      logo: "/brand/Peepal.png",
-      fallback: "PP"
+        name: "Peepal", 
+        logo: "/brand/Peepal.png",
+        fallback: "PP"
     },
     { 
-      name: "Adithya Global School", 
-      logo: "/brand/adithya_gs.png",
-      fallback: "AG"
+        name: "Adithya Global School", 
+        logo: "/brand/adithya_gs.png",
+        fallback: "AG"
     },
     { 
-      name: "Le Meridian", 
-      logo: "/brand/le-merdian.png",
-      fallback: "LM"
+        name: "Le Meridian", 
+        logo: "/brand/le-merdian.png",
+        fallback: "LM"
     },
     { 
-      name: "Radisson Blu", 
-      logo: "/brand/radisun_blu.png",
-      fallback: "RB"
+        name: "Radisson Blu", 
+        logo: "/brand/radisun_blu.png",
+        fallback: "RB"
     },
     { 
-      name: "SSVM", 
-      logo: "/brand/ssvm.png",
-      fallback: "SV"
+        name: "SSVM", 
+        logo: "/brand/ssvm.png",
+        fallback: "SV"
     },
-  ]
+    {
+        name: "Prozone Mall",
+        logo: "/brand/prozone.webp",
+        fallback: "PM"
+    },
+    {
+        name: "Uptown Cofitte",
+        logo: "/brand/uptown.jpg",
+        fallback: "UC"
+    },
+    {
+        name: "Vijay Elanza",
+        logo: "/brand/elanza.png",
+        fallback: "VE"
+    },
+]
 
   // Double the array for seamless loop
   const doubledClients = [...clients, ...clients]
