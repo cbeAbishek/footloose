@@ -10,6 +10,7 @@ import { BehindTheStageSection } from "@/components/landing/behind-stage-section
 import { FounderMessageSection } from "@/components/landing/founder-message-section"
 import { ClassesShowsEventsSection } from "@/components/landing/classes-shows-events-section"
 import { ScrollProgressIndicator } from "@/components/landing/scroll-progress-indicator"
+import  ClassCard from "@/components/landing/class-card"
 
 export default function HomePage() {
   return (
@@ -23,7 +24,8 @@ export default function HomePage() {
       <ClientsSection />
       {/* <BehindTheStageSection /> */}
       <FounderMessageSection />
-      <ClassesShowsEventsSection />
+      <ClassCard />
+      {/* <ClassesShowsEventsSection /> */}
       <SocialWall />
     </main>
   )
