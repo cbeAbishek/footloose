@@ -29,16 +29,16 @@ import { Button } from "@/components/ui/button"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 
 const inquirySchema = z.object({
-  name: z.string().min(2, "Please enter your full name"),
+  full_name: z.string().min(2, "Please enter your full name"),
   email: z.string().email("Please enter a valid email address"),
   phone: z.string().min(10, "Please enter a valid phone number"),
-  subject: z.string().min(1, "Please select a subject"),
+  topic: z.string().min(1, "Please select a topic"),
   message: z.string().min(10, "Please provide more details (at least 10 characters)"),
 })
 
 export type InquiryFormValues = z.infer<typeof inquirySchema>
 
-const subjects = [
+const topics = [
   "Class Enrollment Inquiry",
   "Costume Rental Request",
   "Event Booking",
@@ -54,12 +54,13 @@ export function ContactFormSection() {
   const [showSuccess, setShowSuccess] = useState(false)
 
   const form = useForm<InquiryFormValues>({
+    mode: "onBlur",
     resolver: zodResolver(inquirySchema),
     defaultValues: {
-      name: "",
+      full_name: "",
       email: "",
       phone: "",
-      subject: "",
+      topic: "",
       message: "",
     },
   })
@@ -75,7 +76,13 @@ export function ContactFormSection() {
         title: "Message received!",
         description: "Thank you — we'll get back to you within 24 hours.",
       })
-      form.reset()
+      form.reset({
+        full_name: "",
+        email: "",
+        phone: "",
+        topic: "",
+        message: "",
+      })
       
       // Hide success message after 5 seconds
       setTimeout(() => setShowSuccess(false), 5000)
@@ -146,7 +153,7 @@ export function ContactFormSection() {
                   <div className="grid gap-6 md:grid-cols-2">
                     <FormField
                       control={form.control}
-                      name="name"
+                      name="full_name"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel className="text-sm font-bold text-black dark:text-white">
@@ -213,11 +220,11 @@ export function ContactFormSection() {
 
                     <FormField
                       control={form.control}
-                      name="subject"
+                      name="topic"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel className="text-sm font-bold text-black dark:text-white">
-                            Subject *
+                            Topic *
                           </FormLabel>
                           <Select onValueChange={field.onChange} defaultValue={field.value}>
                             <FormControl>
@@ -226,9 +233,9 @@ export function ContactFormSection() {
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
-                              {subjects.map((subject) => (
-                                <SelectItem key={subject} value={subject}>
-                                  {subject}
+                              {topics.map((topic) => (
+                                <SelectItem key={topic} value={topic}>
+                                  {topic}
                                 </SelectItem>
                               ))}
                             </SelectContent>

@@ -15,6 +15,7 @@ import {
   sampleOpportunities,
   sampleAwards,
 } from "@/components/alumni"
+import { AlumniForm } from "@/components/forms/alumni-form"
 
 export const metadata: Metadata = {
   title: "Alumni Network - Footloose Family Around the World | Edwin's Dance Company",
@@ -94,6 +95,26 @@ export default function AlumniPage() {
 
       {/* Alumni Network & Community */}
       <AlumniNetwork events={sampleEvents} />
+
+      {/* Alumni Submission Form */}
+      <section className="bg-slate-50 py-20 dark:bg-slate-900/40">
+        <div className="container mx-auto max-w-4xl px-4">
+          <div className="mb-10 text-center">
+            <p className="mb-2 text-sm font-semibold uppercase tracking-[0.3em] text-slate-500 dark:text-slate-300">
+              Share Your Journey
+            </p>
+            <h2 className="text-3xl font-black text-slate-900 dark:text-white md:text-4xl">
+              Add Your Story to the Alumni Directory
+            </h2>
+            <p className="mt-4 text-base text-slate-600 dark:text-slate-300">
+              Submit your profile, achievements, and current projects so we can feature you in the Footloose alumni showcase.
+            </p>
+          </div>
+          <div className="rounded-3xl border border-slate-200 bg-white/90 p-8 shadow-xl backdrop-blur-sm dark:border-slate-800 dark:bg-slate-900/80 dark:shadow-none sm:p-12">
+            <AlumniForm />
+          </div>
+        </div>
+      </section>
 
       {/* Career & Collaboration Opportunities */}
       {/* <CareerOpportunities opportunities={sampleOpportunities} /> */}

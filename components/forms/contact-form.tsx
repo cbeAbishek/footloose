@@ -12,6 +12,8 @@ import { toast } from "@/hooks/use-toast"
 const contactSchema = z.object({
   full_name: z.string().min(2, "Please enter your full name"),
   email: z.string().email("Please enter a valid email address"),
+  phone: z.string().min(6, "Please include a phone number we can reach you on"),
+  topic: z.string().min(2, "Let us know what this is about"),
   message: z.string().min(10, "Share a few more details"),
 })
 
@@ -38,6 +40,16 @@ const contactItems = [
   },
 ]
 
+const inquiryTopics = [
+  "General Inquiry",
+  "Dance Classes",
+  "Costume Rentals",
+  "Event Booking",
+  "Corporate Programs",
+  "Careers & Collaboration",
+  "Press & Media",
+]
+
 export function ContactForm() {
   const [isSubmitting, setSubmitting] = useState(false)
 
@@ -46,6 +58,8 @@ export function ContactForm() {
     defaultValues: {
       full_name: "",
       email: "",
+      phone: "",
+      topic: "",
       message: "",
     },
   })
@@ -60,7 +74,13 @@ export function ContactForm() {
         title: "Thank you",
         description: "We received your inquiry and will respond within one business day.",
       })
-      form.reset()
+      form.reset({
+        full_name: "",
+        email: "",
+        phone: "",
+        topic: "",
+        message: "",
+      })
       return
     }
 
@@ -151,6 +171,46 @@ export function ContactForm() {
               />
               {form.formState.errors.email && (
                 <p className="text-sm text-red-400 lg:text-base">{form.formState.errors.email.message}</p>
+              )}
+            </div>
+
+            <div className="w-full space-y-2">
+              <label htmlFor="phone" className="block text-center text-base font-semibold text-white lg:text-lg">
+                Phone
+              </label>
+              <input
+                id="phone"
+                type="tel"
+                placeholder="Include your country code"
+                autoComplete="tel"
+                {...form.register("phone")}
+                className="w-full rounded-xl border border-white/20 bg-white/10 px-5 py-3.5 text-base text-white backdrop-blur-sm transition-all duration-300 placeholder:text-white/40 focus:border-indigo-400 focus:bg-white/15 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 lg:px-6 lg:py-4 lg:text-lg"
+              />
+              {form.formState.errors.phone && (
+                <p className="text-sm text-red-400 lg:text-base">{form.formState.errors.phone.message}</p>
+              )}
+            </div>
+
+            <div className="w-full space-y-2">
+              <label htmlFor="topic" className="block text-center text-base font-semibold text-white lg:text-lg">
+                Topic
+              </label>
+              <select
+                id="topic"
+                {...form.register("topic")}
+                className="w-full rounded-xl border border-white/20 bg-white/10 px-5 py-3.5 text-base text-white backdrop-blur-sm transition-all duration-300 focus:border-indigo-400 focus:bg-white/15 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 lg:px-6 lg:py-4 lg:text-lg"
+              >
+                <option value="" className="text-slate-900">
+                  Select a topic
+                </option>
+                {inquiryTopics.map((topic) => (
+                  <option key={topic} value={topic} className="text-slate-900">
+                    {topic}
+                  </option>
+                ))}
+              </select>
+              {form.formState.errors.topic && (
+                <p className="text-sm text-red-400 lg:text-base">{form.formState.errors.topic.message}</p>
               )}
             </div>
 

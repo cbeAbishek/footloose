@@ -3,7 +3,7 @@
 import { useMemo } from "react"
 import type { SupabaseClient } from "@supabase/supabase-js"
 
-import { createSupabaseBrowserClient } from "@/lib/supabase"
+import { createSupabaseBrowserClient } from "@/lib/supabase-browser"
 
 let browserClient: SupabaseClient | null = null
 

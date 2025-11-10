@@ -1,4 +1,4 @@
-import { createBrowserClient, createServerClient } from "@supabase/ssr"
+import { createServerClient } from "@supabase/ssr"
 import { createClient } from "@supabase/supabase-js"
 import type { CookieOptions } from "@supabase/ssr"
 import type { ReadonlyRequestCookies } from "next/dist/server/web/spec-extension/adapters/request-cookies"
@@ -37,14 +37,6 @@ if (!supabaseServiceRoleKey) {
   console.warn(
     "SUPABASE_SERVICE_ROLE_KEY not configured. Server-side form submissions will use anon key policies.",
   )
-}
-
-export function createSupabaseBrowserClient() {
-  if (!supabaseUrl || !supabaseAnonKey) {
-    throw new Error("Supabase environment variables are missing")
-  }
-
-  return createBrowserClient(supabaseUrl, supabaseAnonKey)
 }
 
 export function createSupabaseServerClient(cookieStore?: ReadonlyRequestCookies) {
