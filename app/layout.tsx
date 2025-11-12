@@ -50,7 +50,7 @@ const structuredData = [
     "@type": "LocalBusiness",
     name: businessName,
     description:
-      "Dance entertainment company providing choreography, themed performances, props, and wellness programs across India.",
+      "Dance entertainment company providing choreography, themed performances, props, and wellness programs",
     url: siteUrl,
     telephone: "+91-98422-22467",
     priceRange: "₹₹",
