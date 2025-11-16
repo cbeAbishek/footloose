@@ -21,11 +21,14 @@ import { Button } from "@/components/ui/button"
 
 const costumeRentalSchema = z.object({
   full_name: z.string().min(2, "Enter your name"),
-  email: z.string().email(),
+  email: z.string().email().optional().or(z.literal("")),
   phone: z.string().min(6),
-  event_date: z.string().min(4, "Provide an expected date"),
-  theme: z.string().min(2, "Share the theme or concept"),
-  sizes: z.string().min(2, "List sizes or age groups"),
+  requested_items: z.string().min(2, "List the costume pieces required"),
+  quantity_needed: z.union([z.coerce.number().int().min(1), z.literal(""), z.undefined()]),
+  rental_start: z.string().min(4, "Provide a start date"),
+  rental_end: z.string().min(4, "Provide an end date"),
+  event_type: z.string().min(2, "Share the event type"),
+  event_location: z.string().min(2, "Where will this be used?"),
   notes: z.string().max(600).optional().or(z.literal("")),
 })
 
@@ -40,16 +43,46 @@ export function CostumeRentalForm() {
       full_name: "",
       email: "",
       phone: "",
-      event_date: "",
-      theme: "",
-      sizes: "",
+      requested_items: "",
+      quantity_needed: "",
+      rental_start: "",
+      rental_end: "",
+      event_type: "",
+      event_location: "",
       notes: "",
     },
   })
 
   const handleSubmit = async (values: CostumeRentalValues) => {
     setSubmitting(true)
-    const result = await submitForm("costume_rentals", values)
+    const payload: Record<string, FormDataEntryValue> = {
+      full_name: values.full_name,
+      email: values.email ?? "",
+      phone: values.phone,
+      requested_items: values.requested_items,
+      rental_start: values.rental_start,
+      rental_end: values.rental_end,
+      event_type: values.event_type,
+      event_location: values.event_location,
+      notes: values.notes ?? "",
+    }
+
+    if (values.quantity_needed && typeof values.quantity_needed === "number") {
+      payload.quantity_needed = String(values.quantity_needed)
+    } else {
+      payload.quantity_needed = ""
+    }
+
+    const startDate = new Date(values.rental_start)
+    const endDate = new Date(values.rental_end)
+    if (!Number.isNaN(startDate.getTime()) && !Number.isNaN(endDate.getTime())) {
+      const diff = Math.round((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)) + 1
+      if (diff > 0) {
+        payload.rental_days = String(diff)
+      }
+    }
+
+    const result = await submitForm("costume_rental_inquiries", payload)
     setSubmitting(false)
 
     if (result.success) {
@@ -114,12 +147,12 @@ export function CostumeRentalForm() {
         <div className="grid gap-6 sm:grid-cols-2">
           <FormField
             control={form.control}
-            name="event_date"
+            name="requested_items"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Event date</FormLabel>
+                <FormLabel>Requested items</FormLabel>
                 <FormControl>
-                  <Input placeholder="DD/MM/YYYY" {...field} />
+                  <Textarea rows={3} placeholder="Eg. 10 lehengas, 5 jackets, props" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -127,31 +160,80 @@ export function CostumeRentalForm() {
           />
           <FormField
             control={form.control}
-            name="theme"
+            name="quantity_needed"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Theme / concept</FormLabel>
+                <FormLabel>Quantity</FormLabel>
                 <FormControl>
-                  <Input placeholder="Eg. Retro, Mythology, Futuristic" {...field} />
+                  <Input
+                    type="number"
+                    min={1}
+                    placeholder="Total pieces"
+                    value={field.value ?? ""}
+                    onChange={(event) => field.onChange(event.target.value)}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
         </div>
-        <FormField
-          control={form.control}
-          name="sizes"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Sizes required</FormLabel>
-              <FormControl>
-                <Textarea rows={3} placeholder="Eg. 10 dancers | Ages 10-14 | Size chart if available" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <div className="grid gap-6 sm:grid-cols-2">
+          <FormField
+            control={form.control}
+            name="rental_start"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Rental start</FormLabel>
+                <FormControl>
+                  <Input type="date" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="rental_end"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Rental end</FormLabel>
+                <FormControl>
+                  <Input type="date" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+        <div className="grid gap-6 sm:grid-cols-2">
+          <FormField
+            control={form.control}
+            name="event_type"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Event type</FormLabel>
+                <FormControl>
+                  <Input placeholder="School annual day, corporate show" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="event_location"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Event location</FormLabel>
+                <FormControl>
+                  <Input placeholder="City / venue" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
         <FormField
           control={form.control}
           name="notes"

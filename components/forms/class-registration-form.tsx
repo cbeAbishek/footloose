@@ -27,22 +27,60 @@ import {
 } from "@/components/ui/select"
 
 const classRegistrationSchema = z.object({
-  student_name: z.string().min(2, "Enter the participant name"),
-  guardian_name: z.string().min(2, "Enter the guardian or emergency contact"),
-  email: z.string().email(),
-  phone: z.string().min(6),
-  preferred_style: z.string().min(2),
-  experience_level: z.string().min(1),
+  full_name: z.string().min(2, "Enter the participant name"),
+  email: z.string().email().optional().or(z.literal("")),
+  phone: z.string().min(6, "Add a contact number"),
+  age: z
+    .union([z.coerce.number().int().min(3).max(80), z.literal(""), z.undefined()])
+    .optional(),
+  interested_class: z.string().optional().or(z.literal("")),
+  dance_style: z.string().optional().or(z.literal("")),
+  experience_level: z.string().min(1, "Pick experience"),
+  preferred_schedule: z.string().optional().or(z.literal("")),
   message: z.string().max(500).optional().or(z.literal("")),
+  source: z.string().optional().or(z.literal("")),
 })
 
 export type ClassRegistrationValues = z.infer<typeof classRegistrationSchema>
 
 const EXPERIENCE_OPTIONS = [
+  { value: "first-timer", label: "First timer" },
   { value: "beginner", label: "Beginner" },
   { value: "intermediate", label: "Intermediate" },
   { value: "advanced", label: "Advanced" },
   { value: "professional", label: "Professional" },
+]
+
+const CLASS_INTERESTS = [
+  "Regular classes",
+  "Performance team",
+  "Private coaching",
+  "Corporate / group",
+  "Chair-Co-Cise",
+]
+
+const SCHEDULE_OPTIONS = [
+  "Weekday mornings",
+  "Weekday evenings",
+  "Weekend mornings",
+  "Weekend evenings",
+]
+
+const STYLE_OPTIONS = [
+  "Bollywood",
+  "Contemporary",
+  "Hip-Hop",
+  "Chair-Co-Cise",
+  "Bharatanatyam",
+]
+
+const SOURCE_OPTIONS = [
+  "Instagram",
+  "YouTube",
+  "Google",
+  "Friend / Family",
+  "Stage show",
+  "Other",
 ]
 
 export function ClassRegistrationForm() {
@@ -51,19 +89,26 @@ export function ClassRegistrationForm() {
   const form = useForm<ClassRegistrationValues>({
     resolver: zodResolver(classRegistrationSchema),
     defaultValues: {
-      student_name: "",
-      guardian_name: "",
+      full_name: "",
       email: "",
       phone: "",
-      preferred_style: "",
+      age: undefined,
+      interested_class: "",
+      dance_style: "",
       experience_level: "",
       message: "",
+      preferred_schedule: "",
+      source: "",
     },
   })
 
   const handleSubmit = async (values: ClassRegistrationValues) => {
     setSubmitting(true)
-    const result = await submitForm("class_registrations", values)
+    const payload = {
+      ...values,
+      age: typeof values.age === "number" ? values.age : undefined,
+    }
+    const result = await submitForm("class_inquiries", payload)
     setSubmitting(false)
 
     if (result.success) {
@@ -87,12 +132,12 @@ export function ClassRegistrationForm() {
         <div className="grid gap-6 sm:grid-cols-2">
           <FormField
             control={form.control}
-            name="student_name"
+            name="full_name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Student name</FormLabel>
+                <FormLabel>Applicant name</FormLabel>
                 <FormControl>
-                  <Input placeholder="Participant" {...field} />
+                  <Input placeholder="Student or dancer name" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -100,12 +145,12 @@ export function ClassRegistrationForm() {
           />
           <FormField
             control={form.control}
-            name="guardian_name"
+            name="phone"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Guardian / emergency contact</FormLabel>
+                <FormLabel>Phone</FormLabel>
                 <FormControl>
-                  <Input placeholder="Contact person" {...field} />
+                  <Input autoComplete="tel" placeholder="Include country code" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -128,31 +173,76 @@ export function ClassRegistrationForm() {
           />
           <FormField
             control={form.control}
-            name="phone"
+            name="age"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Phone</FormLabel>
+                <FormLabel>Age</FormLabel>
                 <FormControl>
-                  <Input autoComplete="tel" placeholder="Include country code" {...field} />
+                  <Input
+                    type="number"
+                    min={3}
+                    max={80}
+                    placeholder="9"
+                    {...field}
+                    value={field.value ?? ""}
+                    onChange={(event) => field.onChange(event.target.value)}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
         </div>
-        <FormField
-          control={form.control}
-          name="preferred_style"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Preferred dance style</FormLabel>
-              <FormControl>
-                <Input placeholder="Bharatanatyam, Contemporary, Hip-hop, etc." {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <div className="grid gap-6 sm:grid-cols-2">
+          <FormField
+            control={form.control}
+            name="interested_class"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Interested program</FormLabel>
+                <Select onValueChange={field.onChange} value={field.value ?? ""}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a program" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {CLASS_INTERESTS.map((option) => (
+                      <SelectItem key={option} value={option}>
+                        {option}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="dance_style"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Preferred style</FormLabel>
+                <Select onValueChange={field.onChange} value={field.value ?? ""}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Pick a style" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {STYLE_OPTIONS.map((option) => (
+                      <SelectItem key={option} value={option}>
+                        {option}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
         <FormField
           control={form.control}
           name="experience_level"
@@ -179,6 +269,30 @@ export function ClassRegistrationForm() {
         />
         <FormField
           control={form.control}
+          name="preferred_schedule"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Preferred schedule</FormLabel>
+              <Select onValueChange={field.onChange} value={field.value ?? ""}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="When can you attend?" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {SCHEDULE_OPTIONS.map((option) => (
+                    <SelectItem key={option} value={option}>
+                      {option}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
           name="message"
           render={({ field }) => (
             <FormItem>
@@ -186,6 +300,30 @@ export function ClassRegistrationForm() {
               <FormControl>
                 <Textarea rows={4} placeholder="Tell us about goals, schedules, or accessibility needs" {...field} />
               </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="source"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>How did you hear about us?</FormLabel>
+              <Select onValueChange={field.onChange} value={field.value ?? ""}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a channel" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {SOURCE_OPTIONS.map((option) => (
+                    <SelectItem key={option} value={option}>
+                      {option}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
               <FormMessage />
             </FormItem>
           )}

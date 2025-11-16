@@ -12,6 +12,7 @@ import { ThemeProvider } from "@/components/theme-provider"
 import { Toaster } from "@/components/ui/toaster"
 import { LoadingScreen } from "@/components/loading-screen"
 import { KidsClassOfferPopup } from "@/components/kids-class-offer-popup"
+import Loader from "@/components/Loader"
 import InstallPrompt from "@/components/pwa/install-prompt"
 
 import "./globals.css"
@@ -230,6 +231,7 @@ export default function RootLayout({
             gtag('config', 'G-S8XNFD36GG');
           `}
         </Script>
+        <Loader />
         <ThemeProvider attribute="class" enableSystem defaultTheme="system">
           <div className="flex min-h-screen flex-col bg-background text-foreground">
             <a
@@ -244,10 +246,11 @@ export default function RootLayout({
             </main>
             <SiteFooter />
           </div>
+          
           <Analytics />
           <Toaster />
           <KidsClassOfferPopup />
-          <InstallPrompt />
+          {/*<InstallPrompt />*/}
           <Script id="chtl-config" strategy="afterInteractive">
             {`window.chtlConfig = { chatbotId: "9881176774" }`}
           </Script>

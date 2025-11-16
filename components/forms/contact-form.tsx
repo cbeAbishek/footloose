@@ -12,6 +12,8 @@ import { toast } from "@/hooks/use-toast"
 const contactSchema = z.object({
   full_name: z.string().min(2, "Please enter your full name"),
   email: z.string().email("Please enter a valid email address"),
+  phone: z.string().min(10, "Please enter a valid phone number").max(20),
+  subject: z.string().min(2, "Choose a subject"),
   message: z.string().min(10, "Share a few more details"),
 })
 
@@ -38,6 +40,17 @@ const contactItems = [
   },
 ]
 
+const subjects = [
+  "Class Enrollment Inquiry",
+  "Costume Rental Request",
+  "Event Booking",
+  "Corporate Wellness Program",
+  "General Question",
+  "Feedback or Complaint",
+  "Alumni Inquiry",
+  "Career Opportunities",
+]
+
 export function ContactForm() {
   const [isSubmitting, setSubmitting] = useState(false)
 
@@ -46,6 +59,8 @@ export function ContactForm() {
     defaultValues: {
       full_name: "",
       email: "",
+      phone: "",
+      subject: "",
       message: "",
     },
   })
@@ -151,6 +166,45 @@ export function ContactForm() {
               />
               {form.formState.errors.email && (
                 <p className="text-sm text-red-400 lg:text-base">{form.formState.errors.email.message}</p>
+              )}
+            </div>
+
+            <div className="w-full space-y-2">
+              <label htmlFor="phone" className="block text-center text-base font-semibold text-white lg:text-lg">
+                Phone
+              </label>
+              <input
+                id="phone"
+                type="tel"
+                placeholder="(+91) 98765 43210"
+                {...form.register("phone")}
+                className="w-full rounded-xl border border-white/20 bg-white/10 px-5 py-3.5 text-base text-white backdrop-blur-sm transition-all duration-300 placeholder:text-white/40 focus:border-indigo-400 focus:bg-white/15 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 lg:px-6 lg:py-4 lg:text-lg"
+              />
+              {form.formState.errors.phone && (
+                <p className="text-sm text-red-400 lg:text-base">{form.formState.errors.phone.message}</p>
+              )}
+            </div>
+
+            <div className="w-full space-y-2">
+              <label htmlFor="subject" className="block text-center text-base font-semibold text-white lg:text-lg">
+                Subject
+              </label>
+              <select
+                id="subject"
+                {...form.register("subject")}
+                className="w-full rounded-xl border border-white/20 bg-white/10 px-5 py-3.5 text-base text-white backdrop-blur-sm transition-all duration-300 focus:border-indigo-400 focus:bg-white/15 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 lg:px-6 lg:py-4 lg:text-lg"
+              >
+                <option value="" disabled>
+                  Select a topic
+                </option>
+                {subjects.map((subject) => (
+                  <option key={subject} value={subject} className="bg-slate-900 text-white">
+                    {subject}
+                  </option>
+                ))}
+              </select>
+              {form.formState.errors.subject && (
+                <p className="text-sm text-red-400 lg:text-base">{form.formState.errors.subject.message}</p>
               )}
             </div>
 

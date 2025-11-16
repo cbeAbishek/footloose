@@ -29,7 +29,7 @@ import { Button } from "@/components/ui/button"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 
 const inquirySchema = z.object({
-  name: z.string().min(2, "Please enter your full name"),
+  full_name: z.string().min(2, "Please enter your full name"),
   email: z.string().email("Please enter a valid email address"),
   phone: z.string().min(10, "Please enter a valid phone number"),
   subject: z.string().min(1, "Please select a subject"),
@@ -56,7 +56,7 @@ export function ContactFormSection() {
   const form = useForm<InquiryFormValues>({
     resolver: zodResolver(inquirySchema),
     defaultValues: {
-      name: "",
+      full_name: "",
       email: "",
       phone: "",
       subject: "",
@@ -146,7 +146,7 @@ export function ContactFormSection() {
                   <div className="grid gap-6 md:grid-cols-2">
                     <FormField
                       control={form.control}
-                      name="name"
+                      name="full_name"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel className="text-sm font-bold text-black dark:text-white">

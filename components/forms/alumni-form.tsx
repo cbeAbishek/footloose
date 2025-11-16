@@ -1,6 +1,6 @@
 "use client"
 
-import { useMemo, useState } from "react"
+import { useState } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Controller, useForm } from "react-hook-form"
 import { z } from "zod"
@@ -23,30 +23,42 @@ const CURRENT_YEAR = new Date().getFullYear()
 
 const alumniSchema = z.object({
   full_name: z.string().min(2, "Please enter your full name"),
+  email: z.union([z.string().email(), z.literal(""), z.undefined()]),
+  phone: z.union([z.string().min(6), z.literal(""), z.undefined()]),
+  current_location: z.union([z.string(), z.literal(""), z.undefined()]),
   headline: z.string().min(4, "Share a short headline"),
   bio: z.string().min(40, "Tell us more about your journey"),
-  graduation_year: z
-    .number({ invalid_type_error: "Enter a valid year" })
-    .min(1980, "Year looks too early")
-    .max(CURRENT_YEAR, "Year cannot be in the future"),
-  email: z
-    .string()
-    .email("Enter a valid email")
-    .optional()
-    .or(z.literal("")),
-  website: z
-    .string()
-    .url("Provide a valid link")
-    .optional()
-    .or(z.literal("")),
+  batch_year: z.union([
+    z.coerce.number().int().min(1980).max(CURRENT_YEAR),
+    z.literal(""),
+    z.undefined(),
+  ]),
+  enrollment_year: z.union([
+    z.coerce.number().int().min(1980).max(CURRENT_YEAR),
+    z.literal(""),
+    z.undefined(),
+  ]),
+  graduation_year: z.union([
+    z.coerce.number().int().min(1980).max(CURRENT_YEAR),
+    z.literal(""),
+    z.undefined(),
+  ]),
+  training_duration_years: z.union([z.coerce.number().min(0), z.literal(""), z.undefined()]),
+  dance_styles: z.union([z.string(), z.literal(""), z.undefined()]),
+  current_role: z.union([z.string(), z.literal(""), z.undefined()]),
+  current_organization: z.union([z.string(), z.literal(""), z.undefined()]),
+  profession: z.union([z.string(), z.literal(""), z.undefined()]),
+  achievements: z.union([z.string(), z.literal(""), z.undefined()]),
+  notable_performances: z.union([z.string(), z.literal(""), z.undefined()]),
+  awards: z.union([z.string(), z.literal(""), z.undefined()]),
+  certifications: z.union([z.string(), z.literal(""), z.undefined()]),
+  website_url: z.union([z.string().url(), z.literal(""), z.undefined()]),
+  willing_to_mentor: z.coerce.boolean().optional().default(false),
+  available_for_events: z.coerce.boolean().optional().default(false),
   photo: z.any().optional(),
 })
 
 export type AlumniFormValues = z.infer<typeof alumniSchema>
-
-type AlumniSubmitPayload = Omit<AlumniFormValues, "photo"> & {
-  photo?: File | null
-}
 
 export function AlumniForm() {
   const [isSubmitting, setSubmitting] = useState(false)
@@ -55,11 +67,26 @@ export function AlumniForm() {
     resolver: zodResolver(alumniSchema),
     defaultValues: {
       full_name: "",
+      email: "",
+      phone: "",
+      current_location: "",
       headline: "",
       bio: "",
-      graduation_year: CURRENT_YEAR,
-      email: "",
-      website: "",
+      batch_year: "",
+      enrollment_year: "",
+      graduation_year: "",
+      training_duration_years: "",
+      dance_styles: "",
+      current_role: "",
+      current_organization: "",
+      profession: "",
+      achievements: "",
+      notable_performances: "",
+      awards: "",
+      certifications: "",
+      website_url: "",
+      willing_to_mentor: false,
+      available_for_events: false,
       photo: undefined,
     },
   })
@@ -67,18 +94,31 @@ export function AlumniForm() {
   const onSubmit = async (values: AlumniFormValues) => {
     setSubmitting(true)
 
-    const payload: AlumniSubmitPayload = {
-      ...values,
-      photo: undefined,
-    }
-
     const formData = new FormData()
     formData.set("full_name", values.full_name)
+    formData.set("email", values.email ?? "")
+    formData.set("phone", values.phone ?? "")
+    formData.set("current_location", values.current_location ?? "")
     formData.set("headline", values.headline)
     formData.set("bio", values.bio)
-    formData.set("graduation_year", String(values.graduation_year))
-    formData.set("email", values.email ?? "")
-    formData.set("website", values.website ?? "")
+    formData.set("batch_year", values.batch_year ? String(values.batch_year) : "")
+    formData.set("enrollment_year", values.enrollment_year ? String(values.enrollment_year) : "")
+    formData.set("graduation_year", values.graduation_year ? String(values.graduation_year) : "")
+    formData.set(
+      "training_duration_years",
+      values.training_duration_years ? String(values.training_duration_years) : "",
+    )
+    formData.set("dance_styles", values.dance_styles ?? "")
+    formData.set("current_role", values.current_role ?? "")
+    formData.set("current_organization", values.current_organization ?? "")
+    formData.set("profession", values.profession ?? "")
+    formData.set("achievements", values.achievements ?? "")
+    formData.set("notable_performances", values.notable_performances ?? "")
+    formData.set("awards", values.awards ?? "")
+    formData.set("certifications", values.certifications ?? "")
+    formData.set("website_url", values.website_url ?? "")
+    formData.set("willing_to_mentor", String(values.willing_to_mentor ?? false))
+    formData.set("available_for_events", String(values.available_for_events ?? false))
 
     const file = extractFile(values.photo)
     if (file) {
@@ -104,14 +144,6 @@ export function AlumniForm() {
     })
   }
 
-  const graduationYearOptions = useMemo(() => {
-    const years: number[] = []
-    for (let year = CURRENT_YEAR; year >= 1990; year -= 1) {
-      years.push(year)
-    }
-    return years
-  }, [])
-
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -131,18 +163,59 @@ export function AlumniForm() {
           />
           <FormField
             control={form.control}
-            name="headline"
+            name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Headline</FormLabel>
+                <FormLabel>Email (optional)</FormLabel>
                 <FormControl>
-                  <Input placeholder="Performer, Coach, Creative Director" {...field} />
+                  <Input type="email" placeholder="you@example.com" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
         </div>
+        <div className="grid gap-6 sm:grid-cols-2">
+          <FormField
+            control={form.control}
+            name="phone"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Phone (optional)</FormLabel>
+                <FormControl>
+                  <Input placeholder="(+91)" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="current_location"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Current location</FormLabel>
+                <FormControl>
+                  <Input placeholder="City, Country" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+        <FormField
+          control={form.control}
+          name="headline"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Headline</FormLabel>
+              <FormControl>
+                <Input placeholder="Performer, Coach, Creative Director" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <FormField
           control={form.control}
           name="bio"
@@ -156,25 +229,110 @@ export function AlumniForm() {
             </FormItem>
           )}
         />
+        <div className="grid gap-6 sm:grid-cols-4">
+          {[
+            { name: "batch_year", label: "Batch year" },
+            { name: "enrollment_year", label: "Enrollment year" },
+            { name: "graduation_year", label: "Graduation year" },
+            { name: "training_duration_years", label: "Training years" },
+          ].map(({ name, label }) => (
+            <FormField
+              key={name}
+              control={form.control}
+              name={name as keyof AlumniFormValues}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{label}</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="number"
+                      placeholder="YYYY"
+                      value={field.value ?? ""}
+                      onChange={(event) => field.onChange(event.target.value)}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          ))}
+        </div>
+        <FormField
+          control={form.control}
+          name="dance_styles"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Dance styles</FormLabel>
+              <FormControl>
+                <Input placeholder="Comma separated styles" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <div className="grid gap-6 sm:grid-cols-2">
+          <FormField
+            control={form.control}
+            name="current_role"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Current role</FormLabel>
+                <FormControl>
+                  <Input placeholder="Creative Director" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="current_organization"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Organization</FormLabel>
+                <FormControl>
+                  <Input placeholder="Company / Crew" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+        <FormField
+          control={form.control}
+          name="profession"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Profession</FormLabel>
+              <FormControl>
+                <Input placeholder="Performer, Founder, Educator" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="achievements"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Achievements</FormLabel>
+              <FormControl>
+                <Textarea rows={3} placeholder="Share awards or highlights" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <div className="grid gap-6 sm:grid-cols-3">
           <FormField
             control={form.control}
-            name="graduation_year"
+            name="notable_performances"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Graduation year</FormLabel>
+                <FormLabel>Notable performances</FormLabel>
                 <FormControl>
-                  <select
-                    className="flex h-10 w-full rounded-md border border-border bg-transparent px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-ring"
-                    value={field.value}
-                    onChange={(event) => field.onChange(Number(event.target.value))}
-                  >
-                    {graduationYearOptions.map((year) => (
-                      <option key={year} value={year}>
-                        {year}
-                      </option>
-                    ))}
-                  </select>
+                  <Input placeholder="Comma separated" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -182,12 +340,12 @@ export function AlumniForm() {
           />
           <FormField
             control={form.control}
-            name="email"
+            name="awards"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email (optional)</FormLabel>
+                <FormLabel>Awards</FormLabel>
                 <FormControl>
-                  <Input type="email" placeholder="you@example.com" {...field} />
+                  <Input placeholder="Comma separated" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -195,17 +353,50 @@ export function AlumniForm() {
           />
           <FormField
             control={form.control}
-            name="website"
+            name="certifications"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Website / profile (optional)</FormLabel>
+                <FormLabel>Certifications</FormLabel>
                 <FormControl>
-                  <Input placeholder="https://" {...field} />
+                  <Input placeholder="Comma separated" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
+        </div>
+        <FormField
+          control={form.control}
+          name="website_url"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Website / profile</FormLabel>
+              <FormControl>
+                <Input placeholder="https://" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <div className="flex flex-col gap-4 rounded-2xl border border-border/60 p-4 sm:flex-row">
+          <label className="flex items-center gap-2 text-sm font-medium">
+            <input
+              type="checkbox"
+              className="h-4 w-4"
+              checked={form.watch("willing_to_mentor")}
+              onChange={(event) => form.setValue("willing_to_mentor", event.target.checked)}
+            />
+            Available to mentor current students
+          </label>
+          <label className="flex items-center gap-2 text-sm font-medium">
+            <input
+              type="checkbox"
+              className="h-4 w-4"
+              checked={form.watch("available_for_events")}
+              onChange={(event) => form.setValue("available_for_events", event.target.checked)}
+            />
+            Open for events / talks
+          </label>
         </div>
         <Controller
           control={form.control}

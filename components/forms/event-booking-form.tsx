@@ -1,12 +1,15 @@
 "use client"
 
-import { useState } from "react"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
+import * as React from "react"
 import { z } from "zod"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
 
 import { submitForm } from "@/lib/form-submit"
-import { toast } from "@/hooks/use-toast"
+import { useToast } from "@/hooks/use-toast"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
 import {
   Form,
   FormControl,
@@ -15,67 +18,106 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { Button } from "@/components/ui/button"
 
-const eventBookingSchema = z.object({
-  organization: z.string().min(2, "Enter your organisation"),
-  contact_name: z.string().min(2, "Enter the main contact"),
-  email: z.string().email(),
-  phone: z.string().min(6),
-  event_date: z.string().min(4, "Provide a tentative date"),
-  location: z.string().min(2, "Provide the venue or city"),
-  audience_size: z.string().min(1, "Approximate audience size helps us plan"),
-  notes: z.string().max(600).optional().or(z.literal("")),
+const eventInquirySchema = z.object({
+  full_name: z.string().min(2, "Name is required"),
+  organization: z.string().optional().or(z.literal("")),
+  email: z.string().email("Enter a valid email"),
+  phone: z.string().min(6, "Phone is required"),
+  event_type: z.string().min(2, "Event type is required"),
+  event_name: z.string().optional().or(z.literal("")),
+  preferred_date: z.string().optional().or(z.literal("")),
+  alternative_dates: z.string().optional().or(z.literal("")),
+  guest_count: z
+    .union([z.coerce.number().int().min(1).max(100000), z.literal(""), z.undefined()])
+    .optional(),
+  event_duration_hours: z
+    .union([z.coerce.number().min(1).max(72), z.literal(""), z.undefined()])
+    .optional(),
+  venue: z.string().optional().or(z.literal("")),
+  budget_range: z.string().optional().or(z.literal("")),
+  performance_requirements: z.string().optional().or(z.literal("")),
+  special_requests: z.string().optional().or(z.literal("")),
+  message: z.string().optional().or(z.literal("")),
 })
 
-export type EventBookingValues = z.infer<typeof eventBookingSchema>
+export type EventBookingValues = z.infer<typeof eventInquirySchema>
 
 export function EventBookingForm() {
-  const [isSubmitting, setSubmitting] = useState(false)
+  const { toast } = useToast()
 
   const form = useForm<EventBookingValues>({
-    resolver: zodResolver(eventBookingSchema),
+    resolver: zodResolver(eventInquirySchema),
     defaultValues: {
+      full_name: "",
       organization: "",
-      contact_name: "",
       email: "",
       phone: "",
-      event_date: "",
-      location: "",
-      audience_size: "",
-      notes: "",
+      event_type: "",
+      event_name: "",
+      preferred_date: "",
+      alternative_dates: "",
+      guest_count: "",
+      event_duration_hours: "",
+      venue: "",
+      budget_range: "",
+      performance_requirements: "",
+      special_requests: "",
+      message: "",
     },
   })
 
   const handleSubmit = async (values: EventBookingValues) => {
-    setSubmitting(true)
-    const result = await submitForm("event_bookings", values)
-    setSubmitting(false)
-
-    if (result.success) {
+    try {
+      await submitForm("event_inquiries", {
+        ...values,
+        guest_count: values.guest_count === "" ? null : values.guest_count,
+        event_duration_hours:
+          values.event_duration_hours === "" ? null : values.event_duration_hours,
+      })
       toast({
-        title: "Event brief received",
-        description: "Our production desk will reach out with next steps.",
+        title: "Request received",
+        description: "Our team will coordinate with you shortly.",
       })
       form.reset()
-      return
+    } catch (error) {
+      console.error(error)
+      toast({
+        variant: "destructive",
+        title: "Submission failed",
+        description: "Please retry in a moment or contact support.",
+      })
     }
-
-    toast({
-      title: "Unable to submit",
-      description: result.error ?? "Please try again shortly.",
-    })
   }
 
+  const isSubmitting = form.formState.isSubmitting
+
   return (
-    <div className="w-full max-w-4xl mx-auto">
+    <div className="mx-auto w-full max-w-4xl">
       <div className="rounded-2xl border border-border bg-card shadow-lg transition-shadow duration-300 hover:shadow-xl">
         <div className="p-8 md:p-10 lg:p-12">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-8">
               <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                <FormField
+                  control={form.control}
+                  name="full_name"
+                  render={({ field }) => (
+                    <FormItem className="space-y-2">
+                      <FormLabel className="text-sm font-medium text-foreground">
+                        Primary contact
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Name of the coordinator"
+                          className="w-full rounded-lg border-input bg-background px-4 py-3 text-sm transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage className="text-xs" />
+                    </FormItem>
+                  )}
+                />
                 <FormField
                   control={form.control}
                   name="organization"
@@ -87,25 +129,6 @@ export function EventBookingForm() {
                       <FormControl>
                         <Input
                           placeholder="Company or institution"
-                          className="w-full rounded-lg border-input bg-background px-4 py-3 text-sm transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage className="text-xs" />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="contact_name"
-                  render={({ field }) => (
-                    <FormItem className="space-y-2">
-                      <FormLabel className="text-sm font-medium text-foreground">
-                        Primary contact
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="Name of the coordinator"
                           className="w-full rounded-lg border-input bg-background px-4 py-3 text-sm transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
                           {...field}
                         />
@@ -143,37 +166,36 @@ export function EventBookingForm() {
                   name="phone"
                   render={({ field }) => (
                     <FormItem className="space-y-2">
-                        <FormLabel className="text-sm font-medium text-foreground">
-                          Phone
-                        </FormLabel>
-                        <FormControl>
-                          <Input
-                            type="tel"
-                            autoComplete="tel"
-                            placeholder="Contact number"
-                            className="w-full rounded-lg border-input bg-background px-4 py-3 text-sm transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage className="text-xs" />
-                      </FormItem>
-                    )}
-                  />
-                </div>
+                      <FormLabel className="text-sm font-medium text-foreground">
+                        Phone
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          type="tel"
+                          autoComplete="tel"
+                          placeholder="Include country code"
+                          className="w-full rounded-lg border-input bg-background px-4 py-3 text-sm transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage className="text-xs" />
+                    </FormItem>
+                  )}
+                />
+              </div>
 
               <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                 <FormField
                   control={form.control}
-                  name="event_date"
+                  name="event_type"
                   render={({ field }) => (
                     <FormItem className="space-y-2">
                       <FormLabel className="text-sm font-medium text-foreground">
-                        Event date
+                        Event type
                       </FormLabel>
                       <FormControl>
                         <Input
-                          type="text"
-                          placeholder="Preferred date or range"
+                          placeholder="Concert, showcase, corporate, etc."
                           className="w-full rounded-lg border-input bg-background px-4 py-3 text-sm transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
                           {...field}
                         />
@@ -184,15 +206,147 @@ export function EventBookingForm() {
                 />
                 <FormField
                   control={form.control}
-                  name="location"
+                  name="event_name"
                   render={({ field }) => (
                     <FormItem className="space-y-2">
                       <FormLabel className="text-sm font-medium text-foreground">
-                        Location
+                        Event name (optional)
                       </FormLabel>
                       <FormControl>
                         <Input
-                          placeholder="City / venue"
+                          placeholder="Annual day, launch, etc."
+                          className="w-full rounded-lg border-input bg-background px-4 py-3 text-sm transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage className="text-xs" />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                <FormField
+                  control={form.control}
+                  name="preferred_date"
+                  render={({ field }) => (
+                    <FormItem className="space-y-2">
+                      <FormLabel className="text-sm font-medium text-foreground">
+                        Preferred date
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="DD/MM/YYYY or range"
+                          className="w-full rounded-lg border-input bg-background px-4 py-3 text-sm transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage className="text-xs" />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="alternative_dates"
+                  render={({ field }) => (
+                    <FormItem className="space-y-2">
+                      <FormLabel className="text-sm font-medium text-foreground">
+                        Alternative dates
+                      </FormLabel>
+                      <FormControl>
+                        <Textarea
+                          rows={2}
+                          placeholder="Comma separated back-up dates"
+                          className="rounded-lg border-input bg-background px-4 py-3 text-sm transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage className="text-xs" />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                <FormField
+                  control={form.control}
+                  name="guest_count"
+                  render={({ field }) => (
+                    <FormItem className="space-y-2">
+                      <FormLabel className="text-sm font-medium text-foreground">
+                        Guest count
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          type="number"
+                          min={1}
+                          placeholder="Approximate numbers"
+                          className="w-full rounded-lg border-input bg-background px-4 py-3 text-sm transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                          {...field}
+                          value={field.value ?? ""}
+                        />
+                      </FormControl>
+                      <FormMessage className="text-xs" />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="event_duration_hours"
+                  render={({ field }) => (
+                    <FormItem className="space-y-2">
+                      <FormLabel className="text-sm font-medium text-foreground">
+                        Duration (hours)
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          type="number"
+                          min={1}
+                          max={72}
+                          step={0.5}
+                          placeholder="e.g. 2"
+                          className="w-full rounded-lg border-input bg-background px-4 py-3 text-sm transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                          {...field}
+                          value={field.value ?? ""}
+                        />
+                      </FormControl>
+                      <FormMessage className="text-xs" />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                <FormField
+                  control={form.control}
+                  name="venue"
+                  render={({ field }) => (
+                    <FormItem className="space-y-2">
+                      <FormLabel className="text-sm font-medium text-foreground">
+                        Venue / city
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Location of performance"
+                          className="w-full rounded-lg border-input bg-background px-4 py-3 text-sm transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage className="text-xs" />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="budget_range"
+                  render={({ field }) => (
+                    <FormItem className="space-y-2">
+                      <FormLabel className="text-sm font-medium text-foreground">
+                        Budget range (optional)
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="e.g. ₹2–3L"
                           className="w-full rounded-lg border-input bg-background px-4 py-3 text-sm transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
                           {...field}
                         />
@@ -205,16 +359,17 @@ export function EventBookingForm() {
 
               <FormField
                 control={form.control}
-                name="audience_size"
+                name="performance_requirements"
                 render={({ field }) => (
                   <FormItem className="space-y-2">
                     <FormLabel className="text-sm font-medium text-foreground">
-                      Audience size
+                      Performance requirements
                     </FormLabel>
                     <FormControl>
-                      <Input
-                        placeholder="Approximate numbers"
-                        className="w-full rounded-lg border-input bg-background px-4 py-3 text-sm transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                      <Textarea
+                        rows={4}
+                        placeholder="Describe acts, props, production cues"
+                        className="min-h-[120px] rounded-lg border-input bg-background px-4 py-3 text-sm transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
                         {...field}
                       />
                     </FormControl>
@@ -225,17 +380,38 @@ export function EventBookingForm() {
 
               <FormField
                 control={form.control}
-                name="notes"
+                name="special_requests"
                 render={({ field }) => (
                   <FormItem className="space-y-2">
                     <FormLabel className="text-sm font-medium text-foreground">
-                      Event notes (optional)
+                      Special requests
                     </FormLabel>
                     <FormControl>
                       <Textarea
-                        rows={4}
-                        placeholder="Describe objectives, themes, or technical requests"
-                        className="min-h-[120px] rounded-lg border-input bg-background px-4 py-3 text-sm transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                        rows={3}
+                        placeholder="Celebrity appearances, backstage passes, etc."
+                        className="min-h-[100px] rounded-lg border-input bg-background px-4 py-3 text-sm transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage className="text-xs" />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="message"
+                render={({ field }) => (
+                  <FormItem className="space-y-2">
+                    <FormLabel className="text-sm font-medium text-foreground">
+                      Additional context
+                    </FormLabel>
+                    <FormControl>
+                      <Textarea
+                        rows={3}
+                        placeholder="Share timelines, goals, or references"
+                        className="min-h-[100px] rounded-lg border-input bg-background px-4 py-3 text-sm transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
                         {...field}
                       />
                     </FormControl>

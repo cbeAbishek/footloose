@@ -1,12 +1,11 @@
 "use client"
 
-import { useState } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
 import { submitForm } from "@/lib/form-submit"
-import { toast } from "@/hooks/use-toast"
+import { useToast } from "@/hooks/use-toast"
 import {
   Form,
   FormControl,
@@ -26,8 +25,13 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 
+const optionalEmail = z.union([z.string().email({ message: "Enter a valid email" }), z.literal("")])
+const optionalPhone = z.union([z.string().min(6).max(20), z.literal("")])
+
 const serverRequestSchema = z.object({
   requester: z.string().min(2, "Enter your name"),
+  email: optionalEmail.optional().default(""),
+  phone: optionalPhone.optional().default(""),
   department: z.string().min(2, "Department is required"),
   priority: z.enum(["low", "medium", "high"]),
   summary: z.string().min(4, "Summary is required"),
@@ -37,12 +41,14 @@ const serverRequestSchema = z.object({
 export type ServerRequestValues = z.infer<typeof serverRequestSchema>
 
 export function ServerRequestForm() {
-  const [isSubmitting, setSubmitting] = useState(false)
+  const { toast } = useToast()
 
   const form = useForm<ServerRequestValues>({
     resolver: zodResolver(serverRequestSchema),
     defaultValues: {
       requester: "",
+      email: "",
+      phone: "",
       department: "",
       priority: "medium",
       summary: "",
@@ -51,9 +57,25 @@ export function ServerRequestForm() {
   })
 
   const handleSubmit = async (values: ServerRequestValues) => {
-    setSubmitting(true)
-    const result = await submitForm("server_requests", values)
-    setSubmitting(false)
+    const payload = {
+      contact_name: values.requester,
+      contact_email: values.email ?? "",
+      contact_phone: values.phone ?? "",
+      feedback_type: "internal_request",
+      category: values.department,
+      subject: `[${values.priority.toUpperCase()}] ${values.summary}`,
+      message: `${values.details}\n\nDepartment: ${values.department}\nPriority: ${values.priority}`,
+      related_to: "operations",
+      overall_rating: "",
+      service_rating: "",
+      instructor_rating: "",
+      facility_rating: "",
+      event_id: "",
+      class_id: "",
+      is_anonymous: false,
+    }
+
+    const result = await submitForm("feedback", payload)
 
     if (result.success) {
       toast({
@@ -62,6 +84,8 @@ export function ServerRequestForm() {
       })
       form.reset({
         requester: "",
+        email: "",
+        phone: "",
         department: "",
         priority: "medium",
         summary: "",
@@ -71,10 +95,13 @@ export function ServerRequestForm() {
     }
 
     toast({
+      variant: "destructive",
       title: "Unable to submit",
       description: result.error ?? "Please try again in a moment.",
     })
   }
+
+  const isSubmitting = form.formState.isSubmitting
 
   return (
     <Form {...form}>
@@ -88,6 +115,35 @@ export function ServerRequestForm() {
                 <FormLabel>Name</FormLabel>
                 <FormControl>
                   <Input placeholder="Your name" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Email (optional)</FormLabel>
+                <FormControl>
+                  <Input type="email" placeholder="name@footloose.com" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+
+        <div className="grid gap-6 sm:grid-cols-2">
+          <FormField
+            control={form.control}
+            name="phone"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Phone (optional)</FormLabel>
+                <FormControl>
+                  <Input type="tel" placeholder="Contact number" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

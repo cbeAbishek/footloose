@@ -26,15 +26,18 @@ const blogPostSchema = z.object({
     .string()
     .min(2, "Slug is required")
     .regex(/^[a-z0-9-]+$/, "Use lowercase letters, numbers, and hyphens only"),
-  summary: z.string().min(20, "Summary should be at least 20 characters"),
-  body: z.string().min(120, "Body requires at least 120 characters"),
+  excerpt: z.string().min(40, "Excerpt should be at least 40 characters"),
+  content: z.string().min(200, "Body requires at least 200 characters"),
   author_name: z.string().min(2, "Author is required"),
-  source_link: z
-    .string()
-    .url("Provide a valid URL")
-    .optional()
-    .or(z.literal("")),
-  thumbnail: z.any().optional(),
+  category: z.string().optional().or(z.literal("")),
+  tags: z.string().optional().or(z.literal("")),
+  status: z.enum(["draft", "scheduled", "published", "archived"]).default("draft"),
+  meta_title: z.string().optional().or(z.literal("")),
+  meta_description: z.string().optional().or(z.literal("")),
+  meta_keywords: z.string().optional().or(z.literal("")),
+  gallery_urls: z.string().optional().or(z.literal("")),
+  source_link: z.union([z.string().url(), z.literal(""), z.undefined()]),
+  cover_image: z.any().optional(),
 })
 
 export type BlogPostFormValues = z.infer<typeof blogPostSchema>
@@ -55,11 +58,18 @@ export function BlogPostForm() {
     defaultValues: {
       title: "",
       slug: "",
-      summary: "",
-      body: "",
+      excerpt: "",
+      content: "",
       author_name: "",
+      category: "",
+      tags: "",
+      status: "draft",
+      meta_title: "",
+      meta_description: "",
+      meta_keywords: "",
+      gallery_urls: "",
       source_link: "",
-      thumbnail: undefined,
+      cover_image: undefined,
     },
   })
 
@@ -77,14 +87,21 @@ export function BlogPostForm() {
     const formData = new FormData()
     formData.set("title", values.title)
     formData.set("slug", values.slug)
-    formData.set("summary", values.summary)
-    formData.set("body", values.body)
+    formData.set("excerpt", values.excerpt)
+    formData.set("content", values.content)
     formData.set("author_name", values.author_name)
+    formData.set("category", values.category ?? "")
+    formData.set("tags", values.tags ?? "")
+    formData.set("status", values.status)
+    formData.set("meta_title", values.meta_title ?? "")
+    formData.set("meta_description", values.meta_description ?? "")
+    formData.set("meta_keywords", values.meta_keywords ?? "")
+    formData.set("gallery_urls", values.gallery_urls ?? "")
     formData.set("source_link", values.source_link ?? "")
 
-    const thumbnail = extractFile(values.thumbnail)
-    if (thumbnail) {
-      formData.set("thumbnail", thumbnail)
+    const coverImage = extractFile(values.cover_image)
+    if (coverImage) {
+      formData.set("cover_image", coverImage)
     }
 
     const result = await submitForm("blog_posts", formData)
@@ -157,10 +174,10 @@ export function BlogPostForm() {
         </div>
         <FormField
           control={form.control}
-          name="summary"
+          name="excerpt"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Summary</FormLabel>
+              <FormLabel>Excerpt</FormLabel>
               <FormControl>
                 <Textarea rows={3} placeholder="Short SEO description" {...field} />
               </FormControl>
@@ -170,7 +187,7 @@ export function BlogPostForm() {
         />
         <FormField
           control={form.control}
-          name="body"
+          name="content"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Article body</FormLabel>
@@ -181,6 +198,110 @@ export function BlogPostForm() {
             </FormItem>
           )}
         />
+        <div className="grid gap-6 sm:grid-cols-2">
+          <FormField
+            control={form.control}
+            name="category"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Category</FormLabel>
+                <FormControl>
+                  <Input placeholder="Academy, Events, Wellness" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="tags"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Tags</FormLabel>
+                <FormControl>
+                  <Input placeholder="Comma separated" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+        <FormField
+          control={form.control}
+          name="status"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Status</FormLabel>
+              <FormControl>
+                <select
+                  className="flex h-10 w-full rounded-md border border-border bg-transparent px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-ring"
+                  value={field.value}
+                  onChange={(event) => field.onChange(event.target.value as BlogPostFormValues["status"])}
+                >
+                  <option value="draft">Draft</option>
+                  <option value="scheduled">Scheduled</option>
+                  <option value="published">Published</option>
+                  <option value="archived">Archived</option>
+                </select>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="meta_title"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Meta title</FormLabel>
+              <FormControl>
+                <Input placeholder="Custom SEO title" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="meta_description"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Meta description</FormLabel>
+              <FormControl>
+                <Textarea rows={3} placeholder="Search description" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <div className="grid gap-6 sm:grid-cols-2">
+          <FormField
+            control={form.control}
+            name="meta_keywords"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Meta keywords</FormLabel>
+                <FormControl>
+                  <Input placeholder="Comma separated" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="gallery_urls"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Gallery URLs</FormLabel>
+                <FormControl>
+                  <Input placeholder="Comma separated image URLs" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
         <FormField
           control={form.control}
           name="source_link"
@@ -196,10 +317,10 @@ export function BlogPostForm() {
         />
         <FormField
           control={form.control}
-          name="thumbnail"
+          name="cover_image"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Thumbnail (optional)</FormLabel>
+              <FormLabel>Cover image</FormLabel>
               <FormControl>
                 <Input
                   type="file"
