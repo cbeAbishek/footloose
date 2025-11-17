@@ -221,6 +221,7 @@ export default function RootLayout({
       <body
         className={`font-sans ${GeistSans.variable} ${GeistMono.variable} antialiased`}
       >
+          {/* <Loader /> */}
         <Script src="https://www.googletagmanager.com/gtag/js?id=G-S8XNFD36GG" strategy="afterInteractive" />
         <Script id="ga-gtag" strategy="afterInteractive">
           {`
@@ -231,7 +232,6 @@ export default function RootLayout({
             gtag('config', 'G-S8XNFD36GG');
           `}
         </Script>
-        <Loader />
         <ThemeProvider attribute="class" enableSystem defaultTheme="system">
           <div className="flex min-h-screen flex-col bg-background text-foreground">
             <a
