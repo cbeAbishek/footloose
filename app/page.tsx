@@ -19,16 +19,16 @@ export default function HomePage() {
       <HeroSection />
       <StatisticsBoard />
       <AboutSection />
-      <ChaircoCiseSection />
+      {/* <ChaircoCiseSection /> */}
       <TestimonialsSection />
       <ClientsSection />
       {/* <BehindTheStageSection /> */}
       <FounderMessageSection />
-      <ClassCard />
+      {/* <ClassCard /> */}
       {/* <ClassesShowsEventsSection /> */}
-      <SocialWall />
+      {/* <SocialWall /> */}
     </main>
-  )
+  );
 }
 
 

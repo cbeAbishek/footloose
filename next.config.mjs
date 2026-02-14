@@ -6,14 +6,15 @@ const appEnv = process.env.APP_ENV || (isProd ? 'prod' : 'dev');
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
   typescript: {
     ignoreBuildErrors: true,
   },
+  // Next.js 16 enables Turbopack by default. `next-pwa` injects a webpack config,
+  // so we add an (empty) Turbopack config to make this intentional.
+  turbopack: {},
   images: {
     unoptimized: true,
+    qualities: [75, 90],
   },
   // Expose APP_ENV (and any other build-time env) to the client
   env: {

@@ -1,64 +1,69 @@
-"use client"
+"use client";
 
-import { useEffect, useRef, useState } from "react"
-import { Calendar, MapPin, Users, Trophy } from "lucide-react"
+import { useEffect, useRef, useState } from "react";
+import { Calendar, MapPin, Users, Trophy } from "lucide-react";
 
 export function CompanyHistory() {
-  const [isVisible, setIsVisible] = useState(false)
-  const sectionRef = useRef<HTMLDivElement>(null)
+  const [isVisible, setIsVisible] = useState(false);
+  const sectionRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        setIsVisible(entry.isIntersecting)
+        setIsVisible(entry.isIntersecting);
       },
-      { threshold: 0.1 }
-    )
+      { threshold: 0.1 },
+    );
 
     if (sectionRef.current) {
-      observer.observe(sectionRef.current)
+      observer.observe(sectionRef.current);
     }
 
-    return () => observer.disconnect()
-  }, [])
+    return () => observer.disconnect();
+  }, []);
 
   const milestones = [
     {
       year: "1992",
       title: "The Beginning",
-      description: "Mr. M. Edwin establishes Coimbatore's first Western dance school, driven by passion to make dance accessible and exciting for everyone.",
+      description:
+        "Mr. M. Edwin establishes Coimbatore's first Western dance school, driven by passion to make dance accessible and exciting for everyone.",
       icon: Calendar,
       color: "from-purple-600 to-purple-400",
     },
     {
       year: "1995-2000",
       title: "Building Community",
-      description: "Growing from small birthday performances to grand annual day celebrations, creating immersive themed experiences.",
+      description:
+        "Growing from small birthday performances to grand annual day celebrations, creating immersive themed experiences.",
       icon: Users,
       color: "from-blue-600 to-cyan-400",
     },
     {
       year: "2005-2015",
       title: "Expansion Era",
-      description: "Opening multiple training centers across Coimbatore (R.S. Puram, Ramanathapuram, Tirupur), reaching thousands of students.",
+      description:
+        "Opening multiple training centers across Coimbatore (R.S. Puram, Ramanathapuram, Tirupur), reaching thousands of students.",
       icon: MapPin,
       color: "from-cyan-600 to-teal-400",
     },
     {
       year: "2015-2020",
       title: "Innovation & Growth",
-      description: "Launching House of Costume division and pioneering CHAIR-CO-CISE program for inclusive fitness.",
+      description:
+        "Launching House of Costume division and pioneering CHAIR-CO-CISE program for inclusive fitness.",
       icon: Trophy,
       color: "from-pink-600 to-rose-400",
     },
     {
       year: "2022-Present",
       title: "Cultural Institution",
-      description: "300,000+ students trained, 8,000+ shows performed. Celebrating 33 years as South India's leading dance company.",
+      description:
+        "300,000+ students trained, 8,000+ shows performed. Celebrating 33 years as South India's leading dance company.",
       icon: Trophy,
       color: "from-orange-600 to-amber-400",
     },
-  ]
+  ];
 
   return (
     <section
@@ -95,56 +100,74 @@ export function CompanyHistory() {
 
           <div className="space-y-12 md:space-y-24">
             {milestones.map((milestone, index) => {
-              const Icon = milestone.icon
-              const isLeft = index % 2 === 0
+              const Icon = milestone.icon;
+              const isLeft = index % 2 === 0;
 
               return (
                 <div
                   key={index}
                   className={`relative transition-all duration-1000 ${
-                    isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+                    isVisible
+                      ? "opacity-100 translate-y-0"
+                      : "opacity-0 translate-y-10"
                   }`}
                   style={{ transitionDelay: `${index * 200}ms` }}
                 >
-                  <div className={`grid md:grid-cols-2 gap-8 items-center ${isLeft ? "" : "md:flex-row-reverse"}`}>
+                  <div
+                    className={`grid md:grid-cols-2 gap-8 items-center ${isLeft ? "" : "md:flex-row-reverse"}`}
+                  >
                     {/* Content */}
-                    <div className={`${isLeft ? "md:text-right md:pr-12" : "md:col-start-2 md:pl-12"}`}>
+                    <div
+                      className={`text-center ${isLeft ? "md:text-right md:pr-12" : "md:col-start-2 md:pl-12"}`}
+                    >
                       <div className="inline-block mb-3">
-                        <div className={`inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r ${milestone.color} bg-opacity-10 border-2 rounded-full`}>
-                          <span className={`text-sm md:text-base font-bold bg-gradient-to-r ${milestone.color} bg-clip-text text-white`}>
+                        <div
+                          className={`inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r ${milestone.color} bg-opacity-10 border-2 rounded-full`}
+                        >
+                          <span
+                            className={`text-sm md:text-base font-bold bg-gradient-to-r ${milestone.color} bg-clip-text text-white`}
+                          >
                             {milestone.year}
                           </span>
                         </div>
                       </div>
-                      
+
                       <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-3 md:mb-4">
                         {milestone.title}
                       </h3>
-                      
+
                       <p className="text-base sm:text-lg text-gray-600 dark:text-gray-400 leading-relaxed">
                         {milestone.description}
                       </p>
                     </div>
 
                     {/* Icon Circle */}
-                    <div className={`hidden md:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 ${isLeft ? "" : ""}`}>
+                    <div
+                      className={`hidden md:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 ${isLeft ? "" : ""}`}
+                    >
                       <div className="relative group">
-                        <div className={`absolute inset-0 bg-gradient-to-br ${milestone.color} rounded-full blur-lg opacity-50 group-hover:opacity-75 transition-opacity animate-pulse`} />
-                        <div className={`relative w-20 h-20 bg-gradient-to-br ${milestone.color} rounded-full flex items-center justify-center shadow-2xl border-4 border-white dark:border-black`}>
+                        <div
+                          className={`absolute inset-0 bg-gradient-to-br ${milestone.color} rounded-full blur-lg opacity-50 group-hover:opacity-75 transition-opacity animate-pulse`}
+                        />
+                        <div
+                          className={`relative w-20 h-20 bg-gradient-to-br ${milestone.color} rounded-full flex items-center justify-center shadow-2xl border-4 border-white dark:border-black`}
+                        >
                           <Icon className="h-10 w-10 text-white" />
                         </div>
                       </div>
                     </div>
 
                     {/* Mobile Icon */}
-                    <div className="md:hidden flex items-center gap-4">
-                      <div className={`w-14 h-14 bg-gradient-to-br ${milestone.color} rounded-full flex items-center justify-center shadow-lg flex-shrink-0`}>
+                    <div className="md:hidden flex items-center gap-4 justify-center mb-4">
+                      <div
+                        className={`w-14 h-14 bg-gradient-to-br ${milestone.color} rounded-full flex items-center justify-center shadow-lg flex-shrink-0`}
+                      >
                         <Icon className="h-7 w-7 text-white" />
                       </div>
                     </div>
                   </div>
                 </div>
-              )
+              );
             })}
           </div>
         </div>
@@ -156,7 +179,9 @@ export function CompanyHistory() {
           }`}
         >
           <blockquote className="text-xl sm:text-2xl md:text-3xl font-semibold text-gray-900 dark:text-white italic">
-            "What started as a dream has evolved into a cultural institution, touching over 300,000 lives through the transformative power of dance."
+            "What started as a dream has evolved into a cultural institution,
+            touching over 300,000 lives through the transformative power of
+            dance."
           </blockquote>
           <p className="mt-4 text-base sm:text-lg text-gray-600 dark:text-gray-400">
             — Mr. M. Edwin, Founder
@@ -164,5 +189,5 @@ export function CompanyHistory() {
         </div>
       </div>
     </section>
-  )
+  );
 }

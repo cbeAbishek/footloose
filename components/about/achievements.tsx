@@ -1,69 +1,69 @@
-"use client"
+"use client";
 
-import { useEffect, useRef, useState } from "react"
-import { Trophy, Users, Star, Globe, Award, TrendingUp } from "lucide-react"
+import { useEffect, useRef, useState } from "react";
+import { Trophy, Users, Star, Globe, Award, TrendingUp } from "lucide-react";
 
 export function Achievements() {
-  const [isVisible, setIsVisible] = useState(false)
+  const [isVisible, setIsVisible] = useState(false);
   const [counts, setCounts] = useState({
     shows: 0,
     students: 0,
     years: 0,
-  })
-  const sectionRef = useRef<HTMLDivElement>(null)
-  const hasAnimatedRef = useRef(false)
+  });
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const hasAnimatedRef = useRef(false);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        setIsVisible(entry.isIntersecting)
+        setIsVisible(entry.isIntersecting);
       },
-      { threshold: 0.2 }
-    )
+      { threshold: 0.2 },
+    );
 
     if (sectionRef.current) {
-      observer.observe(sectionRef.current)
+      observer.observe(sectionRef.current);
     }
 
-    return () => observer.disconnect()
-  }, [])
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     if (isVisible && !hasAnimatedRef.current) {
-      hasAnimatedRef.current = true
+      hasAnimatedRef.current = true;
 
-      const targets = { shows: 8000, students: 300000, years: 33 }
-      const duration = 2000
-      const steps = 60
+      const targets = { shows: 8000, students: 300000, years: 33 };
+      const duration = 2000;
+      const steps = 60;
 
       const increments = {
         shows: targets.shows / steps,
         students: targets.students / steps,
         years: targets.years / steps,
-      }
+      };
 
-      let current = { shows: 0, students: 0, years: 0 }
+      let current = { shows: 0, students: 0, years: 0 };
 
       const timer = setInterval(() => {
-        current.shows += increments.shows
-        current.students += increments.students
-        current.years += increments.years
+        current.shows += increments.shows;
+        current.students += increments.students;
+        current.years += increments.years;
 
         if (current.shows >= targets.shows) {
-          setCounts(targets)
-          clearInterval(timer)
+          setCounts(targets);
+          clearInterval(timer);
         } else {
           setCounts({
             shows: Math.floor(current.shows),
             students: Math.floor(current.students),
             years: Math.floor(current.years),
-          })
+          });
         }
-      }, duration / steps)
+      }, duration / steps);
 
-      return () => clearInterval(timer)
+      return () => clearInterval(timer);
     }
-  }, [isVisible])
+  }, [isVisible]);
 
   const majorStats = [
     {
@@ -90,7 +90,7 @@ export function Achievements() {
       sublabel: "1992 - 2025",
       color: "from-pink-600 to-rose-400",
     },
-  ]
+  ];
 
   const achievements = [
     {
@@ -123,7 +123,7 @@ export function Achievements() {
       title: "Community Impact",
       description: "Free workshops, special needs programs, cultural events",
     },
-  ]
+  ];
 
   return (
     <section
@@ -132,7 +132,10 @@ export function Achievements() {
     >
       {/* Background Elements */}
       <div className="absolute top-20 left-10 w-96 h-96 bg-purple-500/10 dark:bg-purple-500/20 rounded-full blur-3xl animate-pulse" />
-      <div className="absolute bottom-20 right-10 w-96 h-96 bg-blue-500/10 dark:bg-blue-500/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "1s" }} />
+      <div
+        className="absolute bottom-20 right-10 w-96 h-96 bg-blue-500/10 dark:bg-blue-500/20 rounded-full blur-3xl animate-pulse"
+        style={{ animationDelay: "1s" }}
+      />
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
@@ -157,62 +160,73 @@ export function Achievements() {
         {/* Major Stats */}
         <div className="grid md:grid-cols-3 gap-6 md:gap-8 mb-12 md:mb-20 max-w-6xl mx-auto">
           {majorStats.map((stat, index) => {
-            const Icon = stat.icon
+            const Icon = stat.icon;
             return (
               <div
                 key={index}
                 className={`group relative transition-all duration-1000 ${
-                  isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+                  isVisible
+                    ? "opacity-100 translate-y-0"
+                    : "opacity-0 translate-y-10"
                 }`}
                 style={{ transitionDelay: `${index * 100}ms` }}
               >
-                <div className={`absolute inset-0 bg-gradient-to-br ${stat.color} rounded-2xl blur-lg opacity-20 group-hover:opacity-40 transition-opacity`} />
-                <div className="relative bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm border-2 border-gray-200 dark:border-gray-800 rounded-2xl p-6 md:p-8 hover:border-purple-600 dark:hover:border-purple-400 transition-all hover:scale-105">
-                  <div className={`inline-flex items-center justify-center w-14 h-14 md:w-16 md:h-16 rounded-xl bg-gradient-to-br ${stat.color} mb-4 shadow-lg`}>
+                <div
+                  className={`absolute inset-0 bg-gradient-to-br ${stat.color} rounded-2xl blur-lg opacity-20 group-hover:opacity-40 transition-opacity`}
+                />
+                <div className="relative bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm border-2 border-gray-200 dark:border-gray-800 rounded-2xl p-6 md:p-8 hover:border-purple-600 dark:hover:border-purple-400 transition-all hover:scale-105 text-center">
+                  <div
+                    className={`inline-flex items-center justify-center w-14 h-14 md:w-16 md:h-16 rounded-xl bg-gradient-to-br ${stat.color} mb-4 shadow-lg`}
+                  >
                     <Icon className="h-7 w-7 md:h-8 md:w-8 text-white" />
                   </div>
-                  
-                  <div className={`text-4xl sm:text-5xl md:text-6xl font-bold mb-2 bg-gradient-to-br ${stat.color} bg-clip-text text-transparent`}>
-                    {stat.value.toLocaleString()}{stat.suffix}
+
+                  <div
+                    className={`text-4xl sm:text-5xl md:text-6xl font-bold mb-2 bg-gradient-to-br ${stat.color} bg-clip-text text-transparent`}
+                  >
+                    {stat.value.toLocaleString()}
+                    {stat.suffix}
                   </div>
-                  
+
                   <div className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mb-1">
                     {stat.label}
                   </div>
-                  
+
                   <div className="text-sm text-gray-600 dark:text-gray-400">
                     {stat.sublabel}
                   </div>
                 </div>
               </div>
-            )
+            );
           })}
         </div>
 
         {/* Achievements Grid */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 max-w-6xl mx-auto">
           {achievements.map((achievement, index) => {
-            const Icon = achievement.icon
+            const Icon = achievement.icon;
             return (
               <div
                 key={index}
                 className={`group relative bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm border-2 border-gray-200 dark:border-gray-800 rounded-xl p-6 hover:border-purple-600 dark:hover:border-purple-400 transition-all duration-500 hover:scale-105 hover:shadow-xl ${
-                  isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+                  isVisible
+                    ? "opacity-100 translate-y-0"
+                    : "opacity-0 translate-y-10"
                 }`}
                 style={{ transitionDelay: `${(index + 3) * 100}ms` }}
               >
-                <Icon className="h-10 w-10 text-purple-600 dark:text-purple-400 mb-4 group-hover:scale-110 transition-transform" />
-                <h3 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mb-2">
+                <Icon className="h-10 w-10 text-purple-600 dark:text-purple-400 mb-4 group-hover:scale-110 transition-transform mx-auto" />
+                <h3 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mb-2 text-center">
                   {achievement.title}
                 </h3>
-                <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400">
+                <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 text-center">
                   {achievement.description}
                 </p>
               </div>
-            )
+            );
           })}
         </div>
       </div>
     </section>
-  )
+  );
 }

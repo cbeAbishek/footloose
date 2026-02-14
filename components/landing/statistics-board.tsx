@@ -9,44 +9,38 @@ const stats = [
     label: "Years of Excellence",
     value: 30,
     suffix: "+",
-    color: "from-purple-600 to-purple-400",
   },
   {
     icon: Users,
     label: "Students Trained",
     value: 10000,
     suffix: "+",
-    color: "from-blue-600 to-blue-400",
   },
   {
     icon: Trophy,
     label: "Productions Staged",
     value: 500,
     suffix: "+",
-    color: "from-cyan-600 to-cyan-400",
   },
   {
     icon: Palette,
     label: "Costumes Designed",
     value: 2000,
     suffix: "+",
-    color: "from-pink-600 to-pink-400",
   },
   {
     icon: Target,
     label: "Awards Won",
     value: 50,
     suffix: "+",
-    color: "from-orange-600 to-orange-400",
   },
   {
     icon: Heart,
     label: "Client Satisfaction",
     value: 98,
     suffix: "%",
-    color: "from-red-600 to-red-400",
   },
-]
+];
 
 export function StatisticsBoard() {
   const [isVisible, setIsVisible] = useState(false)
@@ -76,27 +70,32 @@ export function StatisticsBoard() {
     >
       {/* Background Pattern */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,0,0,0.02)_1px,transparent_1px)] dark:bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:24px_24px]" />
-      
+
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center mb-12 md:mb-16">
           <h2
             className={`text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 md:mb-6 transition-all duration-1000 ${
-              isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+              isVisible
+                ? "opacity-100 translate-y-0"
+                : "opacity-0 translate-y-10"
             }`}
           >
             <span className="block text-gray-900 dark:text-white mb-2">
               Our Impact in
             </span>
-            <span className="block bg-gradient-to-r from-purple-600 via-blue-600 to-cyan-600 dark:from-purple-400 dark:via-blue-400 dark:to-cyan-400 bg-clip-text text-transparent">
+            <span className="block bg-gradient-to-r from-purple-600 to-indigo-600 dark:from-purple-400 dark:to-indigo-400 bg-clip-text text-transparent">
               Numbers
             </span>
           </h2>
           <p
             className={`text-base sm:text-lg md:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto px-4 transition-all duration-1000 delay-200 ${
-              isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+              isVisible
+                ? "opacity-100 translate-y-0"
+                : "opacity-0 translate-y-10"
             }`}
           >
-            Three decades of transforming dreams into reality through dance, artistry, and dedication
+            Three decades of transforming dreams into reality through dance,
+            artistry, and dedication
           </p>
         </div>
 
@@ -112,7 +111,7 @@ export function StatisticsBoard() {
         </div>
       </div>
     </section>
-  )
+  );
 }
 
 function StatCard({
@@ -165,27 +164,27 @@ function StatCard({
 
   return (
     <div
-      className={`group relative bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-black border-2 border-gray-200 dark:border-gray-800 rounded-xl sm:rounded-2xl p-4 sm:p-6 md:p-8 hover:shadow-2xl hover:shadow-purple-500/10 transition-all duration-500 hover:scale-105 ${
+      className={`group relative bg-white dark:bg-gray-900 border border-gray-200/80 dark:border-gray-800/80 rounded-xl sm:rounded-2xl p-4 sm:p-6 md:p-8 hover:shadow-2xl hover:shadow-purple-500/20 dark:hover:shadow-purple-500/10 hover:border-purple-500/30 dark:hover:border-purple-500/30 transition-all duration-500 hover:scale-[1.02] ${
         isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
       }`}
       style={{ transitionDelay: `${index * 100}ms` }}
     >
-      {/* Gradient Background on Hover */}
-      <div className={`absolute inset-0 bg-gradient-to-br ${stat.color} opacity-0 group-hover:opacity-10 rounded-xl sm:rounded-2xl transition-opacity duration-500`} />
+      {/* Subtle Gradient Background on Hover */}
+      <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-indigo-500/5 dark:from-purple-500/10 dark:to-indigo-500/10 opacity-0 group-hover:opacity-100 rounded-xl sm:rounded-2xl transition-opacity duration-500" />
 
       <div className="relative z-10">
         {/* Icon */}
-        <div className={`inline-flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-lg sm:rounded-xl bg-gradient-to-br ${stat.color} mb-3 sm:mb-4 md:mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
+        <div className="inline-flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-xl sm:rounded-2xl bg-gradient-to-br from-purple-600 to-indigo-600 dark:from-purple-500 dark:to-indigo-500 mb-3 sm:mb-4 md:mb-6 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-lg shadow-purple-500/30">
           <Icon className="h-6 w-6 sm:h-7 sm:w-7 md:h-8 md:w-8 text-white" />
         </div>
 
         {/* Counter */}
         <div className="mb-2 sm:mb-3 md:mb-4">
-          <div className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white leading-tight">
-            <span className={`inline-block mr-1 bg-gradient-to-br ${stat.color} bg-clip-text text-transparent`}>
+          <div className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
+            <span className="inline-block mr-1 bg-gradient-to-br from-purple-600 to-indigo-600 dark:from-purple-400 dark:to-indigo-400 bg-clip-text text-transparent">
               {count.toLocaleString()}
             </span>
-            <span className={`inline-block text-sm sm:text-base md:text-lg align-top bg-gradient-to-br ${stat.color} bg-clip-text text-transparent`}>
+            <span className="inline-block text-sm sm:text-base md:text-lg align-top bg-gradient-to-br from-purple-600 to-indigo-600 dark:from-purple-400 dark:to-indigo-400 bg-clip-text text-transparent">
               {stat.suffix}
             </span>
           </div>
@@ -197,16 +196,16 @@ function StatCard({
         </div>
 
         {/* Progress Bar */}
-        <div className="mt-3 sm:mt-4 md:mt-5 h-1 sm:h-1.5 bg-gray-200 dark:bg-gray-800 rounded-full overflow-hidden">
+        {/* <div className="mt-3 sm:mt-4 md:mt-5 h-1 sm:h-1.5 bg-gray-200 dark:bg-gray-800 rounded-full overflow-hidden">
           <div
-            className={`h-full bg-gradient-to-r ${stat.color} transition-all duration-2000 ease-out rounded-full`}
+            className="h-full bg-gradient-to-r from-purple-600 to-indigo-600 dark:from-purple-500 dark:to-indigo-500 transition-all duration-2000 ease-out rounded-full shadow-sm shadow-purple-500/50"
             style={{
               width: isVisible ? "100%" : "0%",
               transitionDelay: `${index * 100}ms`,
             }}
           />
-        </div>
+        </div> */}
       </div>
     </div>
-  )
+  );
 }

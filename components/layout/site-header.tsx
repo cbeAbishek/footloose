@@ -3,19 +3,21 @@
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { 
-  Phone, 
-  MessageCircle, 
-  ChevronDown, 
-  Info, 
-  Briefcase, 
-  Palette, 
-  Shirt, 
-  Image, 
-  BookOpen, 
-  Users, 
-  Mail 
-} from "lucide-react"
+import {
+  Phone,
+  MessageCircle,
+  ChevronDown,
+  Info,
+  Briefcase,
+  Palette,
+  Shirt,
+  Image,
+  BookOpen,
+  Users,
+  Mail,
+  Menu,
+  X,
+} from "lucide-react";
 import { ThemeToggle } from "./theme-toggle"
 import { cn } from "@/lib/utils"
 
@@ -35,12 +37,12 @@ const primaryNav = [
     ],
   },
   // { href: "/costume-design", label: "Costume Design", icon: Palette },
-  { href: "/costume-rental", label: "Costume Rental", icon: Shirt },
+  // { href: "/costume-rental", label: "Costume Rental", icon: Shirt },
   { href: "/gallery", label: "Gallery", icon: Image },
-  { href: "/blog", label: "Blog", icon: BookOpen },
+  // { href: "/blog", label: "Blog", icon: BookOpen },
   { href: "/alumni", label: "Alumni", icon: Users },
   { href: "/contact", label: "Contact", icon: Mail },
-]
+];
 
 const rotatingWords = ["Footloose", "Edwin's", "Dance", "Company"]
 
@@ -220,7 +222,9 @@ export function SiteHeader() {
         }
 
         .logo-glow:hover {
-          box-shadow: 0 0 20px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1);
+          box-shadow:
+            0 0 20px rgba(0, 0, 0, 0.3),
+            0 0 40px rgba(0, 0, 0, 0.1);
           transform: scale(1.08) rotate(5deg);
         }
 
@@ -230,7 +234,7 @@ export function SiteHeader() {
         }
 
         .nav-item::before {
-          content: '';
+          content: "";
           position: absolute;
           bottom: 0;
           left: 50%;
@@ -271,17 +275,17 @@ export function SiteHeader() {
           "fixed left-1/2 top-4 z-50 w-[95%] max-w-7xl -translate-x-1/2 rounded-xl transition-all duration-300",
           isScrolled
             ? "bg-white/95 backdrop-blur-md dark:bg-gray-900/95 shadow-lg shadow-black/20 dark:shadow-white/20"
-            : "bg-white/90 backdrop-blur-sm dark:bg-gray-900/90 shadow-md shadow-black/10 dark:shadow-white/10"
+            : "bg-white/90 backdrop-blur-sm dark:bg-gray-900/90 shadow-md shadow-black/10 dark:shadow-white/10",
         )}
       >
-        <div className="flex items-center justify-between px-4 py-3 sm:px-6 md:px-8">
+        <div className="flex items-center justify-between px-3 py-2.5 sm:px-6 sm:py-3 md:px-8">
           <Link href="/" className="flex items-center space-x-2">
             <div className="relative h-8 w-8 overflow-hidden rounded-full logo-glow transition-all duration-300">
-                <img
-                  src="/logo.svg"
-                  alt="Logo"
-                  className="absolute inset-0 h-full w-full object-cover"
-                />
+              <img
+                src="/logo.svg"
+                alt="Logo"
+                className="absolute inset-0 h-full w-full object-cover"
+              />
             </div>
             <div className="relative h-6 w-32 overflow-hidden">
               <span
@@ -295,8 +299,8 @@ export function SiteHeader() {
 
           <nav className="hidden items-center space-x-1 lg:flex">
             {primaryNav.map((item) => {
-              const active = isActive(item.href)
-              const hasChildren = item.children && item.children.length > 0
+              const active = isActive(item.href);
+              const hasChildren = item.children && item.children.length > 0;
 
               if (hasChildren) {
                 return (
@@ -308,27 +312,29 @@ export function SiteHeader() {
                           "nav-item rounded-lg px-3 py-2 text-sm font-medium transition-all duration-300",
                           active
                             ? "text-gray-900 dark:text-white font-semibold"
-                            : "text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
+                            : "text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white",
                         )}
                       >
                         {item.label}
                       </Link>
                       <button
                         onClick={(e) => {
-                          e.stopPropagation()
-                          setDesktopSubmenu(desktopSubmenu === item.href ? null : item.href)
+                          e.stopPropagation();
+                          setDesktopSubmenu(
+                            desktopSubmenu === item.href ? null : item.href,
+                          );
                         }}
                         className={cn(
                           "flex items-center justify-center w-8 h-8 rounded-lg transition-all duration-300",
                           active
                             ? "text-gray-900 dark:text-white"
-                            : "text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800"
+                            : "text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800",
                         )}
                       >
                         <ChevronDown
                           className={cn(
                             "h-4 w-4 transition-transform duration-300",
-                            desktopSubmenu === item.href && "rotate-180"
+                            desktopSubmenu === item.href && "rotate-180",
                           )}
                         />
                       </button>
@@ -346,7 +352,7 @@ export function SiteHeader() {
                               "submenu-item slide-in block rounded-lg px-4 py-2.5 text-sm font-medium transition-all duration-200",
                               pathname === child.href
                                 ? "bg-gray-900 dark:bg-white text-white dark:text-gray-900"
-                                : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
+                                : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800",
                             )}
                           >
                             {child.label}
@@ -355,7 +361,7 @@ export function SiteHeader() {
                       </div>
                     )}
                   </div>
-                )
+                );
               }
 
               return (
@@ -366,12 +372,12 @@ export function SiteHeader() {
                     "nav-item rounded-lg px-3 py-2 text-sm font-medium transition-all duration-300",
                     active
                       ? "text-gray-900 dark:text-white font-semibold"
-                      : "text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
+                      : "text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white",
                   )}
                 >
                   {item.label}
                 </Link>
-              )
+              );
             })}
           </nav>
 
@@ -406,155 +412,163 @@ export function SiteHeader() {
             </div>
 
             {/* Mobile Menu Toggle */}
-            <button
-              onClick={toggleMenu}
-              className="relative flex h-10 w-10 items-center justify-center rounded-lg transition-all duration-300 hover:bg-gray-100 dark:hover:bg-gray-800 active:scale-95 lg:hidden"
-              aria-label="Toggle menu"
-            >
-              <div className="relative h-5 w-5">
-                <span
+            <div className="lg:hidden relative">
+              <button
+                onClick={toggleMenu}
+                className="relative flex h-10 w-10 items-center justify-center rounded-lg transition-all duration-300 hover:bg-gray-100 dark:hover:bg-gray-800 active:scale-95"
+                aria-label="Toggle menu"
+              >
+                <Menu
                   className={cn(
-                    "absolute left-0 top-0 h-0.5 w-5 bg-gray-900 transition-all duration-300 ease-in-out dark:bg-white",
-                    isMobileMenuOpen && "top-2 rotate-45"
+                    "h-5 w-5 text-gray-900 dark:text-white absolute transition-all duration-300",
+                    isMobileMenuOpen && "rotate-90 scale-0",
                   )}
                 />
-                <span
+                <X
                   className={cn(
-                    "absolute left-0 top-2 h-0.5 w-5 bg-gray-900 transition-all duration-300 ease-in-out dark:bg-white",
-                    isMobileMenuOpen && "opacity-0 scale-0"
+                    "h-5 w-5 text-gray-900 dark:text-white absolute transition-all duration-300",
+                    isMobileMenuOpen
+                      ? "rotate-0 scale-100"
+                      : "-rotate-90 scale-0",
                   )}
                 />
-                <span
-                  className={cn(
-                    "absolute left-0 top-4 h-0.5 w-5 bg-gray-900 transition-all duration-300 ease-in-out dark:bg-white",
-                    isMobileMenuOpen && "top-2 -rotate-45"
-                  )}
-                />
-              </div>
-            </button>
+                <span className="sr-only">Toggle menu</span>
+              </button>
+            </div>
           </div>
         </div>
       </nav>
 
-      {/* Mobile Menu Overlay */}
+      {/* Mobile Dropdown Menu */}
       <div
         className={cn(
-          "fixed inset-0 z-40 bg-black/60 backdrop-blur-sm transition-opacity duration-300 lg:hidden",
-          isMobileMenuOpen ? "opacity-100" : "opacity-0 pointer-events-none"
-        )}
-        onClick={() => setMobileMenuOpen(false)}
-      />
-
-      {/* Mobile Menu Panel */}
-      <div
-        className={cn(
-          "fixed left-0 top-20 z-40 h-[calc(100vh-5rem)] w-full transform overflow-y-auto bg-white/95 dark:bg-black backdrop-blur-xl transition-all duration-500 ease-out lg:hidden shadow-2xl",
-          isMobileMenuOpen ? "translate-x-0 opacity-100" : "-translate-x-full opacity-0"
+          "lg:hidden fixed left-1/2 -translate-x-1/2 z-40 w-[95%] max-w-7xl transition-all duration-500 ease-out",
+          isMobileMenuOpen
+            ? "top-[80px] opacity-100 visible"
+            : "top-[60px] opacity-0 invisible",
         )}
       >
-        <div className="space-y-2 p-4">
-          {primaryNav.map((item, itemIdx) => {
-            const active = isActive(item.href)
-            const hasChildren = item.children && item.children.length > 0
-            const isExpanded = activeSubmenu === item.href
-            const Icon = item.icon
+        <div
+          className={cn(
+            "rounded-2xl border bg-white/95 dark:bg-black/95 backdrop-blur-xl shadow-2xl",
+            "border-gray-200/50 dark:border-white/10 overflow-hidden",
+            "transform transition-all duration-500 origin-top",
+            isMobileMenuOpen ? "scale-y-100" : "scale-y-0",
+          )}
+        >
+          <div className="space-y-2 p-4">
+            {primaryNav.map((item, itemIdx) => {
+              const active = isActive(item.href);
+              const hasChildren = item.children && item.children.length > 0;
+              const isExpanded = activeSubmenu === item.href;
+              const Icon = item.icon;
 
-            return (
-              <div 
-                key={item.href} 
-                className="mobile-menu-enter"
-                style={{ animationDelay: `${itemIdx * 40}ms` }}
-              >
-                {hasChildren ? (
-                  <div className="space-y-2">
-                    <div className="flex items-center space-x-2">
-                      <Link
-                        href={item.href}
-                        onClick={closeAllMenus}
-                        className={cn(
-                          "mobile-menu-item flex items-center space-x-2.5 flex-1 rounded-xl px-4 py-3.5 text-sm font-semibold transition-all duration-300 shadow-sm",
-                          active
-                            ? "bg-gray-900 dark:bg-white text-white dark:text-gray-900 shadow-md"
-                            : "bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700 hover:shadow-md"
-                        )}
-                      >
-                        {Icon && <Icon className="h-4 w-4" />}
-                        <span>View All {item.label}</span>
-                      </Link>
-                      <button
-                        onClick={() => toggleSubmenu(item.href)}
-                        className="flex h-12 w-12 items-center justify-center rounded-xl bg-gray-100 dark:bg-gray-800 transition-all duration-300 hover:bg-gray-200 dark:hover:bg-gray-700 hover:shadow-md active:scale-95 shadow-sm"
-                      >
-                        <ChevronDown
+              return (
+                <div
+                  key={item.href}
+                  className="mobile-menu-enter"
+                  style={{ animationDelay: `${itemIdx * 40}ms` }}
+                >
+                  {hasChildren ? (
+                    <div className="space-y-2">
+                      <div className="flex items-center space-x-2">
+                        <Link
+                          href={item.href}
+                          onClick={closeAllMenus}
                           className={cn(
-                            "h-5 w-5 transition-transform duration-300 text-gray-900 dark:text-white",
-                            isExpanded && "rotate-180"
+                            "mobile-menu-item flex items-center space-x-2.5 flex-1 rounded-xl px-4 py-3.5 text-sm font-semibold transition-all duration-300 shadow-sm",
+                            active
+                              ? "bg-gray-900 dark:bg-white text-white dark:text-gray-900 shadow-md"
+                              : "bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700 hover:shadow-md",
                           )}
-                        />
-                      </button>
-                    </div>
-
-                    {isExpanded && (
-                      <div className="submenu-expand space-y-1.5 rounded-xl bg-gray-50 dark:bg-gray-800/50 p-2 border border-gray-200 dark:border-gray-700">
-                        {item.children?.map((child, idx) => (
-                          <Link
-                            key={child.href}
-                            href={child.href}
-                            onClick={closeAllMenus}
-                            style={{ animationDelay: `${idx * 50}ms` }}
+                        >
+                          {Icon && <Icon className="h-4 w-4" />}
+                          <span>View All {item.label}</span>
+                        </Link>
+                        <button
+                          onClick={() => toggleSubmenu(item.href)}
+                          className="flex h-12 w-12 items-center justify-center rounded-xl bg-gray-100 dark:bg-gray-800 transition-all duration-300 hover:bg-gray-200 dark:hover:bg-gray-700 hover:shadow-md active:scale-95 shadow-sm"
+                        >
+                          <ChevronDown
                             className={cn(
-                              "slide-in submenu-item block rounded-lg px-4 py-2.5 text-sm font-medium transition-all duration-200",
-                              pathname === child.href
-                                ? "bg-gray-900 dark:bg-white text-white dark:text-gray-900"
-                                : "text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
+                              "h-5 w-5 transition-transform duration-300 text-gray-900 dark:text-white",
+                              isExpanded && "rotate-180",
                             )}
-                          >
-                            {child.label}
-                          </Link>
-                        ))}
+                          />
+                        </button>
                       </div>
-                    )}
-                  </div>
-                ) : (
-                  <Link
-                    href={item.href}
-                    onClick={closeAllMenus}
-                    className={cn(
-                      "mobile-menu-item flex items-center space-x-2.5 rounded-xl px-4 py-3.5 text-sm font-semibold transition-all duration-300 shadow-sm",
-                      active
-                        ? "bg-gray-900 dark:bg-white text-white dark:text-gray-900 shadow-md"
-                        : "bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700 hover:shadow-md"
-                    )}
-                  >
-                    {Icon && <Icon className="h-4 w-4" />}
-                    <span>{item.label}</span>
-                  </Link>
-                )}
-              </div>
-            )
-          })}
 
-          {/* Mobile Action Buttons */}
-          <div className="space-y-2.5 pt-6 border-t border-gray-200 dark:border-gray-700">
-            <a
-              href="tel:+919842222467"
-              className="flex items-center justify-center space-x-2 rounded-xl bg-gray-900 dark:bg-white px-4 py-3.5 text-sm font-semibold text-white dark:text-gray-900 transition-all duration-300 hover:scale-105 hover:shadow-lg active:scale-95 shadow-md"
-            >
-              <Phone className="h-4 w-4" />
-              <span>Call Us</span>
-            </a>
-            <a
-              href="https://wa.me/+919842222467"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center justify-center space-x-2 rounded-xl bg-gray-900 dark:bg-white px-4 py-3.5 text-sm font-semibold text-white dark:text-gray-900 transition-all duration-300 hover:scale-105 hover:shadow-lg active:scale-95 shadow-md"
-            >
-              <MessageCircle className="h-4 w-4" />
-              <span>WhatsApp Us</span>
-            </a>
+                      {isExpanded && (
+                        <div className="submenu-expand space-y-1.5 rounded-xl bg-gray-50 dark:bg-gray-800/50 p-2 border border-gray-200 dark:border-gray-700">
+                          {item.children?.map((child, idx) => (
+                            <Link
+                              key={child.href}
+                              href={child.href}
+                              onClick={closeAllMenus}
+                              style={{ animationDelay: `${idx * 50}ms` }}
+                              className={cn(
+                                "slide-in submenu-item block rounded-lg px-4 py-2.5 text-sm font-medium transition-all duration-200",
+                                pathname === child.href
+                                  ? "bg-gray-900 dark:bg-white text-white dark:text-gray-900"
+                                  : "text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700",
+                              )}
+                            >
+                              {child.label}
+                            </Link>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <Link
+                      href={item.href}
+                      onClick={closeAllMenus}
+                      className={cn(
+                        "mobile-menu-item flex items-center space-x-2.5 rounded-xl px-4 py-3.5 text-sm font-semibold transition-all duration-300 shadow-sm",
+                        active
+                          ? "bg-gray-900 dark:bg-white text-white dark:text-gray-900 shadow-md"
+                          : "bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700 hover:shadow-md",
+                      )}
+                    >
+                      {Icon && <Icon className="h-4 w-4" />}
+                      <span>{item.label}</span>
+                    </Link>
+                  )}
+                </div>
+              );
+            })}
+
+            {/* Mobile Action Buttons */}
+            <div className="space-y-2.5 pt-6 border-t border-gray-200 dark:border-gray-700">
+              <a
+                href="tel:+919842222467"
+                className="flex items-center justify-center space-x-2 rounded-xl bg-gray-900 dark:bg-white px-4 py-3.5 text-sm font-semibold text-white dark:text-gray-900 transition-all duration-300 hover:scale-105 hover:shadow-lg active:scale-95 shadow-md"
+              >
+                <Phone className="h-4 w-4" />
+                <span>Call Us</span>
+              </a>
+              <a
+                href="https://wa.me/+919842222467"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center space-x-2 rounded-xl bg-gray-900 dark:bg-white px-4 py-3.5 text-sm font-semibold text-white dark:text-gray-900 transition-all duration-300 hover:scale-105 hover:shadow-lg active:scale-95 shadow-md"
+              >
+                <MessageCircle className="h-4 w-4" />
+                <span>WhatsApp Us</span>
+              </a>
+            </div>
           </div>
         </div>
       </div>
+
+      {/* Backdrop Overlay */}
+      <div
+        className={cn(
+          "lg:hidden fixed inset-0 bg-black/40 backdrop-blur-sm transition-all duration-500 z-30",
+          isMobileMenuOpen ? "opacity-100 visible" : "opacity-0 invisible",
+        )}
+        onClick={() => setMobileMenuOpen(false)}
+      />
     </>
-  )
+  );
 }

@@ -90,7 +90,7 @@ export default function AlumniPage() {
       {/* <AlumniMap alumni={sampleAlumni} /> */}
 
       {/* Testimonials & Memories */}
-      <TestimonialsMemories testimonials={sampleTestimonials} />
+      {/* <TestimonialsMemories testimonials={sampleTestimonials} /> */}
 
       {/* Alumni Network & Community */}
       <AlumniNetwork events={sampleEvents} />
@@ -102,7 +102,7 @@ export default function AlumniPage() {
       {/* <RecognitionAwards awards={sampleAwards} /> */}
 
       {/* Final Call to Action */}
-      <AlumniCTA />
+      {/* <AlumniCTA /> */}
     </main>
   )
 }

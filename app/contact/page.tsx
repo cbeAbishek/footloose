@@ -1,8 +1,7 @@
 import type { Metadata } from "next"
 import {
   ContactHero,
-  LocationCards,
-  InteractiveMap,
+  LocationAndMapSection,
   ContactFormSection,
   FAQSection,
   contactLocations,
@@ -122,19 +121,16 @@ export default function ContactPage() {
       {/* Hero Section */}
       <ContactHero />
 
-      {/* Location Information Cards */}
-      <LocationCards locations={contactLocations} />
-
-      {/* Interactive Map */}
-      <InteractiveMap locations={contactLocations} />
+      {/* Location and Map Section - Combined */}
+      <LocationAndMapSection locations={contactLocations} />
 
       {/* Contact Form */}
-      <div id="contact">
+      {/* <div id="contact">
         <ContactFormSection />
-      </div>
+      </div> */}
 
       {/* FAQ Section */}
-      <FAQSection categories={faqCategories} />
+      {/* <FAQSection categories={faqCategories} /> */}
     </>
-  )
+  );
 }

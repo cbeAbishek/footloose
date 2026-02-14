@@ -2,8 +2,31 @@
 
 import { useEffect, useRef, useState } from "react"
 import { Card, CardContent } from "@/components/ui/card"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { Quote, Sparkles } from "lucide-react"
+import { Quote } from "lucide-react";
+
+function pseudoRandom01(seed: number): number {
+  // Deterministic 0..1 value so SSR + client render match (avoids hydration errors).
+  const x = Math.sin(seed) * 10000;
+  return x - Math.floor(x);
+}
+
+const QUOTE_DECORATIONS = Array.from({ length: 12 }, (_, index) => {
+  const top = pseudoRandom01(index * 4 + 1) * 100;
+  const left = pseudoRandom01(index * 4 + 2) * 100;
+  const size = 40 + pseudoRandom01(index * 4 + 3) * 40;
+  const rotation = pseudoRandom01(index * 4 + 4) * 360;
+
+  return {
+    key: index,
+    style: {
+      top: `${top}%`,
+      left: `${left}%`,
+      width: `${size}px`,
+      height: `${size}px`,
+      transform: `rotate(${rotation}deg)`,
+    } as const,
+  };
+});
 
 export function FounderMessageSection() {
   const [isVisible, setIsVisible] = useState(false)
@@ -32,20 +55,14 @@ export function FounderMessageSection() {
       {/* Background Decorations */}
       <div className="absolute top-20 left-10 w-72 h-72 bg-purple-500/10 dark:bg-purple-500/20 rounded-full blur-3xl" />
       <div className="absolute bottom-20 right-10 w-72 h-72 bg-blue-500/10 dark:bg-blue-500/20 rounded-full blur-3xl" />
-      
+
       {/* Quote Pattern */}
       <div className="absolute inset-0 opacity-5 dark:opacity-10">
-        {[...Array(12)].map((_, i) => (
+        {QUOTE_DECORATIONS.map((decoration) => (
           <Quote
-            key={i}
+            key={decoration.key}
             className="absolute text-purple-600 dark:text-purple-400"
-            style={{
-              top: `${Math.random() * 100}%`,
-              left: `${Math.random() * 100}%`,
-              width: `${40 + Math.random() * 40}px`,
-              height: `${40 + Math.random() * 40}px`,
-              transform: `rotate(${Math.random() * 360}deg)`,
-            }}
+            style={decoration.style}
           />
         ))}
       </div>
@@ -73,11 +90,10 @@ export function FounderMessageSection() {
             }`}
           >
             {/* Gradient Overlay */}
-            
 
             <CardContent className="p-8 md:p-12">
               {/* Header with Avatar */}
-                <div className="flex flex-col md:flex-row items-center gap-8 mb-8">
+              <div className="flex flex-col md:flex-row items-center gap-8 mb-8">
                 {/* Avatar */}
                 <div className="relative">
                   <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-purple-200 dark:border-purple-800 shadow-xl">
@@ -116,37 +132,46 @@ export function FounderMessageSection() {
               <div className="space-y-6 text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
                 <p
                   className={`transition-all duration-1000 delay-300 ${
-                    isVisible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-10"
+                    isVisible
+                      ? "opacity-100 translate-x-0"
+                      : "opacity-0 -translate-x-10"
                   }`}
                 >
                   Dance is not just about movement—it's about{" "}
                   <span className="font-semibold text-purple-600 dark:text-purple-400">
                     storytelling, passion, and connection
                   </span>
-                  . For over three decades, we've been privileged to share this art form with
-                  thousands of students, performers, and corporate partners.
+                  . For over three decades, we've been privileged to share this
+                  art form with thousands of students, performers, and corporate
+                  partners.
                 </p>
 
                 <p
                   className={`transition-all duration-1000 delay-500 ${
-                    isVisible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-10"
+                    isVisible
+                      ? "opacity-100 translate-x-0"
+                      : "opacity-0 -translate-x-10"
                   }`}
                 >
                   At Edwin's Dance & Costume Company, we believe that{" "}
                   <span className="font-semibold text-blue-600 dark:text-blue-400">
                     every body can dance, every story deserves to be told
                   </span>
-                  , and every performance should leave a lasting impact. Our commitment to
-                  excellence, innovation, and inclusivity drives everything we do.
+                  , and every performance should leave a lasting impact. Our
+                  commitment to excellence, innovation, and inclusivity drives
+                  everything we do.
                 </p>
 
                 <p
                   className={`transition-all duration-1000 delay-700 ${
-                    isVisible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-10"
+                    isVisible
+                      ? "opacity-100 translate-x-0"
+                      : "opacity-0 -translate-x-10"
                   }`}
                 >
-                  Whether you're taking your first dance class, preparing for a major production,
-                  or bringing wellness to your workplace through CHAIR-CO-CISE, we're here to{" "}
+                  Whether you're taking your first dance class, preparing for a
+                  major production, or bringing wellness to your workplace
+                  through CHAIR-CO-CISE, we're here to{" "}
                   <span className="font-semibold text-cyan-600 dark:text-cyan-400">
                     empower you to move with confidence and joy
                   </span>
@@ -157,7 +182,9 @@ export function FounderMessageSection() {
               {/* Signature */}
               <div
                 className={`mt-12 transition-all duration-1000 delay-1000 ${
-                  isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+                  isVisible
+                    ? "opacity-100 translate-y-0"
+                    : "opacity-0 translate-y-10"
                 }`}
               >
                 <div className="relative inline-block">
@@ -175,10 +202,9 @@ export function FounderMessageSection() {
                 <Quote className="h-12 w-12 text-purple-600/20 dark:text-purple-400/20 rotate-180" />
               </div>
             </CardContent>
-          
           </Card>
         </div>
       </div>
     </section>
-  )
+  );
 }

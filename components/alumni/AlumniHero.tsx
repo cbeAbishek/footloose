@@ -1,285 +1,215 @@
-"use client"
+"use client";
 
-import { motion, useScroll, useTransform } from "framer-motion"
-import Image from "next/image"
-import { MapPin, Users, Sparkles } from "lucide-react"
-import { useEffect, useMemo, useRef, useState } from "react"
+import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { ArrowRight, MapPin, Users, Sparkles } from "lucide-react";
+import Link from "next/link";
 
 interface AlumniHeroProps {
-  totalAlumni?: number
-  globalLocations?: number
+  totalAlumni?: number;
+  globalLocations?: number;
 }
 
-export function AlumniHero({ totalAlumni = 500, globalLocations = 25 }: AlumniHeroProps) {
-  const sectionRef = useRef<HTMLElement>(null)
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start start", "end start"]
-  })
-
-  const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"])
-  const opacity = useTransform(scrollYProgress, [0, 0.5, 1], [1, 0.8, 0])
-
-  const [viewport, setViewport] = useState({ width: 0, height: 0 })
+export function AlumniHero({
+  totalAlumni = 500,
+  globalLocations = 25,
+}: AlumniHeroProps) {
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
-    const updateViewport = () => {
-      setViewport({
-        width: window.innerWidth,
-        height: window.innerHeight,
-      })
-    }
-
-    updateViewport()
-    window.addEventListener("resize", updateViewport)
-    return () => window.removeEventListener("resize", updateViewport)
-  }, [])
-
-  const particles = useMemo(
-    () =>
-      Array.from({ length: 20 }).map(() => ({
-        initialX: Math.random(),
-        initialY: Math.random(),
-        targetX: Math.random(),
-        targetY: Math.random(),
-        duration: Math.random() * 20 + 10,
-      })),
-    []
-  )
-
-  const fallbackWidth = viewport.width || 1920
-  const fallbackHeight = viewport.height || 1080
-  const toX = (value: number) => value * fallbackWidth
-  const toY = (value: number) => value * fallbackHeight
+    setIsLoaded(true);
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePosition({
+        x: (e.clientX / window.innerWidth - 0.5) * 20,
+        y: (e.clientY / window.innerHeight - 0.5) * 20,
+      });
+    };
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, []);
 
   return (
-    <section ref={sectionRef} className="pt-10 relative min-h-[100vh] overflow-hidden bg-black dark:bg-white">
-      {/* Animated Background Gradient */}
-      <motion.div 
-        className="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-black to-blue-900/20 dark:from-purple-100/20 dark:via-white dark:to-blue-100/20"
-        animate={{
-          background: [
-            "linear-gradient(to bottom right, rgba(88, 28, 135, 0.2), rgba(0, 0, 0, 1), rgba(30, 58, 138, 0.2))",
-            "linear-gradient(to bottom right, rgba(30, 58, 138, 0.2), rgba(0, 0, 0, 1), rgba(88, 28, 135, 0.2))",
-            "linear-gradient(to bottom right, rgba(88, 28, 135, 0.2), rgba(0, 0, 0, 1), rgba(30, 58, 138, 0.2))",
-          ]
-        }}
-        transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
-      />
-
-      {/* Floating Particles */}
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-gray-50 via-white to-gray-100 dark:from-gray-950 dark:via-black dark:to-gray-900">
+      {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
-        {particles.map((particle, i) => (
-          <motion.div
-            key={i}
-            className="absolute h-2 w-2 rounded-full bg-white/20 dark:bg-black/20"
-            initial={{
-              x: toX(particle.initialX),
-              y: toY(particle.initialY),
-            }}
-            animate={{
-              y: [toY(particle.initialY), toY(particle.targetY)],
-              x: [toX(particle.initialX), toX(particle.targetX)],
-            }}
-            transition={{
-              duration: particle.duration,
-              repeat: Infinity,
-              ease: "linear",
-            }}
-          />
-        ))}
+        <div
+          className="absolute top-20 left-10 w-72 h-72 bg-purple-500/10 dark:bg-purple-500/20 rounded-full blur-3xl animate-pulse"
+          style={{
+            transform: `translate(${mousePosition.x}px, ${mousePosition.y}px)`,
+            transition: "transform 0.5s ease-out",
+          }}
+        />
+        <div
+          className="absolute bottom-20 right-10 w-96 h-96 bg-blue-500/10 dark:bg-blue-500/20 rounded-full blur-3xl animate-pulse"
+          style={{
+            transform: `translate(${-mousePosition.x}px, ${-mousePosition.y}px)`,
+            transition: "transform 0.5s ease-out",
+          }}
+        />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,0,0,0.03)_1px,transparent_1px)] dark:bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:32px_32px]" />
+        </div>
       </div>
 
-      {/* Background Image with Parallax */}
-      <motion.div className="absolute inset-0" style={{ y }}>
-        <Image
-          src="/assets/alumni-hero.jpg"
-          alt="Footloose Alumni Community"
-          fill
-          className="object-cover opacity-30"
-          priority
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black dark:from-white/70 dark:via-white/50 dark:to-white" />
-      </motion.div>
-
-      {/* Content */}
-      <div className="container relative z-10 flex min-h-[70vh] flex-col items-center justify-center px-4 text-center">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="space-y-6"
-        >
-          {/* Eyebrow */}
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.2, duration: 0.6 }}
-            className="text-sm font-medium uppercase tracking-[0.3em] text-white/80 dark:text-black/80"
+      {/* Main Content */}
+      <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-5xl mx-auto text-center space-y-8">
+          {/* Badge */}
+          <div
+            className={`inline-flex items-center gap-2 px-6 py-3 bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl border border-gray-200 dark:border-gray-800 rounded-full shadow-lg transition-all duration-1000 ${
+              isLoaded
+                ? "opacity-100 translate-y-0"
+                : "opacity-0 translate-y-10"
+            }`}
           >
-            Alumni Network
-          </motion.p>
-
-          {/* Main Heading */}
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3, duration: 0.8 }}
-            className="text-5xl font-black leading-tight text-white dark:text-black md:text-7xl lg:text-8xl"
-          >
-            Footloose Family
-            <br />
-            <span className="bg-gradient-to-r from-white via-gray-300 to-white bg-clip-text text-transparent dark:from-black dark:via-gray-700 dark:to-black">
-              Around the World
+            <Sparkles className="h-5 w-5 text-purple-600 dark:text-purple-400 animate-pulse" />
+            <span className="text-sm font-semibold bg-gradient-to-r from-purple-600 to-blue-600 dark:from-purple-400 dark:to-blue-400 bg-clip-text text-transparent">
+              Alumni Network Worldwide
             </span>
-          </motion.h1>
+          </div>
 
-          {/* Description */}
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5, duration: 0.8 }}
-            className="mx-auto max-w-3xl text-lg text-white/90 dark:text-black/90 md:text-xl"
-          >
-            From Coimbatore stages to global platforms — celebrating the journeys, achievements,
-            and enduring connections of dancers who started here and now inspire the world.
-          </motion.p>
-
-          {/* Stats with Counter Animation */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.7, duration: 0.8 }}
-            className="flex flex-wrap items-center justify-center gap-8 pt-8"
-          >
-            <motion.div 
-              className="group flex items-center gap-3"
-              whileHover={{ scale: 1.05 }}
-              transition={{ type: "spring", stiffness: 400 }}
+          {/* Main Title with Animation */}
+          <div className="space-y-6">
+            <h1
+              className={`text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight transition-all duration-1000 delay-100 ${
+                isLoaded
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-10"
+              }`}
             >
-              <motion.div 
-                className="rounded-full bg-white/10 p-3 backdrop-blur-sm transition-all group-hover:bg-white/20 dark:bg-black/10 dark:group-hover:bg-black/20"
-                whileHover={{ rotate: 360 }}
-                transition={{ duration: 0.6 }}
-              >
-                <Users className="h-6 w-6 text-white dark:text-black" />
-              </motion.div>
+              <span className="block text-gray-900 dark:text-white mb-4">
+                Footloose Family
+              </span>
+              <span className="block bg-gradient-to-r from-purple-600 via-blue-600 to-cyan-600 dark:from-purple-400 dark:via-blue-400 dark:to-cyan-400 bg-clip-text text-transparent animate-gradient">
+                Around the World
+              </span>
+            </h1>
+
+            <p
+              className={`text-lg sm:text-xl md:text-2xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto leading-relaxed transition-all duration-1000 delay-300 ${
+                isLoaded
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-10"
+              }`}
+            >
+              From Coimbatore stages to global platforms — celebrating the
+              journeys, achievements, and enduring connections of{" "}
+              <span className="font-semibold text-gray-900 dark:text-white">
+                dancers who started here
+              </span>{" "}
+              and now inspire the world.
+            </p>
+          </div>
+
+          {/* Stats */}
+          {/* <div
+            className={`flex flex-wrap items-center justify-center gap-8 pt-4 transition-all duration-1000 delay-400 ${
+              isLoaded
+                ? "opacity-100 translate-y-0"
+                : "opacity-0 translate-y-10"
+            }`}
+          >
+            <div className="group flex items-center gap-3 px-6 py-4 bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl border border-gray-200 dark:border-gray-800 rounded-2xl shadow-lg hover:shadow-xl transition-all hover:scale-105">
+              <div className="rounded-full bg-gradient-to-r from-purple-600 to-blue-600 dark:from-purple-400 dark:to-blue-400 p-3">
+                <Users className="h-6 w-6 text-white" />
+              </div>
               <div className="text-left">
-                <motion.p 
-                  className="text-3xl font-black text-white dark:text-black"
-                  initial={{ opacity: 0, scale: 0.5 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.9, type: "spring" }}
-                >
+                <p className="text-3xl font-black bg-gradient-to-r from-purple-600 to-blue-600 dark:from-purple-400 dark:to-blue-400 bg-clip-text text-transparent">
                   {totalAlumni}+
-                </motion.p>
-                <p className="text-sm text-white/70 dark:text-black/70">Alumni Worldwide</p>
+                </p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  Alumni Worldwide
+                </p>
               </div>
-            </motion.div>
+            </div>
 
-            <motion.div 
-              className="h-12 w-px bg-white/20 dark:bg-black/20"
-              initial={{ scaleY: 0 }}
-              animate={{ scaleY: 1 }}
-              transition={{ delay: 1, duration: 0.4 }}
-            />
-
-            <motion.div 
-              className="group flex items-center gap-3"
-              whileHover={{ scale: 1.05 }}
-              transition={{ type: "spring", stiffness: 400 }}
-            >
-              <motion.div 
-                className="rounded-full bg-white/10 p-3 backdrop-blur-sm transition-all group-hover:bg-white/20 dark:bg-black/10 dark:group-hover:bg-black/20"
-                whileHover={{ rotate: 360 }}
-                transition={{ duration: 0.6 }}
-              >
-                <MapPin className="h-6 w-6 text-white dark:text-black" />
-              </motion.div>
+            <div className="group flex items-center gap-3 px-6 py-4 bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl border border-gray-200 dark:border-gray-800 rounded-2xl shadow-lg hover:shadow-xl transition-all hover:scale-105">
+              <div className="rounded-full bg-gradient-to-r from-blue-600 to-cyan-600 dark:from-blue-400 dark:to-cyan-400 p-3">
+                <MapPin className="h-6 w-6 text-white" />
+              </div>
               <div className="text-left">
-                <motion.p 
-                  className="text-3xl font-black text-white dark:text-black"
-                  initial={{ opacity: 0, scale: 0.5 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 1, type: "spring" }}
-                >
+                <p className="text-3xl font-black bg-gradient-to-r from-blue-600 to-cyan-600 dark:from-blue-400 dark:to-cyan-400 bg-clip-text text-transparent">
                   {globalLocations}+
-                </motion.p>
-                <p className="text-sm text-white/70 dark:text-black/70">Countries</p>
+                </p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  Countries
+                </p>
               </div>
-            </motion.div>
-          </motion.div>
+            </div>
+          </div> */}
 
-          {/* CTA Buttons with Advanced Interactions */}
-          {/* <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.9, duration: 0.8 }}
-            className="flex flex-wrap items-center justify-center gap-4 pt-8"
+          {/* CTA Buttons */}
+          {/* <div
+            className={`flex flex-col sm:flex-row items-center justify-center gap-4 pt-4 transition-all duration-1000 delay-500 ${
+              isLoaded
+                ? "opacity-100 translate-y-0"
+                : "opacity-0 translate-y-10"
+            }`}
           >
-            <motion.button 
-              className="group relative overflow-hidden rounded-full bg-white px-8 py-4 font-bold text-black dark:bg-black dark:text-white"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              transition={{ type: "spring", stiffness: 400, damping: 17 }}
+            <Button
+              size="lg"
+              className="group relative overflow-hidden bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-8 py-6 text-lg rounded-full shadow-2xl hover:shadow-purple-500/50 transition-all duration-300 hover:scale-105"
+              asChild
             >
-              <motion.span
-                className="absolute inset-0 bg-gradient-to-r from-purple-600 to-blue-600"
-                initial={{ x: "-100%" }}
-                whileHover={{ x: 0 }}
-                transition={{ duration: 0.3 }}
-              />
-              <span className="relative z-10 flex items-center gap-2">
-                Join Alumni Network
-                <motion.span
-                  animate={{ x: [0, 3, 0] }}
-                  transition={{ duration: 1.5, repeat: Infinity }}
-                >
-                  →
-                </motion.span>
-              </span>
-            </motion.button>
-            
-            <motion.button 
-              className="group relative overflow-hidden rounded-full border-2 border-white px-8 py-4 font-bold text-white dark:border-black dark:text-black"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              transition={{ type: "spring", stiffness: 400, damping: 17 }}
+              <Link href="#alumni-directory">
+                <span className="relative z-10 flex items-center gap-2">
+                  Explore Alumni Network
+                  <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                </span>
+                <div className="absolute inset-0 bg-gradient-to-r from-purple-700 to-blue-700 opacity-0 group-hover:opacity-100 transition-opacity" />
+              </Link>
+            </Button>
+
+            <Button
+              size="lg"
+              variant="outline"
+              className="group px-8 py-6 text-lg rounded-full border-2 border-gray-900 dark:border-white text-gray-900 dark:text-white hover:bg-gray-900 hover:text-white dark:hover:bg-white dark:hover:text-gray-900 transition-all duration-300 hover:scale-105"
+              asChild
             >
-              <motion.span
-                className="absolute inset-0 bg-white dark:bg-black"
-                initial={{ y: "100%" }}
-                whileHover={{ y: 0 }}
-                transition={{ duration: 0.3 }}
-              />
-              <span className="relative z-10 flex items-center gap-2 group-hover:text-black dark:group-hover:text-white">
-                <Sparkles className="h-4 w-4" />
-                Submit Your Story
-              </span>
-            </motion.button>
-          </motion.div> */}
-        </motion.div>
+              <Link href="#submit-story">
+                <span className="flex items-center gap-2">
+                  <Sparkles className="h-5 w-5" />
+                  Submit Your Story
+                </span>
+              </Link>
+            </Button>
+          </div> */}
+        </div>
       </div>
 
       {/* Scroll Indicator */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.2, duration: 0.8 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2"
+      <div
+        className={`absolute bottom-8 left-1/2 -translate-x-1/2 transition-all duration-1000 delay-1000 ${
+          isLoaded ? "opacity-100" : "opacity-0"
+        }`}
       >
-        <motion.div
-          animate={{ y: [0, 10, 0] }}
-          transition={{ repeat: Infinity, duration: 2 }}
-          className="h-12 w-6 rounded-full border-2 border-white/50 dark:border-black/50"
-        >
-          <motion.div
-            animate={{ y: [0, 20, 0] }}
-            transition={{ repeat: Infinity, duration: 2 }}
-            className="mx-auto mt-2 h-2 w-2 rounded-full bg-white dark:bg-black"
-          />
-        </motion.div>
-      </motion.div>
+        <div className="flex flex-col items-center gap-2 animate-bounce">
+          <span className="text-sm text-gray-600 dark:text-gray-400">
+            Scroll to explore
+          </span>
+          <div className="w-6 h-10 border-2 border-gray-900 dark:border-white rounded-full flex items-start justify-center p-2">
+            <div className="w-1.5 h-3 bg-gray-900 dark:bg-white rounded-full animate-pulse" />
+          </div>
+        </div>
+      </div>
+
+      <style jsx global>{`
+        @keyframes gradient {
+          0%,
+          100% {
+            background-position: 0% 50%;
+          }
+          50% {
+            background-position: 100% 50%;
+          }
+        }
+
+        .animate-gradient {
+          background-size: 200% 200%;
+          animation: gradient 5s ease infinite;
+        }
+      `}</style>
     </section>
-  )
+  );
 }

@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
-import { motion } from "framer-motion"
-import Image from "next/image"
-import { Badge } from "@/components/ui/badge"
-import { Camera, Play, Sparkles } from "lucide-react"
+import { motion } from "framer-motion";
+import Image from "next/image";
+import { Badge } from "@/components/ui/badge";
+import { Camera, Play, Sparkles } from "lucide-react";
 
 export function GalleryHero() {
   return (
@@ -92,12 +92,12 @@ export function GalleryHero() {
             transition={{ duration: 0.8, delay: 0.4 }}
             className="mx-auto mb-12 max-w-3xl text-xl leading-relaxed text-gray-300 sm:text-2xl"
           >
-            A visual journey through performances, emotions, and artistry — celebrating three
-            decades of dance excellence
+            A visual journey through performances, emotions, and artistry —
+            celebrating three decades of dance excellence
           </motion.p>
 
           {/* Stats */}
-          <motion.div
+          {/* <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.6 }}
@@ -130,7 +130,7 @@ export function GalleryHero() {
                 <div className="text-sm text-gray-400">Events</div>
               </div>
             </div>
-          </motion.div>
+          </motion.div> */}
         </div>
       </div>
 
@@ -139,7 +139,7 @@ export function GalleryHero() {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{
-          duration: 0.5,
+          duration: 3.5,
           delay: 1,
           repeat: Infinity,
           repeatType: "reverse",
@@ -147,8 +147,15 @@ export function GalleryHero() {
         className="absolute bottom-8 left-1/2 -translate-x-1/2"
       >
         <div className="flex flex-col items-center gap-2 text-white">
-          <span className="text-xs font-bold uppercase tracking-wider">Explore Gallery</span>
-          <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <span className="text-xs font-bold uppercase tracking-wider">
+            Explore Gallery
+          </span>
+          <svg
+            className="h-6 w-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -159,5 +166,5 @@ export function GalleryHero() {
         </div>
       </motion.div>
     </section>
-  )
+  );
 }

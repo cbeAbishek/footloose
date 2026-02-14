@@ -16,16 +16,16 @@ export function GalleryMain() {
       <GalleryHero />
 
       {/* Event Highlights / Performance Albums */}
-      <EventHighlights />
+      {/* <EventHighlights /> */}
 
       {/* Costume & Backstage Moments */}
       <CostumeBackstage />
 
       {/* Video Gallery */}
-      <VideoGallery />
+      {/* <VideoGallery /> */}
 
       {/* Student & Alumni Spotlight */}
-      <StudentSpotlight />
+      {/* <StudentSpotlight /> */}
 
       {/* Themed Collections */}
       <ThemedCollections />
@@ -34,9 +34,9 @@ export function GalleryMain() {
       <TestimonialsSnapshots />
 
       {/* Gallery Submission Form */}
-      <div id="submit">
+      {/* <div id="submit">
         <GallerySubmission />
-      </div>
+      </div> */}
     </main>
   )
 }

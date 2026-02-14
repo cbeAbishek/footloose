@@ -1,15 +1,15 @@
-"use client"
+"use client";
 
-import { motion } from "framer-motion"
-import Image from "next/image"
-import { Quote, Calendar } from "lucide-react"
-import { Card, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { testimonialSnapshotsData } from "./data"
+import { motion } from "framer-motion";
+import Image from "next/image";
+import { Calendar } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { testimonialSnapshotsData } from "./data";
 
 export function TestimonialsSnapshots() {
   return (
-    <section className="bg-white py-16 dark:bg-black sm:py-24">
+    <section className="bg-gray-50 py-16 dark:bg-gray-950 sm:py-24">
       <div className="container mx-auto px-4">
         {/* Header */}
         <motion.div
@@ -20,10 +20,10 @@ export function TestimonialsSnapshots() {
           className="mb-16 text-center"
         >
           <h2 className="mb-4 text-3xl font-black text-black dark:text-white sm:text-4xl">
-            Moments & Memories
+            Student Testimonials
           </h2>
           <p className="mx-auto max-w-2xl text-gray-600 dark:text-gray-400">
-            Real stories and candid moments from our community
+            Hear from our students about their transformative dance journey
           </p>
         </motion.div>
 
@@ -37,10 +37,10 @@ export function TestimonialsSnapshots() {
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: index * 0.1 }}
             >
-              <Card className="group h-full overflow-hidden border-2 border-gray-200 bg-white transition-all duration-500 hover:border-black hover:shadow-2xl dark:border-gray-800 dark:bg-gray-900 dark:hover:border-white">
+              <Card className="group h-full p-0 overflow-hidden border-2 border-gray-200 bg-white transition-all duration-500 hover:border-black hover:shadow-2xl dark:border-gray-800 dark:bg-gray-900 dark:hover:border-white">
                 <CardContent className="p-0">
-                  <div className="grid md:grid-cols-5">
-                    {/* Image Section */}
+                  <div className="grid md:grid-cols-5 h-auto">
+                    {/* Image Section - No padding/margin */}
                     <div className="relative h-64 overflow-hidden md:col-span-2 md:h-auto">
                       <Image
                         src={testimonial.image}
@@ -52,39 +52,29 @@ export function TestimonialsSnapshots() {
                     </div>
 
                     {/* Content Section */}
-                    <div className="flex flex-col justify-center p-6 md:col-span-3">
-                      {/* Quote Icon */}
-                      <Quote className="mb-4 h-8 w-8 text-gray-300 dark:text-gray-700" />
-
+                    <div className="flex flex-col justify-center p-6 md:col-span-3 md:p-8">
                       {/* Quote */}
-                      <blockquote className="mb-6 text-base italic leading-relaxed text-gray-700 dark:text-gray-300 md:text-lg">
+                      <blockquote className="mb-6 text-base leading-relaxed text-gray-700 dark:text-gray-300 md:text-lg">
                         "{testimonial.quote}"
                       </blockquote>
 
                       {/* Author Info */}
-                      <div className="flex items-start justify-between">
-                        <div>
-                          <div className="mb-1 font-bold text-black dark:text-white">
-                            {testimonial.author}
-                          </div>
-                          <div className="mb-2 text-sm text-gray-600 dark:text-gray-400">
-                            {testimonial.role}
-                          </div>
-                          {testimonial.event && (
-                            <Badge
-                              variant="outline"
-                              className="border-gray-300 text-xs dark:border-gray-700"
-                            >
-                              <Calendar className="mr-1 h-3 w-3" />
-                              {testimonial.event}
-                            </Badge>
-                          )}
+                      <div className="border-t border-gray-200 pt-4 dark:border-gray-800">
+                        <div className="mb-1 font-bold text-black dark:text-white">
+                          {testimonial.author}
                         </div>
-
-                        {/* Decorative Element */}
-                        <div className="hidden h-12 w-12 items-center justify-center rounded-full bg-black/5 dark:bg-white/5 md:flex">
-                          <Quote className="h-6 w-6 text-black/20 dark:text-white/20" />
+                        <div className="mb-3 text-sm text-gray-600 dark:text-gray-400">
+                          {testimonial.role}
                         </div>
+                        {testimonial.event && (
+                          <Badge
+                            variant="outline"
+                            className="border-gray-300 text-xs dark:border-gray-700"
+                          >
+                            <Calendar className="mr-1 h-3 w-3" />
+                            {testimonial.event}
+                          </Badge>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -103,16 +93,16 @@ export function TestimonialsSnapshots() {
           className="mt-16 text-center"
         >
           <p className="text-lg text-gray-600 dark:text-gray-400">
-            Want to share your story?{" "}
+            Join our community of dancers. <br />
             <a
-              href="#submit"
+              href="https://wa.me/+919842222467?text=Hi%20sir%2C%20we%20are%20delighted%20to%20inform%20you%20that%20we%20have%20some%20valuable%20images%20that%20we%20would%20love%20to%20share%20with%20you."
               className="font-bold text-black underline transition-colors hover:text-gray-600 dark:text-white dark:hover:text-gray-400"
             >
-              Submit your photos and memories
+              Start your dance journey today
             </a>
           </p>
         </motion.div>
       </div>
     </section>
-  )
+  );
 }
