@@ -1,13 +1,13 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
-import { Mail, Phone, MapPin, ArrowRight } from "lucide-react"
+import { useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { Mail, Phone, MapPin, ArrowRight } from "lucide-react";
 
-import { submitForm } from "@/lib/form-submit"
-import { toast } from "@/hooks/use-toast"
+import { submitForm } from "@/lib/form-submit";
+import { toast } from "@/hooks/use-toast";
 
 const contactSchema = z.object({
   full_name: z.string().min(2, "Please enter your full name"),
@@ -15,21 +15,33 @@ const contactSchema = z.object({
   phone: z.string().min(10, "Please enter a valid phone number").max(20),
   subject: z.string().min(2, "Choose a subject"),
   message: z.string().min(10, "Share a few more details"),
-})
+});
 
-export type ContactFormValues = z.infer<typeof contactSchema>
+export type ContactFormValues = z.infer<typeof contactSchema>;
 
 const contactItems = [
   {
     icon: Mail,
     label: "Email",
-    value: "hello@footloose.online",
-    href: "mailto:hello@footloose.online",
+    value: "contact@footloose.online",
+    href: "mailto:contact@footloose.online",
+  },
+  {
+    icon: Mail,
+    label: "Admin",
+    value: "admin@footloose.online",
+    href: "mailto:admin@footloose.online",
+  },
+  {
+    icon: Mail,
+    label: "Events",
+    value: "event@footloose.online",
+    href: "mailto:event@footloose.online",
   },
   {
     icon: Phone,
     label: "Call",
-    value: "+91 98422 22467",
+    value: "+91 9842222467",
     href: "tel:+919842222467",
   },
   {
@@ -38,7 +50,7 @@ const contactItems = [
     value: "Chennai, Tamil Nadu",
     href: "https://maps.google.com",
   },
-]
+];
 
 const subjects = [
   "Class Enrollment Inquiry",
@@ -49,10 +61,10 @@ const subjects = [
   "Feedback or Complaint",
   "Alumni Inquiry",
   "Career Opportunities",
-]
+];
 
 export function ContactForm() {
-  const [isSubmitting, setSubmitting] = useState(false)
+  const [isSubmitting, setSubmitting] = useState(false);
 
   const form = useForm<ContactFormValues>({
     resolver: zodResolver(contactSchema),
@@ -63,27 +75,28 @@ export function ContactForm() {
       subject: "",
       message: "",
     },
-  })
+  });
 
   const handleSubmit = async (values: ContactFormValues) => {
-    setSubmitting(true)
-    const result = await submitForm("inquiries", values)
-    setSubmitting(false)
+    setSubmitting(true);
+    const result = await submitForm("inquiries", values);
+    setSubmitting(false);
 
     if (result.success) {
       toast({
         title: "Thank you",
-        description: "We received your inquiry and will respond within one business day.",
-      })
-      form.reset()
-      return
+        description:
+          "We received your inquiry and will respond within one business day.",
+      });
+      form.reset();
+      return;
     }
 
     toast({
       title: "Submission failed",
       description: result.error ?? "Please try again in a moment.",
-    })
-  }
+    });
+  };
 
   return (
     <div className="relative w-full max-w-full overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-slate-900/95 via-slate-800/90 to-slate-900/95 shadow-2xl backdrop-blur-xl transition-colors dark:border-white/10 dark:from-slate-900/95 dark:via-slate-800/90 dark:to-slate-900/95">
@@ -91,20 +104,23 @@ export function ContactForm() {
       <div className="pointer-events-none absolute inset-0 rounded-3xl bg-gradient-to-br from-indigo-500/20 via-purple-500/10 to-pink-500/20 opacity-50 transition-opacity" />
       <div className="pointer-events-none absolute -top-40 -right-40 h-80 w-80 rounded-full bg-indigo-500/30 blur-3xl transition-opacity" />
       <div className="pointer-events-none absolute -bottom-40 -left-40 h-80 w-80 rounded-full bg-purple-500/20 blur-3xl transition-opacity" />
-      
+
       <div className="relative grid w-full grid-cols-1 gap-8 p-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)] lg:gap-10 lg:p-12 xl:gap-14 xl:p-14 2xl:gap-16 2xl:p-16">
         {/* Left side - Contact items */}
         <div className="w-full space-y-8 lg:space-y-10">
           <div className="space-y-4">
-            <h2 className="text-3xl font-bold text-white lg:text-4xl xl:text-5xl">Get in Touch</h2>
+            <h2 className="text-3xl font-bold text-white lg:text-4xl xl:text-5xl">
+              Get in Touch
+            </h2>
             <p className="text-base leading-relaxed text-white/70 lg:text-lg">
-              Connect with us through any of these channels. We're here to help bring your vision to life.
+              Connect with us through any of these channels. We're here to help
+              bring your vision to life.
             </p>
           </div>
-          
+
           <div className="space-y-4 lg:space-y-5">
             {contactItems.map((item) => {
-              const Icon = item.icon
+              const Icon = item.icon;
               return (
                 <a
                   key={item.label}
@@ -115,29 +131,43 @@ export function ContactForm() {
                 >
                   <div className="flex min-w-0 flex-1 items-center gap-4">
                     <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 lg:h-14 lg:w-14">
-                      <Icon className="h-6 w-6 text-white lg:h-7 lg:w-7" strokeWidth={2} />
+                      <Icon
+                        className="h-6 w-6 text-white lg:h-7 lg:w-7"
+                        strokeWidth={2}
+                      />
                     </div>
                     <div className="flex min-w-0 flex-1 flex-col">
                       <span className="text-xs font-semibold uppercase tracking-wider text-white/60 lg:text-sm">
                         {item.label}
                       </span>
-                      <span className="truncate text-base font-medium text-white lg:text-lg">{item.value}</span>
+                      <span className="truncate text-base font-medium text-white lg:text-lg">
+                        {item.value}
+                      </span>
                     </div>
                   </div>
                   <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-white/10 transition-all duration-300 group-hover:scale-110 group-hover:bg-white/20 lg:h-12 lg:w-12">
-                    <ArrowRight className="h-5 w-5 text-white transition-transform duration-300 group-hover:translate-x-1 lg:h-6 lg:w-6" strokeWidth={2} />
+                    <ArrowRight
+                      className="h-5 w-5 text-white transition-transform duration-300 group-hover:translate-x-1 lg:h-6 lg:w-6"
+                      strokeWidth={2}
+                    />
                   </div>
                 </a>
-              )
+              );
             })}
           </div>
         </div>
 
         {/* Right side - Contact form */}
         <div className="w-full rounded-2xl border border-white/10 bg-white/5 p-8 backdrop-blur-sm lg:p-10 xl:p-12">
-          <form onSubmit={form.handleSubmit(handleSubmit)} className="w-full space-y-6 lg:space-y-7">
+          <form
+            onSubmit={form.handleSubmit(handleSubmit)}
+            className="w-full space-y-6 lg:space-y-7"
+          >
             <div className="w-full space-y-2">
-              <label htmlFor="full_name" className="block text-center text-base font-semibold text-white lg:text-lg">
+              <label
+                htmlFor="full_name"
+                className="block text-center text-base font-semibold text-white lg:text-lg"
+              >
                 Name
               </label>
               <input
@@ -148,12 +178,17 @@ export function ContactForm() {
                 className="w-full rounded-xl border border-white/20 bg-white/10 px-5 py-3.5 text-base text-white backdrop-blur-sm transition-all duration-300 placeholder:text-white/40 focus:border-indigo-400 focus:bg-white/15 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 lg:px-6 lg:py-4 lg:text-lg"
               />
               {form.formState.errors.full_name && (
-                <p className="text-sm text-red-400 lg:text-base">{form.formState.errors.full_name.message}</p>
+                <p className="text-sm text-red-400 lg:text-base">
+                  {form.formState.errors.full_name.message}
+                </p>
               )}
             </div>
 
             <div className="w-full space-y-2">
-              <label htmlFor="email" className="block text-center text-base font-semibold text-white lg:text-lg">
+              <label
+                htmlFor="email"
+                className="block text-center text-base font-semibold text-white lg:text-lg"
+              >
                 Email
               </label>
               <input
@@ -165,28 +200,38 @@ export function ContactForm() {
                 className="w-full rounded-xl border border-white/20 bg-white/10 px-5 py-3.5 text-base text-white backdrop-blur-sm transition-all duration-300 placeholder:text-white/40 focus:border-indigo-400 focus:bg-white/15 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 lg:px-6 lg:py-4 lg:text-lg"
               />
               {form.formState.errors.email && (
-                <p className="text-sm text-red-400 lg:text-base">{form.formState.errors.email.message}</p>
+                <p className="text-sm text-red-400 lg:text-base">
+                  {form.formState.errors.email.message}
+                </p>
               )}
             </div>
 
             <div className="w-full space-y-2">
-              <label htmlFor="phone" className="block text-center text-base font-semibold text-white lg:text-lg">
+              <label
+                htmlFor="phone"
+                className="block text-center text-base font-semibold text-white lg:text-lg"
+              >
                 Phone
               </label>
               <input
                 id="phone"
                 type="tel"
-                placeholder="(+91) 98765 43210"
+                placeholder="(+91) 9842222467"
                 {...form.register("phone")}
                 className="w-full rounded-xl border border-white/20 bg-white/10 px-5 py-3.5 text-base text-white backdrop-blur-sm transition-all duration-300 placeholder:text-white/40 focus:border-indigo-400 focus:bg-white/15 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 lg:px-6 lg:py-4 lg:text-lg"
               />
               {form.formState.errors.phone && (
-                <p className="text-sm text-red-400 lg:text-base">{form.formState.errors.phone.message}</p>
+                <p className="text-sm text-red-400 lg:text-base">
+                  {form.formState.errors.phone.message}
+                </p>
               )}
             </div>
 
             <div className="w-full space-y-2">
-              <label htmlFor="subject" className="block text-center text-base font-semibold text-white lg:text-lg">
+              <label
+                htmlFor="subject"
+                className="block text-center text-base font-semibold text-white lg:text-lg"
+              >
                 Subject
               </label>
               <select
@@ -198,18 +243,27 @@ export function ContactForm() {
                   Select a topic
                 </option>
                 {subjects.map((subject) => (
-                  <option key={subject} value={subject} className="bg-slate-900 text-white">
+                  <option
+                    key={subject}
+                    value={subject}
+                    className="bg-slate-900 text-white"
+                  >
                     {subject}
                   </option>
                 ))}
               </select>
               {form.formState.errors.subject && (
-                <p className="text-sm text-red-400 lg:text-base">{form.formState.errors.subject.message}</p>
+                <p className="text-sm text-red-400 lg:text-base">
+                  {form.formState.errors.subject.message}
+                </p>
               )}
             </div>
 
             <div className="w-full space-y-2">
-              <label htmlFor="message" className="block text-center text-base font-semibold text-white lg:text-lg">
+              <label
+                htmlFor="message"
+                className="block text-center text-base font-semibold text-white lg:text-lg"
+              >
                 Message
               </label>
               <textarea
@@ -220,7 +274,9 @@ export function ContactForm() {
                 className="w-full resize-none rounded-xl border border-white/20 bg-white/10 px-5 py-3.5 text-base text-white backdrop-blur-sm transition-all duration-300 placeholder:text-white/40 focus:border-indigo-400 focus:bg-white/15 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 lg:px-6 lg:py-4 lg:text-lg"
               />
               {form.formState.errors.message && (
-                <p className="text-sm text-red-400 lg:text-base">{form.formState.errors.message.message}</p>
+                <p className="text-sm text-red-400 lg:text-base">
+                  {form.formState.errors.message.message}
+                </p>
               )}
             </div>
 
@@ -235,7 +291,7 @@ export function ContactForm() {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default ContactForm
+export default ContactForm;

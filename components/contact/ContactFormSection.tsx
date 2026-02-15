@@ -1,13 +1,13 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { motion } from "framer-motion"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
-import { Send, CheckCircle2 } from "lucide-react"
-import { submitForm } from "@/lib/form-submit"
-import { toast } from "@/hooks/use-toast"
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { Send, CheckCircle2 } from "lucide-react";
+import { submitForm } from "@/lib/form-submit";
+import { toast } from "@/hooks/use-toast";
 import {
   Form,
   FormControl,
@@ -15,28 +15,30 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { Button } from "@/components/ui/button"
-import { Alert, AlertDescription } from "@/components/ui/alert"
+} from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 const inquirySchema = z.object({
   full_name: z.string().min(2, "Please enter your full name"),
   email: z.string().email("Please enter a valid email address"),
   phone: z.string().min(10, "Please enter a valid phone number"),
   subject: z.string().min(1, "Please select a subject"),
-  message: z.string().min(10, "Please provide more details (at least 10 characters)"),
-})
+  message: z
+    .string()
+    .min(10, "Please provide more details (at least 10 characters)"),
+});
 
-export type InquiryFormValues = z.infer<typeof inquirySchema>
+export type InquiryFormValues = z.infer<typeof inquirySchema>;
 
 const subjects = [
   "Class Enrollment Inquiry",
@@ -47,11 +49,11 @@ const subjects = [
   "Feedback or Complaint",
   "Alumni Inquiry",
   "Career Opportunities",
-]
+];
 
 export function ContactFormSection() {
-  const [isSubmitting, setSubmitting] = useState(false)
-  const [showSuccess, setShowSuccess] = useState(false)
+  const [isSubmitting, setSubmitting] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
 
   const form = useForm<InquiryFormValues>({
     resolver: zodResolver(inquirySchema),
@@ -62,32 +64,32 @@ export function ContactFormSection() {
       subject: "",
       message: "",
     },
-  })
+  });
 
   const handleSubmit = async (values: InquiryFormValues) => {
-    setSubmitting(true)
-    const result = await submitForm("inquiries", values)
-    setSubmitting(false)
+    setSubmitting(true);
+    const result = await submitForm("inquiries", values);
+    setSubmitting(false);
 
     if (result.success) {
-      setShowSuccess(true)
+      setShowSuccess(true);
       toast({
         title: "Message received!",
         description: "Thank you — we'll get back to you within 24 hours.",
-      })
-      form.reset()
-      
+      });
+      form.reset();
+
       // Hide success message after 5 seconds
-      setTimeout(() => setShowSuccess(false), 5000)
-      return
+      setTimeout(() => setShowSuccess(false), 5000);
+      return;
     }
 
     toast({
       title: "Unable to submit",
       description: result.error ?? "Please try again shortly.",
       variant: "destructive",
-    })
-  }
+    });
+  };
 
   return (
     <section className="bg-white py-20 dark:bg-black">
@@ -107,8 +109,8 @@ export function ContactFormSection() {
             Send Us a Message
           </h2>
           <p className="mx-auto max-w-2xl text-lg text-black/70 dark:text-white/70">
-            Fill out the form below and we'll respond within one business day. For urgent matters,
-            please call us directly.
+            Fill out the form below and we'll respond within one business day.
+            For urgent matters, please call us directly.
           </p>
         </motion.div>
 
@@ -133,15 +135,18 @@ export function ContactFormSection() {
                   <Alert className="border-2 border-green-500 bg-green-50 dark:bg-green-950">
                     <CheckCircle2 className="h-5 w-5 text-green-600 dark:text-green-400" />
                     <AlertDescription className="text-green-800 dark:text-green-200">
-                      <strong>Thank you for reaching out!</strong> We've received your message and
-                      will respond soon.
+                      <strong>Thank you for reaching out!</strong> We've
+                      received your message and will respond soon.
                     </AlertDescription>
                   </Alert>
                 </motion.div>
               )}
 
               <Form {...form}>
-                <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
+                <form
+                  onSubmit={form.handleSubmit(handleSubmit)}
+                  className="space-y-6"
+                >
                   {/* Name & Email Row */}
                   <div className="grid gap-6 md:grid-cols-2">
                     <FormField
@@ -200,7 +205,7 @@ export function ContactFormSection() {
                           <FormControl>
                             <Input
                               type="tel"
-                              placeholder="+91 98765 43210"
+                              placeholder="+91 9842222467"
                               autoComplete="tel"
                               className="h-12 rounded-lg border-2 border-black bg-white transition-all focus:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:border-white dark:bg-black dark:focus:shadow-[4px_4px_0px_0px_rgba(255,255,255,1)]"
                               {...field}
@@ -219,7 +224,10 @@ export function ContactFormSection() {
                           <FormLabel className="text-sm font-bold text-black dark:text-white">
                             Subject *
                           </FormLabel>
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <Select
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                          >
                             <FormControl>
                               <SelectTrigger className="h-12 rounded-lg border-2 border-black bg-white transition-all hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] dark:border-white dark:bg-black dark:hover:shadow-[3px_3px_0px_0px_rgba(255,255,255,1)]">
                                 <SelectValue placeholder="Select a topic" />
@@ -262,7 +270,10 @@ export function ContactFormSection() {
                   />
 
                   {/* Submit Button */}
-                  <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                  <motion.div
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
                     <Button
                       type="submit"
                       disabled={isSubmitting}
@@ -272,7 +283,11 @@ export function ContactFormSection() {
                         <span className="flex items-center gap-2">
                           <motion.div
                             animate={{ rotate: 360 }}
-                            transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                            transition={{
+                              duration: 1,
+                              repeat: Infinity,
+                              ease: "linear",
+                            }}
                             className="h-5 w-5 rounded-full border-2 border-white border-t-transparent dark:border-black dark:border-t-transparent"
                           />
                           Sending...
@@ -288,7 +303,8 @@ export function ContactFormSection() {
 
                   {/* Privacy Note */}
                   <p className="text-center text-xs text-black/60 dark:text-white/60">
-                    Your information is secure and will only be used to respond to your inquiry.
+                    Your information is secure and will only be used to respond
+                    to your inquiry.
                   </p>
                 </form>
               </Form>
@@ -297,5 +313,5 @@ export function ContactFormSection() {
         </motion.div>
       </div>
     </section>
-  )
+  );
 }

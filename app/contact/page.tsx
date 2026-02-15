@@ -1,4 +1,4 @@
-import type { Metadata } from "next"
+import type { Metadata } from "next";
 import {
   ContactHero,
   LocationAndMapSection,
@@ -6,7 +6,7 @@ import {
   FAQSection,
   contactLocations,
   faqCategories,
-} from "@/components/contact"
+} from "@/components/contact";
 
 export const metadata: Metadata = {
   title: "Contact & Support - Edwin's Dance & Costume Company",
@@ -38,10 +38,11 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Contact Edwin's Dance & Costume Company",
-    description: "Get in touch with Footloose for dance classes, costumes, and event bookings.",
+    description:
+      "Get in touch with Footloose for dance classes, costumes, and event bookings.",
     images: ["https://i.ibb.co/84DmJmx7/footloose.jpg"],
   },
-}
+};
 
 // Structured Data for LocalBusiness
 const structuredData = {
@@ -52,8 +53,8 @@ const structuredData = {
   description:
     "Premier dance school and costume rental service in Coimbatore offering Western, Bollywood, Classical, and wellness programs.",
   url: "https://footloose.online",
-  telephone: "+91-98765-43210",
-  email: "info@footloose.online",
+  telephone: "+91-9842222467",
+  email: "contact@footloose.online",
   address: [
     {
       "@type": "PostalAddress",
@@ -107,7 +108,7 @@ const structuredData = {
     "@type": "City",
     name: "Coimbatore",
   },
-}
+};
 
 export default function ContactPage() {
   return (

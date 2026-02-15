@@ -1,21 +1,24 @@
-"use client"
+"use client";
 
-import { motion, useScroll, useTransform } from "framer-motion"
-import { useRef } from "react"
-import { MessageCircle, Phone, MapPin } from "lucide-react"
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useRef } from "react";
+import { MessageCircle, Phone, MapPin } from "lucide-react";
 
 export function ContactHero() {
-  const ref = useRef<HTMLDivElement>(null)
+  const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start start", "end start"],
-  })
+  });
 
-  const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"])
-  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0])
+  const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
+  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
 
   return (
-    <section ref={ref} className="relative min-h-[60vh] overflow-hidden bg-white dark:bg-black">
+    <section
+      ref={ref}
+      className="relative min-h-[60vh] overflow-hidden bg-white dark:bg-black"
+    >
       {/* Parallax Background */}
       <motion.div
         style={{ y }}
@@ -72,7 +75,9 @@ export function ContactHero() {
             className="mb-8 text-xl text-black/70 dark:text-white/70 md:text-2xl"
           >
             Connecting Art, Movement, and People — Reach Out to the{" "}
-            <span className="font-bold text-black dark:text-white">Footloose Family</span>
+            <span className="font-bold text-black dark:text-white">
+              Footloose Family
+            </span>
           </motion.p>
 
           {/* Quick Contact Pills */}
@@ -83,7 +88,7 @@ export function ContactHero() {
             className="flex flex-wrap items-center justify-center gap-4"
           >
             <motion.a
-              href="tel:+919876543210"
+              href="tel:+919842222467"
               whileHover={{ scale: 1.05, y: -2 }}
               whileTap={{ scale: 0.95 }}
               className="flex items-center gap-2 rounded-full border-2 border-black bg-white px-6 py-3 text-sm font-bold text-black transition-colors hover:bg-black hover:text-white dark:border-white dark:bg-black dark:text-white dark:hover:bg-white dark:hover:text-black"
@@ -154,5 +159,5 @@ export function ContactHero() {
         </motion.div>
       </motion.div>
     </section>
-  )
+  );
 }

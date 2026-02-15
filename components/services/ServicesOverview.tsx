@@ -1,54 +1,54 @@
-"use client"
+"use client";
 
-import { motion } from "framer-motion"
-import Image from "next/image"
-import Link from "next/link"
-import { 
-  ArrowRight, 
-  TrendingUp, 
-  Music, 
-  Sparkles, 
-  Heart, 
-  GraduationCap, 
-  Footprints 
-} from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { servicesData } from "./data"
+import { motion } from "framer-motion";
+import Image from "next/image";
+import Link from "next/link";
+import {
+  ArrowRight,
+  TrendingUp,
+  Music,
+  Sparkles,
+  Heart,
+  GraduationCap,
+  Footprints,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { servicesData } from "./data";
 
 const servicesList = [
   {
     key: "danceClasses",
     icon: TrendingUp,
-    color: "from-blue-500 to-cyan-500"
+    color: "from-blue-500 to-cyan-500",
   },
   {
     key: "choreography",
     icon: Sparkles,
-    color: "from-purple-500 to-pink-500"
+    color: "from-purple-500 to-pink-500",
   },
   {
     key: "events",
     icon: Music,
-    color: "from-orange-500 to-red-500"
+    color: "from-orange-500 to-red-500",
   },
   {
     key: "chairCoCise",
     icon: Heart,
-    color: "from-green-500 to-emerald-500"
+    color: "from-green-500 to-emerald-500",
   },
   {
     key: "espShowcase",
     icon: GraduationCap,
-    color: "from-indigo-500 to-purple-500"
+    color: "from-indigo-500 to-purple-500",
   },
   {
     key: "laRamp",
     icon: Footprints,
-    color: "from-pink-500 to-rose-500"
-  }
-]
+    color: "from-pink-500 to-rose-500",
+  },
+];
 
 export function ServicesOverview() {
   return (
@@ -56,7 +56,7 @@ export function ServicesOverview() {
       {/* Hero Section */}
       <section className="relative overflow-hidden py-20 sm:py-32">
         <div className="absolute inset-0 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-950 dark:to-black" />
-        
+
         {/* Animated background elements */}
         <div className="absolute inset-0 overflow-hidden">
           <motion.div
@@ -67,7 +67,7 @@ export function ServicesOverview() {
             transition={{
               duration: 20,
               repeat: Infinity,
-              ease: "linear"
+              ease: "linear",
             }}
             className="absolute -top-1/2 -right-1/2 h-full w-full bg-gradient-to-br from-gray-200/20 to-transparent dark:from-gray-800/20 rounded-full blur-3xl"
           />
@@ -79,7 +79,7 @@ export function ServicesOverview() {
             transition={{
               duration: 20,
               repeat: Infinity,
-              ease: "linear"
+              ease: "linear",
             }}
             className="absolute -bottom-1/2 -left-1/2 h-full w-full bg-gradient-to-tl from-gray-200/20 to-transparent dark:from-gray-800/20 rounded-full blur-3xl"
           />
@@ -99,7 +99,8 @@ export function ServicesOverview() {
               Our Services
             </h1>
             <p className="mx-auto mb-8 max-w-2xl text-lg text-gray-600 dark:text-gray-400 sm:text-xl">
-              From dance education to event production, we offer comprehensive solutions for every movement and creative need
+              From dance education to event production, we offer comprehensive
+              solutions for every movement and creative need
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <Button
@@ -136,14 +137,16 @@ export function ServicesOverview() {
               What We Offer
             </h2>
             <p className="mx-auto max-w-2xl text-gray-600 dark:text-gray-400">
-              Professional services designed to bring your creative vision to life
+              Professional services designed to bring your creative vision to
+              life
             </p>
           </motion.div>
 
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {servicesList.map((service, index) => {
-              const data = servicesData[service.key as keyof typeof servicesData]
-              const Icon = service.icon
+              const data =
+                servicesData[service.key as keyof typeof servicesData];
+              const Icon = service.icon;
 
               return (
                 <motion.div
@@ -164,10 +167,12 @@ export function ServicesOverview() {
                           className="object-cover transition-transform duration-700 group-hover:scale-110"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
-                        
+
                         {/* Icon Badge */}
                         <div className="absolute left-4 top-4">
-                          <div className={`rounded-full bg-gradient-to-br ${service.color} p-3 shadow-lg backdrop-blur`}>
+                          <div
+                            className={`rounded-full bg-gradient-to-br ${service.color} p-3 shadow-lg backdrop-blur`}
+                          >
                             <Icon className="h-6 w-6 text-white" />
                           </div>
                         </div>
@@ -192,7 +197,10 @@ export function ServicesOverview() {
                         {/* Features */}
                         <div className="mb-6 space-y-2">
                           {data.features.slice(0, 3).map((feature, idx) => (
-                            <div key={idx} className="flex items-center gap-2 text-sm">
+                            <div
+                              key={idx}
+                              className="flex items-center gap-2 text-sm"
+                            >
                               <div className="h-1.5 w-1.5 rounded-full bg-black dark:bg-white" />
                               <span className="text-gray-700 dark:text-gray-300">
                                 {feature.title}
@@ -204,7 +212,7 @@ export function ServicesOverview() {
                         {/* CTA */}
                         <div className="flex items-center justify-between">
                           <span className="text-sm font-bold text-black dark:text-white">
-                            {data.pricing.split('/')[0]}
+                            {data.pricing.split("/")[0]}
                           </span>
                           <Button
                             variant="ghost"
@@ -218,7 +226,7 @@ export function ServicesOverview() {
                     </Card>
                   </Link>
                 </motion.div>
-              )
+              );
             })}
           </div>
         </div>
@@ -232,7 +240,7 @@ export function ServicesOverview() {
               { number: "30+", label: "Years Experience" },
               { number: "10,000+", label: "Students Trained" },
               { number: "500+", label: "Events Produced" },
-              { number: "100+", label: "Corporate Clients" }
+              { number: "100+", label: "Corporate Clients" },
             ].map((stat, index) => (
               <motion.div
                 key={index}
@@ -268,7 +276,8 @@ export function ServicesOverview() {
               Ready to Get Started?
             </h2>
             <p className="mx-auto mb-8 max-w-2xl text-lg text-gray-600 dark:text-gray-400">
-              Contact us today to discuss your project and discover how we can bring your vision to life
+              Contact us today to discuss your project and discover how we can
+              bring your vision to life
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <Button
@@ -276,7 +285,7 @@ export function ServicesOverview() {
                 size="lg"
                 className="rounded-full bg-black text-white hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-100"
               >
-                <a href="tel:+919842222467">Call +91 98422 22467</a>
+                <a href="tel:+919842222467">Call +91 9842222467</a>
               </Button>
               <Button
                 asChild
@@ -293,5 +302,5 @@ export function ServicesOverview() {
         </div>
       </section>
     </div>
-  )
+  );
 }

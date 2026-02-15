@@ -119,7 +119,7 @@ export function HeroSection() {
                 asChild
               >
                 <Link
-                  href="https://wa.me/1234567890?text=Hi! I'd like to book a consultation."
+                  href="https://wa.me/+919842222467?text=Hi! I'd like to book a consultation."
                   target="_blank"
                 >
                   <MessageCircle className="h-5 w-5 mr-2 group-hover:animate-bounce" />
@@ -133,7 +133,7 @@ export function HeroSection() {
                   asChild
                 >
                   <Link
-                    href="https://wa.me/1234567890?text=Hi!%20I'd%20like%20to%20book%20a%20consultation."
+                    href="https://wa.me/+919842222467?text=Hi!%20I'd%20like%20to%20book%20a%20consultation."
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label="Book Consultation on WhatsApp"
@@ -197,7 +197,6 @@ export function HeroSection() {
           </div>
         </div>
       </div>
-      
 
       {/* Enhanced Scroll Indicator */}
       <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce-slow cursor-pointer group ">

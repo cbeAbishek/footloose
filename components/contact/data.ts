@@ -1,12 +1,12 @@
-import { ContactLocation, FAQCategory } from "./types"
+import { ContactLocation, FAQCategory } from "./types";
 
 export const contactLocations: ContactLocation[] = [
   {
     id: "rs-puram",
     name: "R.S. Puram Center (Main Branch)",
     address: "123 Avinashi Road, R.S. Puram, Coimbatore - 641002, Tamil Nadu",
-    phone: "+91 98765 43210",
-    email: "info@footloose.online",
+    phone: "+91 9842222467",
+    email: "contact@footloose.online",
     workingHours: {
       weekdays: "Monday - Friday: 6:00 AM - 9:00 PM",
       weekends: "Saturday - Sunday: 7:00 AM - 8:00 PM",
@@ -16,22 +16,22 @@ export const contactLocations: ContactLocation[] = [
       lng: 76.9558,
     },
   },
-//   {
-//     id: "ramanathapuram",
-//     name: "Ramanathapuram Branch",
-//     address: "456 Sathy Road, Ramanathapuram, Coimbatore - 641045, Tamil Nadu",
-//     phone: "+91 98765 43211",
-//     email: "ramanathapuram@footloose.online",
-//     workingHours: {
-//       weekdays: "Monday - Friday: 6:30 AM - 8:30 PM",
-//       weekends: "Saturday - Sunday: 7:00 AM - 7:00 PM",
-//     },
-//     coordinates: {
-//       lat: 11.0510,
-//       lng: 76.9634,
-//     },
-//   },
-]
+  //   {
+  //     id: "ramanathapuram",
+  //     name: "Ramanathapuram Branch",
+  //     address: "456 Sathy Road, Ramanathapuram, Coimbatore - 641045, Tamil Nadu",
+  //     phone: "+91 9842222467",
+  //     email: "ramanathapuram@footloose.online",
+  //     workingHours: {
+  //       weekdays: "Monday - Friday: 6:30 AM - 8:30 PM",
+  //       weekends: "Saturday - Sunday: 7:00 AM - 7:00 PM",
+  //     },
+  //     coordinates: {
+  //       lat: 11.0510,
+  //       lng: 76.9634,
+  //     },
+  //   },
+];
 
 export const faqCategories: FAQCategory[] = [
   {
@@ -268,4 +268,4 @@ export const faqCategories: FAQCategory[] = [
       },
     ],
   },
-]
+];

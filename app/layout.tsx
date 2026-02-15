@@ -1,28 +1,28 @@
-import type React from "react"
-import type { Metadata, Viewport } from "next"
-import { GeistSans } from "geist/font/sans"
-import { GeistMono } from "geist/font/mono"
-import { Suspense } from "react"
-import Script from "next/script"
-import { Analytics } from "@vercel/analytics/next"
+import type React from "react";
+import type { Metadata, Viewport } from "next";
+import { GeistSans } from "geist/font/sans";
+import { GeistMono } from "geist/font/mono";
+import { Suspense } from "react";
+import Script from "next/script";
+import { Analytics } from "@vercel/analytics/next";
 
-import { SiteFooter } from "@/components/layout/site-footer"
-import { SiteHeader } from "@/components/layout/site-header"
-import { ThemeProvider } from "@/components/theme-provider"
-import { Toaster } from "@/components/ui/toaster"
-import { LoadingScreen } from "@/components/loading-screen"
-import { KidsClassOfferPopup } from "@/components/kids-class-offer-popup"
-import Loader from "@/components/Loader"
-import InstallPrompt from "@/components/pwa/install-prompt"
+import { SiteFooter } from "@/components/layout/site-footer";
+import { SiteHeader } from "@/components/layout/site-header";
+import { ThemeProvider } from "@/components/theme-provider";
+import { Toaster } from "@/components/ui/toaster";
+import { LoadingScreen } from "@/components/loading-screen";
+import { KidsClassOfferPopup } from "@/components/kids-class-offer-popup";
+import Loader from "@/components/Loader";
+import InstallPrompt from "@/components/pwa/install-prompt";
 
-import "./globals.css"
+import "./globals.css";
 
-const siteUrl = "http://footloose.online/"
-const businessName = "Footloose Edwin's Dance Company"
+const siteUrl = "http://footloose.online/";
+const businessName = "Footloose Edwin's Dance Company";
 const businessGeo = {
   latitude: 13.0827,
   longitude: 80.2707,
-}
+};
 
 const structuredData = [
   {
@@ -39,7 +39,7 @@ const structuredData = [
     contactPoint: [
       {
         "@type": "ContactPoint",
-        telephone: "+91-98422-22467",
+        telephone: "+91-9842222467",
         contactType: "customer service",
         areaServed: ["IN"],
         availableLanguage: ["English"],
@@ -53,7 +53,7 @@ const structuredData = [
     description:
       "Dance entertainment company providing choreography, themed performances, props, and wellness programs",
     url: siteUrl,
-    telephone: "+91-98422-22467",
+    telephone: "+91-9842222467",
     priceRange: "₹₹",
     image: [`${siteUrl}/icon.png`],
     address: {
@@ -99,9 +99,9 @@ const structuredData = [
       "query-input": "required name=search_term_string",
     },
   },
-]
+];
 
-const structuredDataJson = JSON.stringify(structuredData)
+const structuredDataJson = JSON.stringify(structuredData);
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -198,31 +198,34 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
-}
+};
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#059669" },
-    { media: "(prefers-color-scheme: dark)", color: "#10b981" },
+    { media: "(prefers-color-scheme: light)", color: "#000000ff" },
+    { media: "(prefers-color-scheme: dark)", color: "#000000ff" },
   ],
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
-}
+};
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode
+  children: React.ReactNode;
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body
         className={`font-sans ${GeistSans.variable} ${GeistMono.variable} antialiased`}
       >
-          {/* <Loader /> */}
-        <Script src="https://www.googletagmanager.com/gtag/js?id=G-S8XNFD36GG" strategy="afterInteractive" />
+        {/* <Loader /> */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-S8XNFD36GG"
+          strategy="afterInteractive"
+        />
         <Script id="ga-gtag" strategy="afterInteractive">
           {`
             window.dataLayer = window.dataLayer || [];
@@ -242,11 +245,11 @@ export default function RootLayout({
             </a>
             <SiteHeader />
             <main id="main-content" className="flex-1 pt-14 sm:pt-16 md:pt-20">
-              <Suspense fallback={<LoadingScreen />}>{children}</Suspense>
+              <Suspense>{children}</Suspense>
             </main>
             <SiteFooter />
           </div>
-          
+
           <Analytics />
           <Toaster />
           <KidsClassOfferPopup />
@@ -268,5 +271,5 @@ export default function RootLayout({
         />
       </body>
     </html>
-  )
+  );
 }

@@ -1,11 +1,18 @@
-"use client"
+"use client";
 
-import { useEffect, useRef, useState } from "react"
-import Image from "next/image"
-import Link from "next/link"
-import { ArrowRight, Facebook, Instagram, Linkedin, MessageCircle, Youtube } from "lucide-react"
+import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import {
+  ArrowRight,
+  Facebook,
+  Instagram,
+  Linkedin,
+  MessageCircle,
+  Youtube,
+} from "lucide-react";
 
-import { Container } from "./container"
+import { Container } from "./container";
 
 const linkGroups = [
   {
@@ -41,40 +48,60 @@ const linkGroups = [
       { label: "Terms", href: "/terms-of-service" },
     ],
   },
-]
+];
 
 const socialLinks = [
-  { label: "Instagram", href: "https://www.instagram.com/fedsi_official/", icon: Instagram },
-  { label: "Facebook", href: "https://www.facebook.com/people/Footloose-Edwins-Dance-School/100063675714869/", icon: Facebook },
-  { label: "YouTube", href: "https://www.youtube.com/c/eddyedwin", icon: Youtube },
-  { label: "LinkedIn", href: "https://www.linkedin.com/in/abishek2005/", icon: Linkedin },
-  { label: "WhatsApp", href: "https://wa.me/919842222467", icon: MessageCircle },
-]
+  {
+    label: "Instagram",
+    href: "https://www.instagram.com/fedsi_official/",
+    icon: Instagram,
+  },
+  {
+    label: "Facebook",
+    href: "https://www.facebook.com/people/Footloose-Edwins-Dance-School/100063675714869/",
+    icon: Facebook,
+  },
+  {
+    label: "YouTube",
+    href: "https://www.youtube.com/c/eddyedwin",
+    icon: Youtube,
+  },
+  {
+    label: "LinkedIn",
+    href: "https://www.linkedin.com/in/abishek2005/",
+    icon: Linkedin,
+  },
+  {
+    label: "WhatsApp",
+    href: "https://wa.me/+919842222467",
+    icon: MessageCircle,
+  },
+];
 
 export function SiteFooter() {
-  const footerRef = useRef<HTMLElement | null>(null)
-  const [isVisible, setIsVisible] = useState(false)
+  const footerRef = useRef<HTMLElement | null>(null);
+  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    const current = footerRef.current
-    if (!current) return
+    const current = footerRef.current;
+    if (!current) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            setIsVisible(true)
-            observer.disconnect()
+            setIsVisible(true);
+            observer.disconnect();
           }
-        })
+        });
       },
-      { threshold: 0.2 }
-    )
+      { threshold: 0.2 },
+    );
 
-    observer.observe(current)
+    observer.observe(current);
 
-    return () => observer.disconnect()
-  }, [])
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <footer
@@ -115,7 +142,7 @@ export function SiteFooter() {
                   href="tel:+919842222467"
                   className="group inline-flex items-center gap-2 rounded-full border border-slate-300/70 bg-white/80 px-5 py-2 text-sm font-semibold text-slate-700 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-white focus:no-underline focus-visible:no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-300 active:scale-95 dark:border-white/20 dark:bg-white/10 dark:text-white/80 dark:hover:bg-white/15 dark:hover:text-white"
                 >
-                  <span>+91 98422 22467</span>
+                  <span>+91 9842222467</span>
                   <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
                 </Link>
               </div>

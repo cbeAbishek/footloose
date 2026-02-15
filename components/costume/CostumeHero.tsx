@@ -1,11 +1,11 @@
-"use client"
+"use client";
 
-import { motion } from "framer-motion"
-import Image from "next/image"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { ArrowRight, Calendar, Phone } from "lucide-react"
+import { motion } from "framer-motion";
+import Image from "next/image";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { ArrowRight, Calendar, Phone } from "lucide-react";
 
 export function CostumeHero() {
   return (
@@ -74,9 +74,9 @@ export function CostumeHero() {
             </h1>
 
             <p className="mb-8 max-w-xl text-lg leading-relaxed text-gray-300 sm:text-xl">
-              From classical Bharatanatyam to contemporary fusion, discover authentic costumes
-              that bring your vision to life. Professional quality, affordable prices, and
-              hassle-free service.
+              From classical Bharatanatyam to contemporary fusion, discover
+              authentic costumes that bring your vision to life. Professional
+              quality, affordable prices, and hassle-free service.
             </p>
 
             {/* Key Features */}
@@ -95,7 +95,9 @@ export function CostumeHero() {
                   className="flex items-center gap-3 rounded-xl bg-white/10 p-3 backdrop-blur"
                 >
                   <div className="h-2 w-2 rounded-full bg-gradient-to-r from-purple-400 to-pink-400" />
-                  <span className="text-sm font-bold text-white">{feature}</span>
+                  <span className="text-sm font-bold text-white">
+                    {feature}
+                  </span>
                 </motion.div>
               ))}
             </div>
@@ -137,7 +139,7 @@ export function CostumeHero() {
               >
                 <a href="tel:+919842222467">
                   <Phone className="mr-2 h-5 w-5" />
-                  +91 98422 22467
+                  +91 9842222467
                 </a>
               </Button>
             </motion.div>
@@ -208,7 +210,9 @@ export function CostumeHero() {
               <div className="text-center">
                 <div className="text-4xl font-black text-black">₹600</div>
                 <div className="text-sm text-gray-600">Starting From</div>
-                <div className="mt-2 text-xs font-bold text-gray-400">Per Day Rental</div>
+                <div className="mt-2 text-xs font-bold text-gray-400">
+                  Per Day Rental
+                </div>
               </div>
             </motion.div>
           </motion.div>
@@ -228,7 +232,9 @@ export function CostumeHero() {
         className="absolute bottom-8 left-1/2 -translate-x-1/2"
       >
         <div className="flex flex-col items-center gap-2 text-white">
-          <span className="text-xs font-bold uppercase tracking-wider">Scroll to Explore</span>
+          <span className="text-xs font-bold uppercase tracking-wider">
+            Scroll to Explore
+          </span>
           <svg
             className="h-6 w-6"
             fill="none"
@@ -245,5 +251,5 @@ export function CostumeHero() {
         </div>
       </motion.div>
     </section>
-  )
+  );
 }

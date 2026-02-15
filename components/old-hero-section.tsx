@@ -119,7 +119,7 @@ export function HeroSection() {
                 asChild
               >
                 <Link
-                  href="https://wa.me/1234567890?text=Hi! I'd like to book a consultation."
+                  href="https://wa.me/+919842222467?text=Hi! I'd like to book a consultation."
                   target="_blank"
                 >
                   <MessageCircle className="h-5 w-5 mr-2 group-hover:animate-bounce" />
