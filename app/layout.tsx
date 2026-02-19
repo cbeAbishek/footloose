@@ -252,7 +252,7 @@ export default function RootLayout({
 
           <Analytics />
           <Toaster />
-          <KidsClassOfferPopup />
+          {/* <KidsClassOfferPopup /> */}
           {/*<InstallPrompt />*/}
           <Script id="chtl-config" strategy="afterInteractive">
             {`window.chtlConfig = { chatbotId: "9881176774" }`}
