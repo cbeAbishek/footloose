@@ -86,7 +86,7 @@ export function AboutSection() {
                   isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"
                 }`}
               >
-                Founded in <span className="font-bold text-purple-600 dark:text-purple-400">1995</span>, 
+                Founded in <span className="font-bold text-purple-600 dark:text-purple-400">1992</span>, 
                 Edwin's Dance & Costume Company has been at the forefront of transforming artistic visions 
                 into breathtaking performances. What began as a small dance studio in Chennai has evolved 
                 into a comprehensive creative powerhouse.

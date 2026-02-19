@@ -7,25 +7,25 @@ const stats = [
   {
     icon: Award,
     label: "Years of Excellence",
-    value: 30,
+    value: new Date().getFullYear() - 1992,
     suffix: "+",
   },
   {
     icon: Users,
     label: "Students Trained",
-    value: 10000,
+    value: 350000,
     suffix: "+",
   },
   {
     icon: Trophy,
     label: "Productions Staged",
-    value: 500,
+    value: 8500,
     suffix: "+",
   },
   {
     icon: Palette,
     label: "Costumes Designed",
-    value: 2000,
+    value: 1000,
     suffix: "+",
   },
   {
