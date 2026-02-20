@@ -235,10 +235,33 @@ export function SiteFooter() {
         </div>
       </Container>
       <div className="relative z-10 border-t border-slate-200/60 bg-gradient-to-r from-white/60 via-transparent to-white/60 py-4 text-xs text-slate-500/80 dark:border-white/10 dark:from-white/5 dark:via-white/0 dark:to-white/5 dark:text-white/60">
-        <Container className="flex justify-center px-4">
-          <p className="max-w-full overflow-hidden text-center text-[11px] font-medium text-slate-500/80 leading-tight tracking-wide dark:text-white/60 sm:text-xs whitespace-nowrap">
+        <Container className="flex flex-col items-center justify-center gap-3 px-4 sm:flex-row sm:gap-2">
+          <p className="text-center text-[11px] font-medium text-slate-500/80 leading-tight tracking-wide dark:text-white/60 sm:text-xs">
             © {new Date().getFullYear()} Footloose Edwin&apos;s Dance Company.
             All rights reserved.
+          </p>
+          <span className="hidden text-slate-400 dark:text-white/40 sm:inline">
+            •
+          </span>
+          <p className="text-center text-[11px] font-medium text-slate-500/80 leading-tight tracking-wide dark:text-white/60 sm:text-xs">
+            Developed with love by{" "}
+            <Link
+              href="https://wa.me/+919566372450"
+              target="_blank"
+              rel="noreferrer"
+              className="font-semibold text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-300 transition-colors underline"
+            >
+              Abishek
+            </Link>
+            .  <br />Interested to build a website like this?{" "}
+            <Link
+              href="https://wa.me/+919566372450"
+              target="_blank"
+              rel="noreferrer"
+              className="font-semibold text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-300 transition-colors underline"
+            >
+              Get in touch!
+            </Link>
           </p>
         </Container>
       </div>

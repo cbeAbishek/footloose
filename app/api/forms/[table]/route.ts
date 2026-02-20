@@ -1,64 +1,49 @@
-import { randomUUID } from "crypto"
-import { NextResponse } from "next/server"
-import { z } from "zod"
+import { randomUUID } from "crypto";
+import { NextResponse } from "next/server";
+import { z } from "zod";
 
-import { createSupabaseServiceClient } from "@/lib/supabase"
+import { createSupabaseServiceClient } from "@/lib/supabase";
 
-export const runtime = "nodejs"
+export const runtime = "nodejs";
 
 type TableConfig = {
-  schema: z.ZodTypeAny
-  fileField?: string
-  storageField?: string
-  bucket?: string
-}
+  schema: z.ZodTypeAny;
+  fileField?: string;
+  storageField?: string;
+  bucket?: string;
+};
 
 function normalizeDate(value: string): string | null {
-  const trimmed = value.trim()
+  const trimmed = value.trim();
 
   if (!trimmed) {
-    return null
+    return null;
   }
 
   // Already ISO formatted (YYYY-MM-DD)
   if (/^\d{4}-\d{2}-\d{2}$/.test(trimmed)) {
-    return trimmed
+    return trimmed;
   }
 
   // Handle common DD/MM/YYYY or DD-MM-YYYY inputs
-  const dayFirstMatch = trimmed.match(/^(\d{2})[\/\-](\d{2})[\/\-](\d{4})$/)
+  const dayFirstMatch = trimmed.match(/^(\d{2})[\/\-](\d{2})[\/\-](\d{4})$/);
   if (dayFirstMatch) {
-    const [, day, month, year] = dayFirstMatch
-    return `${year}-${month}-${day}`
+    const [, day, month, year] = dayFirstMatch;
+    return `${year}-${month}-${day}`;
   }
 
   // Fallback to Date parsing
-  const parsed = new Date(trimmed)
+  const parsed = new Date(trimmed);
   if (!Number.isNaN(parsed.getTime())) {
-    return parsed.toISOString().slice(0, 10)
+    return parsed.toISOString().slice(0, 10);
   }
 
-  return null
-}
-
-function generateInquiryCode(date = new Date()): string {
-  const pad = (value: number) => value.toString().padStart(2, "0")
-  const year = date.getUTCFullYear().toString().slice(-2)
-  const month = pad(date.getUTCMonth() + 1)
-  const day = pad(date.getUTCDate())
-  const hours = pad(date.getUTCHours())
-  const minutes = pad(date.getUTCMinutes())
-  const seconds = pad(date.getUTCSeconds())
-  const randomSuffix = Math.floor(Math.random() * 1000)
-    .toString()
-    .padStart(3, "0")
-
-  return `INQ-${year}${month}${day}${hours}${minutes}${seconds}-${randomSuffix}`
+  return null;
 }
 
 function normalizeDateArray(value: unknown): string[] | undefined {
   if (!value) {
-    return undefined
+    return undefined;
   }
 
   const entries = Array.isArray(value)
@@ -68,110 +53,149 @@ function normalizeDateArray(value: unknown): string[] | undefined {
           .split(/[,\n]/)
           .map((entry) => entry.trim())
           .filter(Boolean)
-      : []
+      : [];
 
   const normalized = entries
     .map((entry) => (typeof entry === "string" ? normalizeDate(entry) : null))
-    .filter((entry): entry is string => Boolean(entry))
+    .filter((entry): entry is string => Boolean(entry));
 
-  return normalized.length > 0 ? normalized : undefined
+  return normalized.length > 0 ? normalized : undefined;
 }
 
 function normalizeStringArray(value: unknown): string[] | undefined {
   if (!value) {
-    return undefined
+    return undefined;
   }
 
   if (Array.isArray(value)) {
     const normalized = value
       .map((entry) => (typeof entry === "string" ? entry.trim() : ""))
-      .filter(Boolean)
-    return normalized.length > 0 ? normalized : undefined
+      .filter(Boolean);
+    return normalized.length > 0 ? normalized : undefined;
   }
 
   if (typeof value === "string") {
     const normalized = value
       .split(/[,\n]/)
       .map((entry) => entry.trim())
-      .filter(Boolean)
-    return normalized.length > 0 ? normalized : undefined
+      .filter(Boolean);
+    return normalized.length > 0 ? normalized : undefined;
   }
 
-  return undefined
+  return undefined;
+}
+
+function normalizeStringListToText(value: unknown): string | null {
+  const list = normalizeStringArray(value);
+  if (!list || list.length === 0) {
+    return null;
+  }
+
+  return list.join(", ");
+}
+
+function normalizeDateListToText(value: unknown): string | null {
+  const list = normalizeDateArray(value);
+  if (!list || list.length === 0) {
+    return null;
+  }
+
+  return list.join(", ");
 }
 
 function normalizeTablePayload(table: string, data: Record<string, unknown>) {
-  const normalized = { ...data }
-  const invalidDateFields: string[] = []
+  const normalized = { ...data };
+  const invalidDateFields: string[] = [];
 
   const setDate = (key: string, options: { required?: boolean } = {}) => {
-    const value = normalized[key]
+    const value = normalized[key];
 
     if (typeof value !== "string") {
-      return
+      return;
     }
 
     if (!value.trim()) {
       if (options.required) {
-        invalidDateFields.push(key)
+        invalidDateFields.push(key);
       } else {
-        normalized[key] = null
+        normalized[key] = null;
       }
-      return
+      return;
     }
 
-    const result = normalizeDate(value)
+    const result = normalizeDate(value);
     if (!result) {
-      invalidDateFields.push(key)
-      return
+      invalidDateFields.push(key);
+      return;
     }
 
-    normalized[key] = result
-  }
+    normalized[key] = result;
+  };
 
   switch (table) {
     case "event_inquiries":
-      setDate("preferred_date")
-      normalized.alternative_dates = normalizeDateArray(normalized.alternative_dates)
-      break
+      setDate("preferred_date");
+      normalized.alternative_dates = normalizeDateListToText(
+        normalized.alternative_dates,
+      );
+      break;
     case "costume_rental_inquiries":
-      setDate("rental_start", { required: true })
-      setDate("rental_end", { required: true })
-      break
+      setDate("rental_start", { required: true });
+      setDate("rental_end", { required: true });
+      break;
     case "career_applications":
-      setDate("available_from")
-      normalized.skills = normalizeStringArray(normalized.skills)
-      normalized.certifications = normalizeStringArray(normalized.certifications)
-      normalized.languages = normalizeStringArray(normalized.languages)
-      normalized.additional_documents = normalizeStringArray(normalized.additional_documents)
-      break
+      setDate("available_from");
+      normalized.skills = normalizeStringListToText(normalized.skills);
+      normalized.certifications = normalizeStringListToText(
+        normalized.certifications,
+      );
+      normalized.languages = normalizeStringListToText(normalized.languages);
+      break;
     case "blog_posts":
-      normalized.tags = normalizeStringArray(normalized.tags)
-      normalized.meta_keywords = normalizeStringArray(normalized.meta_keywords)
-      normalized.gallery_urls = normalizeStringArray(normalized.gallery_urls)
-      break
+      normalized.tags = normalizeStringArray(normalized.tags);
+      normalized.meta_keywords = normalizeStringArray(normalized.meta_keywords);
+      normalized.gallery_urls = normalizeStringArray(normalized.gallery_urls);
+      break;
     case "feedback":
-      normalized.attachments = normalizeStringArray(normalized.attachments)
-      break
+      normalized.attachments = normalizeStringArray(normalized.attachments);
+      break;
     case "alumni":
-      normalized.dance_styles = normalizeStringArray(normalized.dance_styles)
-      normalized.notable_performances = normalizeStringArray(normalized.notable_performances)
-      normalized.awards = normalizeStringArray(normalized.awards)
-      normalized.certifications = normalizeStringArray(normalized.certifications)
-      break
+      normalized.dance_styles = normalizeStringListToText(
+        normalized.dance_styles,
+      );
+      normalized.notable_performances = normalizeStringListToText(
+        normalized.notable_performances,
+      );
+      normalized.awards = normalizeStringListToText(normalized.awards);
+      normalized.certifications = normalizeStringListToText(
+        normalized.certifications,
+      );
+      break;
     case "testimonials":
-      setDate("approved_at")
-      break
+      setDate("approved_at");
+      break;
     default:
-      break
+      break;
   }
 
-  return { normalized, invalidDateFields }
+  return { normalized, invalidDateFields };
 }
 
-const stringOrEmpty = () => z.union([z.string().min(2), z.literal("")]).optional().default("")
-const emailOrEmpty = () => z.union([z.string().email(), z.literal("")]).optional().default("")
-const optionalLongText = () => z.union([z.string().min(5), z.literal("")]).optional().default("")
+const stringOrEmpty = () =>
+  z
+    .union([z.string().min(2), z.literal("")])
+    .optional()
+    .default("");
+const emailOrEmpty = () =>
+  z
+    .union([z.string().email(), z.literal("")])
+    .optional()
+    .default("");
+const optionalLongText = () =>
+  z
+    .union([z.string().min(5), z.literal("")])
+    .optional()
+    .default("");
 
 const tableSchemas: Record<string, TableConfig> = {
   inquiries: {
@@ -200,14 +224,22 @@ const tableSchemas: Record<string, TableConfig> = {
   event_inquiries: {
     schema: z.object({
       full_name: z.string().min(2),
-      email: emailOrEmpty(),
+      email: z.string().email(),
       phone: z.string().min(6).max(20),
       organization: stringOrEmpty(),
       event_type: z.string().min(2),
       event_name: stringOrEmpty(),
-      preferred_date: z.union([z.string().min(4), z.literal("")]).optional().default(""),
+      preferred_date: z
+        .union([z.string().min(4), z.literal("")])
+        .optional()
+        .default(""),
       alternative_dates: z
-        .union([z.array(z.string().min(4)), z.string(), z.literal(""), z.undefined()])
+        .union([
+          z.array(z.string().min(4)),
+          z.string(),
+          z.literal(""),
+          z.undefined(),
+        ])
         .optional(),
       event_duration_hours: z.union([
         z.coerce.number().positive().max(72),
@@ -239,8 +271,8 @@ const tableSchemas: Record<string, TableConfig> = {
       ]),
       rental_start: z.string().min(4),
       rental_end: z.string().min(4),
-      event_type: stringOrEmpty(),
-      event_location: stringOrEmpty(),
+      event_type: z.string().min(2),
+      event_location: z.string().min(2),
       notes: optionalLongText(),
     }),
   },
@@ -257,7 +289,11 @@ const tableSchemas: Record<string, TableConfig> = {
         z.literal(""),
         z.undefined(),
       ]),
-      available_from: z.union([z.string().min(4), z.literal(""), z.undefined()]),
+      available_from: z.union([
+        z.string().min(4),
+        z.literal(""),
+        z.undefined(),
+      ]),
       years_of_experience: z.union([
         z.coerce.number().int().min(0).max(50),
         z.literal(""),
@@ -265,15 +301,30 @@ const tableSchemas: Record<string, TableConfig> = {
       ]),
       current_employer: stringOrEmpty(),
       education_qualification: stringOrEmpty(),
-      resume_url: z.union([z.string().url(), z.literal(""), z.undefined()]),
+      resume: z.union([z.string().url(), z.literal(""), z.undefined()]),
       portfolio_url: z.union([z.string().url(), z.literal(""), z.undefined()]),
       cover_letter: optionalLongText(),
-      skills: z.union([z.array(z.string().min(2)), z.string(), z.literal(""), z.undefined()]),
-      certifications: z.union([z.array(z.string().min(2)), z.string(), z.literal(""), z.undefined()]),
-      languages: z.union([z.array(z.string().min(2)), z.string(), z.literal(""), z.undefined()]),
+      skills: z.union([
+        z.array(z.string().min(2)),
+        z.string(),
+        z.literal(""),
+        z.undefined(),
+      ]),
+      certifications: z.union([
+        z.array(z.string().min(2)),
+        z.string(),
+        z.literal(""),
+        z.undefined(),
+      ]),
+      languages: z.union([
+        z.array(z.string().min(2)),
+        z.string(),
+        z.literal(""),
+        z.undefined(),
+      ]),
     }),
     fileField: "resume",
-    storageField: "resume_url",
+    storageField: "resume",
     bucket: "documents",
   },
   blog_posts: {
@@ -287,12 +338,30 @@ const tableSchemas: Record<string, TableConfig> = {
       content: z.string().min(80),
       author_name: z.string().min(2),
       category: stringOrEmpty(),
-      tags: z.union([z.array(z.string()), z.string(), z.literal(""), z.undefined()]),
-      status: z.enum(["draft", "scheduled", "published", "archived"]).optional().default("draft"),
+      tags: z.union([
+        z.array(z.string()),
+        z.string(),
+        z.literal(""),
+        z.undefined(),
+      ]),
+      status: z
+        .enum(["draft", "scheduled", "published", "archived"])
+        .optional()
+        .default("draft"),
       meta_title: stringOrEmpty(),
       meta_description: optionalLongText(),
-      meta_keywords: z.union([z.array(z.string()), z.string(), z.literal(""), z.undefined()]),
-      gallery_urls: z.union([z.array(z.string().url()), z.string(), z.literal(""), z.undefined()]),
+      meta_keywords: z.union([
+        z.array(z.string()),
+        z.string(),
+        z.literal(""),
+        z.undefined(),
+      ]),
+      gallery_urls: z.union([
+        z.array(z.string().url()),
+        z.string(),
+        z.literal(""),
+        z.undefined(),
+      ]),
       source_link: z.union([z.string().url(), z.literal(""), z.undefined()]),
     }),
     fileField: "cover_image",
@@ -315,6 +384,7 @@ const tableSchemas: Record<string, TableConfig> = {
       email: emailOrEmpty(),
       phone: stringOrEmpty(),
       current_location: stringOrEmpty(),
+      headline: z.string().min(4),
       batch_year: z.union([
         z.coerce.number().int().min(1980).max(new Date().getFullYear()),
         z.literal(""),
@@ -335,21 +405,41 @@ const tableSchemas: Record<string, TableConfig> = {
         z.literal(""),
         z.undefined(),
       ]),
-      dance_styles: z.union([z.array(z.string().min(2)), z.string(), z.literal(""), z.undefined()]),
+      dance_styles: z.union([
+        z.array(z.string().min(2)),
+        z.string(),
+        z.literal(""),
+        z.undefined(),
+      ]),
       current_role: stringOrEmpty(),
       current_organization: stringOrEmpty(),
       profession: stringOrEmpty(),
       achievements: optionalLongText(),
-      notable_performances: z.union([z.array(z.string().min(2)), z.string(), z.literal(""), z.undefined()]),
-      awards: z.union([z.array(z.string().min(2)), z.string(), z.literal(""), z.undefined()]),
-      certifications: z.union([z.array(z.string().min(2)), z.string(), z.literal(""), z.undefined()]),
+      notable_performances: z.union([
+        z.array(z.string().min(2)),
+        z.string(),
+        z.literal(""),
+        z.undefined(),
+      ]),
+      awards: z.union([
+        z.array(z.string().min(2)),
+        z.string(),
+        z.literal(""),
+        z.undefined(),
+      ]),
+      certifications: z.union([
+        z.array(z.string().min(2)),
+        z.string(),
+        z.literal(""),
+        z.undefined(),
+      ]),
       bio: z.string().min(40),
       website_url: z.union([z.string().url(), z.literal(""), z.undefined()]),
       willing_to_mentor: z.coerce.boolean().optional().default(false),
       available_for_events: z.coerce.boolean().optional().default(false),
     }),
     fileField: "photo",
-    storageField: "photo_url",
+    storageField: "photo",
     bucket: "profile",
   },
   testimonials: {
@@ -402,55 +492,64 @@ const tableSchemas: Record<string, TableConfig> = {
       event_id: z.union([z.string().uuid(), z.literal(""), z.undefined()]),
       class_id: z.union([z.string().uuid(), z.literal(""), z.undefined()]),
       is_anonymous: z.coerce.boolean().optional().default(false),
-      attachments: z.union([z.array(z.string().url()), z.string(), z.literal(""), z.undefined()]),
+      attachments: z.union([
+        z.array(z.string().url()),
+        z.string(),
+        z.literal(""),
+        z.undefined(),
+      ]),
     }),
   },
-}
+};
 
 export async function POST(
   request: Request,
-  { params }: { params: { table: keyof typeof tableSchemas } },
+  { params }: { params: Promise<{ table: keyof typeof tableSchemas }> },
 ) {
-  const config = tableSchemas[params.table]
+  const { table } = await params;
+  const config = tableSchemas[table];
 
   if (!config) {
-    return NextResponse.json({ error: "Unknown form" }, { status: 404 })
+    return NextResponse.json({ error: "Unknown form" }, { status: 404 });
   }
 
-  const contentType = request.headers.get("content-type") || ""
+  const contentType = request.headers.get("content-type") || "";
 
-  let supabase: ReturnType<typeof createSupabaseServiceClient>
+  let supabase: Awaited<ReturnType<typeof createSupabaseServiceClient>>;
   try {
-    supabase = createSupabaseServiceClient()
+    supabase = await createSupabaseServiceClient();
   } catch (error) {
-    console.error("[forms:supabase-client]", error)
+    console.error("[forms:supabase-client]", error);
     return NextResponse.json(
       { error: "Form service not configured. Please try again later." },
       { status: 500 },
-    )
+    );
   }
 
   try {
-    let payload: Record<string, unknown> = {}
-    let file: File | undefined
+    let payload: Record<string, unknown> = {};
+    let file: File | undefined;
 
     if (contentType.includes("multipart/form-data")) {
-      const formData = await request.formData()
+      const formData = await request.formData();
       formData.forEach((value, key) => {
         if (value instanceof File) {
           if (config.fileField && key === config.fileField && value.size > 0) {
-            file = value
+            file = value;
           }
         } else {
-          payload[key] = value
+          payload[key] = value;
         }
-      })
+      });
     } else {
-      payload = await request.json()
+      payload = await request.json();
     }
 
-    const parsed = config.schema.parse(payload) as Record<string, unknown>
-    const { normalized, invalidDateFields } = normalizeTablePayload(params.table, parsed)
+    const parsed = config.schema.parse(payload) as Record<string, unknown>;
+    const { normalized, invalidDateFields } = normalizeTablePayload(
+      table,
+      parsed,
+    );
 
     if (invalidDateFields.length > 0) {
       return NextResponse.json(
@@ -458,75 +557,75 @@ export async function POST(
           error: `Invalid date format for ${invalidDateFields.join(", ")}`,
         },
         { status: 422 },
-      )
+      );
     }
 
-    const storageField = config.storageField
+    const storageField = config.storageField;
 
     if (file && storageField) {
-      const uploadFile = file as File
-      const arrayBuffer = await uploadFile.arrayBuffer()
-      const fileName = `${params.table}/${randomUUID()}-${uploadFile.name.replace(/\s+/g, "-").toLowerCase()}`
-      const bucket = config.bucket ?? "uploads"
+      const uploadFile = file as File;
+      const arrayBuffer = await uploadFile.arrayBuffer();
+      const fileName = `${table}/${randomUUID()}-${uploadFile.name.replace(/\s+/g, "-").toLowerCase()}`;
+      const bucket = config.bucket ?? "uploads";
 
       const { error: uploadError, data: uploadData } = await supabase.storage
         .from(bucket)
         .upload(fileName, Buffer.from(arrayBuffer), {
           contentType: uploadFile.type,
           upsert: false,
-        })
+        });
 
       if (uploadError) {
-        throw uploadError
+        throw uploadError;
       }
 
       const {
         data: { publicUrl },
-      } = supabase.storage.from(bucket).getPublicUrl(uploadData.path)
+      } = supabase.storage.from(bucket).getPublicUrl(uploadData.path);
 
-      parsed[storageField] = publicUrl
+      parsed[storageField] = publicUrl;
+      normalized[storageField] = publicUrl;
     }
 
     const cleaned = Object.fromEntries(
       Object.entries(normalized).map(([key, value]) => {
         if (typeof value === "string") {
-          const trimmed = value.trim()
-          return [key, trimmed.length > 0 ? trimmed : null]
+          const trimmed = value.trim();
+          return [key, trimmed.length > 0 ? trimmed : null];
         }
-        return [key, value]
+        return [key, value];
       }),
-    )
+    );
 
-    if (params.table === "inquiries") {
-      const timestamp = new Date().toISOString()
-      cleaned.id ??= randomUUID()
-      cleaned.inquiry_code ??= generateInquiryCode()
-      cleaned.created_at ??= timestamp
-      cleaned.updated_at = timestamp
+    if (table === "inquiries") {
+      const timestamp = new Date().toISOString();
+      cleaned.id ??= randomUUID();
+      cleaned.created_at ??= timestamp;
+      cleaned.updated_at = timestamp;
     }
 
-    const { error } = await supabase.from(params.table).insert(cleaned)
+    const { error } = await supabase.from(table).insert(cleaned);
 
     if (error) {
-      throw error
+      throw error;
     }
 
-    return NextResponse.json({ success: true })
+    return NextResponse.json({ success: true });
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         { error: "Validation failed", details: error.flatten() },
         { status: 422 },
-      )
+      );
     }
 
-    console.error(`[forms:${params.table}]`, error)
+    console.error(`[forms:${table}]`, error);
 
     const message =
       typeof error === "object" && error !== null && "message" in error
         ? String((error as { message?: string }).message)
-        : "Unable to submit form"
+        : "Unable to submit form";
 
-    return NextResponse.json({ error: message }, { status: 500 })
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

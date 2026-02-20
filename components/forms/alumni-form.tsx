@@ -1,12 +1,12 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { Controller, useForm } from "react-hook-form"
-import { z } from "zod"
+import { useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Controller, useForm } from "react-hook-form";
+import { z } from "zod";
 
-import { submitForm } from "@/lib/form-submit"
-import { toast } from "@/hooks/use-toast"
+import { submitForm } from "@/lib/form-submit";
+import { toast } from "@/hooks/use-toast";
 import {
   Form,
   FormControl,
@@ -14,12 +14,12 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { Button } from "@/components/ui/button"
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
 
-const CURRENT_YEAR = new Date().getFullYear()
+const CURRENT_YEAR = new Date().getFullYear();
 
 const alumniSchema = z.object({
   full_name: z.string().min(2, "Please enter your full name"),
@@ -43,7 +43,11 @@ const alumniSchema = z.object({
     z.literal(""),
     z.undefined(),
   ]),
-  training_duration_years: z.union([z.coerce.number().min(0), z.literal(""), z.undefined()]),
+  training_duration_years: z.union([
+    z.coerce.number().min(0),
+    z.literal(""),
+    z.undefined(),
+  ]),
   dance_styles: z.union([z.string(), z.literal(""), z.undefined()]),
   current_role: z.union([z.string(), z.literal(""), z.undefined()]),
   current_organization: z.union([z.string(), z.literal(""), z.undefined()]),
@@ -56,12 +60,12 @@ const alumniSchema = z.object({
   willing_to_mentor: z.coerce.boolean().optional().default(false),
   available_for_events: z.coerce.boolean().optional().default(false),
   photo: z.any().optional(),
-})
+});
 
-export type AlumniFormValues = z.infer<typeof alumniSchema>
+export type AlumniFormValues = z.infer<typeof alumniSchema>;
 
 export function AlumniForm() {
-  const [isSubmitting, setSubmitting] = useState(false)
+  const [isSubmitting, setSubmitting] = useState(false);
 
   const form = useForm<AlumniFormValues>({
     resolver: zodResolver(alumniSchema),
@@ -89,60 +93,77 @@ export function AlumniForm() {
       available_for_events: false,
       photo: undefined,
     },
-  })
+  });
 
   const onSubmit = async (values: AlumniFormValues) => {
-    setSubmitting(true)
+    setSubmitting(true);
 
-    const formData = new FormData()
-    formData.set("full_name", values.full_name)
-    formData.set("email", values.email ?? "")
-    formData.set("phone", values.phone ?? "")
-    formData.set("current_location", values.current_location ?? "")
-    formData.set("headline", values.headline)
-    formData.set("bio", values.bio)
-    formData.set("batch_year", values.batch_year ? String(values.batch_year) : "")
-    formData.set("enrollment_year", values.enrollment_year ? String(values.enrollment_year) : "")
-    formData.set("graduation_year", values.graduation_year ? String(values.graduation_year) : "")
+    const formData = new FormData();
+    formData.set("full_name", values.full_name);
+    formData.set("email", values.email ?? "");
+    formData.set("phone", values.phone ?? "");
+    formData.set("current_location", values.current_location ?? "");
+    formData.set("headline", values.headline);
+    formData.set("bio", values.bio);
+    formData.set(
+      "batch_year",
+      values.batch_year ? String(values.batch_year) : "",
+    );
+    formData.set(
+      "enrollment_year",
+      values.enrollment_year ? String(values.enrollment_year) : "",
+    );
+    formData.set(
+      "graduation_year",
+      values.graduation_year ? String(values.graduation_year) : "",
+    );
     formData.set(
       "training_duration_years",
-      values.training_duration_years ? String(values.training_duration_years) : "",
-    )
-    formData.set("dance_styles", values.dance_styles ?? "")
-    formData.set("current_role", values.current_role ?? "")
-    formData.set("current_organization", values.current_organization ?? "")
-    formData.set("profession", values.profession ?? "")
-    formData.set("achievements", values.achievements ?? "")
-    formData.set("notable_performances", values.notable_performances ?? "")
-    formData.set("awards", values.awards ?? "")
-    formData.set("certifications", values.certifications ?? "")
-    formData.set("website_url", values.website_url ?? "")
-    formData.set("willing_to_mentor", String(values.willing_to_mentor ?? false))
-    formData.set("available_for_events", String(values.available_for_events ?? false))
+      values.training_duration_years
+        ? String(values.training_duration_years)
+        : "",
+    );
+    formData.set("dance_styles", values.dance_styles ?? "");
+    formData.set("current_role", values.current_role ?? "");
+    formData.set("current_organization", values.current_organization ?? "");
+    formData.set("profession", values.profession ?? "");
+    formData.set("achievements", values.achievements ?? "");
+    formData.set("notable_performances", values.notable_performances ?? "");
+    formData.set("awards", values.awards ?? "");
+    formData.set("certifications", values.certifications ?? "");
+    formData.set("website_url", values.website_url ?? "");
+    formData.set(
+      "willing_to_mentor",
+      String(values.willing_to_mentor ?? false),
+    );
+    formData.set(
+      "available_for_events",
+      String(values.available_for_events ?? false),
+    );
 
-    const file = extractFile(values.photo)
+    const file = extractFile(values.photo);
     if (file) {
-      formData.set("photo", file)
+      formData.set("photo", file);
     }
 
-    const result = await submitForm("alumni", formData)
+    const result = await submitForm("alumni", formData);
 
-    setSubmitting(false)
+    setSubmitting(false);
 
     if (result.success) {
       toast({
         title: "Profile submitted",
         description: "Our alumni desk will review and publish shortly.",
-      })
-      form.reset()
-      return
+      });
+      form.reset();
+      return;
     }
 
     toast({
       title: "Submission failed",
       description: result.error ?? "Please try again soon.",
-    })
-  }
+    });
+  };
 
   return (
     <Form {...form}>
@@ -168,7 +189,11 @@ export function AlumniForm() {
               <FormItem>
                 <FormLabel>Email (optional)</FormLabel>
                 <FormControl>
-                  <Input type="email" placeholder="you@example.com" {...field} />
+                  <Input
+                    type="email"
+                    placeholder="you@example.com"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -183,7 +208,12 @@ export function AlumniForm() {
               <FormItem>
                 <FormLabel>Phone (optional)</FormLabel>
                 <FormControl>
-                  <Input placeholder="(+91)" {...field} />
+                  <Input
+                    type="tel"
+                    autoComplete="tel"
+                    placeholder="(+91)"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -210,7 +240,10 @@ export function AlumniForm() {
             <FormItem>
               <FormLabel>Headline</FormLabel>
               <FormControl>
-                <Input placeholder="Performer, Coach, Creative Director" {...field} />
+                <Input
+                  placeholder="Performer, Coach, Creative Director"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -223,7 +256,11 @@ export function AlumniForm() {
             <FormItem>
               <FormLabel>Journey</FormLabel>
               <FormControl>
-                <Textarea rows={5} placeholder="Tell us about your Footloose experience and what you are building now." {...field} />
+                <Textarea
+                  rows={5}
+                  placeholder="Tell us about your Footloose experience and what you are building now."
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -318,7 +355,11 @@ export function AlumniForm() {
             <FormItem>
               <FormLabel>Achievements</FormLabel>
               <FormControl>
-                <Textarea rows={3} placeholder="Share awards or highlights" {...field} />
+                <Textarea
+                  rows={3}
+                  placeholder="Share awards or highlights"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -384,7 +425,9 @@ export function AlumniForm() {
               type="checkbox"
               className="h-4 w-4"
               checked={form.watch("willing_to_mentor")}
-              onChange={(event) => form.setValue("willing_to_mentor", event.target.checked)}
+              onChange={(event) =>
+                form.setValue("willing_to_mentor", event.target.checked)
+              }
             />
             Available to mentor current students
           </label>
@@ -393,7 +436,9 @@ export function AlumniForm() {
               type="checkbox"
               className="h-4 w-4"
               checked={form.watch("available_for_events")}
-              onChange={(event) => form.setValue("available_for_events", event.target.checked)}
+              onChange={(event) =>
+                form.setValue("available_for_events", event.target.checked)
+              }
             />
             Open for events / talks
           </label>
@@ -408,10 +453,14 @@ export function AlumniForm() {
                 <Input
                   type="file"
                   accept="image/*"
-                  onChange={(event) => field.onChange(event.target.files ?? undefined)}
+                  onChange={(event) =>
+                    field.onChange(event.target.files ?? undefined)
+                  }
                 />
               </FormControl>
-              <p className="text-xs text-foreground/50">Upload JPEG or PNG up to 5 MB.</p>
+              <p className="text-xs text-foreground/50">
+                Upload JPEG or PNG up to 5 MB.
+              </p>
               <FormMessage />
             </FormItem>
           )}
@@ -421,17 +470,17 @@ export function AlumniForm() {
         </Button>
       </form>
     </Form>
-  )
+  );
 }
 
 function extractFile(value: unknown): File | undefined {
-  if (!value) return undefined
-  if (value instanceof File) return value
+  if (!value) return undefined;
+  if (value instanceof File) return value;
   if (value instanceof FileList) {
-    return value.length > 0 ? value[0] : undefined
+    return value.length > 0 ? value[0] : undefined;
   }
   if (Array.isArray(value)) {
-    return value[0] instanceof File ? (value[0] as File) : undefined
+    return value[0] instanceof File ? (value[0] as File) : undefined;
   }
-  return undefined
+  return undefined;
 }

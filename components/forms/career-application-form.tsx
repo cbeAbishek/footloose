@@ -1,12 +1,12 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
+import { useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
-import { submitForm } from "@/lib/form-submit"
-import { toast } from "@/hooks/use-toast"
+import { submitForm } from "@/lib/form-submit";
+import { toast } from "@/hooks/use-toast";
 import {
   Form,
   FormControl,
@@ -14,12 +14,16 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { Button } from "@/components/ui/button"
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
 
-const optionalText = () => z.union([z.string().min(2), z.literal("")]).optional().default("")
+const optionalText = () =>
+  z
+    .union([z.string().min(2), z.literal("")])
+    .optional()
+    .default("");
 
 const careerSchema = z.object({
   full_name: z.string().min(2, "Enter your full name"),
@@ -28,7 +32,11 @@ const careerSchema = z.object({
   current_location: optionalText(),
   position_applied: z.string().min(2, "What role are you applying for?"),
   department: optionalText(),
-  expected_salary: z.union([z.coerce.number().min(0), z.literal(""), z.undefined()]),
+  expected_salary: z.union([
+    z.coerce.number().min(0),
+    z.literal(""),
+    z.undefined(),
+  ]),
   available_from: z.union([z.string().min(4), z.literal(""), z.undefined()]),
   years_of_experience: z.union([
     z.coerce.number().int().min(0).max(50),
@@ -43,12 +51,12 @@ const careerSchema = z.object({
   skills: z.union([z.string(), z.literal(""), z.undefined()]),
   certifications: z.union([z.string(), z.literal(""), z.undefined()]),
   languages: z.union([z.string(), z.literal(""), z.undefined()]),
-})
+});
 
-export type CareerApplicationValues = z.infer<typeof careerSchema>
+export type CareerApplicationValues = z.infer<typeof careerSchema>;
 
 export function CareerApplicationForm() {
-  const [isSubmitting, setSubmitting] = useState(false)
+  const [isSubmitting, setSubmitting] = useState(false);
 
   const form = useForm<CareerApplicationValues>({
     resolver: zodResolver(careerSchema),
@@ -71,53 +79,59 @@ export function CareerApplicationForm() {
       certifications: "",
       languages: "",
     },
-  })
+  });
 
   const handleSubmit = async (values: CareerApplicationValues) => {
-    setSubmitting(true)
-    const formData = new FormData()
-    formData.set("full_name", values.full_name)
-    formData.set("email", values.email)
-    formData.set("phone", values.phone)
-    formData.set("current_location", values.current_location ?? "")
-    formData.set("position_applied", values.position_applied)
-    formData.set("department", values.department ?? "")
-    formData.set("expected_salary", values.expected_salary ? String(values.expected_salary) : "")
-    formData.set("available_from", values.available_from ?? "")
+    setSubmitting(true);
+    const formData = new FormData();
+    formData.set("full_name", values.full_name);
+    formData.set("email", values.email);
+    formData.set("phone", values.phone);
+    formData.set("current_location", values.current_location ?? "");
+    formData.set("position_applied", values.position_applied);
+    formData.set("department", values.department ?? "");
+    formData.set(
+      "expected_salary",
+      values.expected_salary ? String(values.expected_salary) : "",
+    );
+    formData.set("available_from", values.available_from ?? "");
     formData.set(
       "years_of_experience",
       values.years_of_experience ? String(values.years_of_experience) : "",
-    )
-    formData.set("current_employer", values.current_employer ?? "")
-    formData.set("education_qualification", values.education_qualification ?? "")
-    formData.set("portfolio_url", values.portfolio_url ?? "")
-    formData.set("cover_letter", values.cover_letter ?? "")
-    formData.set("skills", values.skills ?? "")
-    formData.set("certifications", values.certifications ?? "")
-    formData.set("languages", values.languages ?? "")
+    );
+    formData.set("current_employer", values.current_employer ?? "");
+    formData.set(
+      "education_qualification",
+      values.education_qualification ?? "",
+    );
+    formData.set("portfolio_url", values.portfolio_url ?? "");
+    formData.set("cover_letter", values.cover_letter ?? "");
+    formData.set("skills", values.skills ?? "");
+    formData.set("certifications", values.certifications ?? "");
+    formData.set("languages", values.languages ?? "");
 
-    const resumeFile = extractFile(values.resume)
+    const resumeFile = extractFile(values.resume);
     if (resumeFile) {
-      formData.set("resume", resumeFile)
+      formData.set("resume", resumeFile);
     }
 
-    const result = await submitForm("career_applications", formData)
-    setSubmitting(false)
+    const result = await submitForm("career_applications", formData);
+    setSubmitting(false);
 
     if (result.success) {
       toast({
         title: "Application received",
         description: "Our talent desk will get in touch soon.",
-      })
-      form.reset()
-      return
+      });
+      form.reset();
+      return;
     }
 
     toast({
       title: "Could not submit",
       description: result.error ?? "Please try again later.",
-    })
-  }
+    });
+  };
 
   return (
     <Form {...form}>
@@ -143,7 +157,12 @@ export function CareerApplicationForm() {
               <FormItem>
                 <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input type="email" autoComplete="email" placeholder="you@example.com" {...field} />
+                  <Input
+                    type="email"
+                    autoComplete="email"
+                    placeholder="you@example.com"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -156,7 +175,12 @@ export function CareerApplicationForm() {
               <FormItem>
                 <FormLabel>Phone</FormLabel>
                 <FormControl>
-                  <Input autoComplete="tel" placeholder="Include country code" {...field} />
+                  <Input
+                    type="tel"
+                    autoComplete="tel"
+                    placeholder="Include country code"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -197,7 +221,10 @@ export function CareerApplicationForm() {
               <FormItem>
                 <FormLabel>Department</FormLabel>
                 <FormControl>
-                  <Input placeholder="Productions, Academy, Costumes" {...field} />
+                  <Input
+                    placeholder="Productions, Academy, Costumes"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -279,7 +306,10 @@ export function CareerApplicationForm() {
               <FormItem>
                 <FormLabel>Education / certification</FormLabel>
                 <FormControl>
-                  <Input placeholder="Diploma, Degree, Certification" {...field} />
+                  <Input
+                    placeholder="Diploma, Degree, Certification"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -307,7 +337,13 @@ export function CareerApplicationForm() {
               <FormItem>
                 <FormLabel>Resume (PDF)</FormLabel>
                 <FormControl>
-                  <Input type="file" accept="application/pdf" onChange={(event) => field.onChange(event.target.files ?? undefined)} />
+                  <Input
+                    type="file"
+                    accept="application/pdf"
+                    onChange={(event) =>
+                      field.onChange(event.target.files ?? undefined)
+                    }
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -321,7 +357,10 @@ export function CareerApplicationForm() {
             <FormItem>
               <FormLabel>Key skills</FormLabel>
               <FormControl>
-                <Input placeholder="Comma separated e.g. choreography, teaching, lighting" {...field} />
+                <Input
+                  placeholder="Comma separated e.g. choreography, teaching, lighting"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -360,7 +399,11 @@ export function CareerApplicationForm() {
             <FormItem>
               <FormLabel>Cover letter</FormLabel>
               <FormControl>
-                <Textarea rows={5} placeholder="Share why you want to work with Footloose" {...field} />
+                <Textarea
+                  rows={5}
+                  placeholder="Share why you want to work with Footloose"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -371,17 +414,17 @@ export function CareerApplicationForm() {
         </Button>
       </form>
     </Form>
-  )
+  );
 }
 
 function extractFile(value: unknown): File | undefined {
-  if (!value) return undefined
-  if (value instanceof File) return value
+  if (!value) return undefined;
+  if (value instanceof File) return value;
   if (value instanceof FileList) {
-    return value.length > 0 ? value[0] : undefined
+    return value.length > 0 ? value[0] : undefined;
   }
   if (Array.isArray(value)) {
-    return value[0] instanceof File ? (value[0] as File) : undefined
+    return value[0] instanceof File ? (value[0] as File) : undefined;
   }
-  return undefined
+  return undefined;
 }

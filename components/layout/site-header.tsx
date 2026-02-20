@@ -40,7 +40,7 @@ const primaryNav = [
   // { href: "/costume-rental", label: "Costume Rental", icon: Shirt },
   { href: "/gallery", label: "Gallery", icon: Image },
   // { href: "/blog", label: "Blog", icon: BookOpen },
-  { href: "/alumni", label: "Alumni", icon: Users },
+  // { href: "/alumni", label: "Alumni", icon: Users },
   { href: "/contact", label: "Contact", icon: Mail },
 ];
 
