@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useState, useEffect, useCallback, useMemo } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import type { Metadata } from "next";
+import VenueMap from "./VenueMap";
+import { type Seat, SECTION_META } from "./venue-data";
 
 /* ──────────────────────────────────────────────
    CONSTANTS
@@ -14,49 +15,8 @@ const VENUE_NAME = "Hindustan Concert Ground";
 const VENUE_MAP_LINK =
   "https://maps.app.goo.gl/PJStNrJ18h5PuxR28";
 
-interface SeatCategory {
-  id: string;
-  label: string;
-  seats: string[];
-  price: number;
-  color: string;
-  description: string;
-}
-
-const SEAT_CATEGORIES: SeatCategory[] = [
-  {
-    id: "fed",
-    label: "FED Series – VIP",
-    seats: ["FED1", "FED2"],
-    price: 5000,
-    color: "#FFD700",
-    description: "Front-row VIP Sofa seating",
-  },
-  {
-    id: "fl",
-    label: "FL Series – Premium",
-    seats: ["FL1", "FL2", "FL3", "FL4"],
-    price: 3000,
-    color: "#C0A050",
-    description: "Premium seating with Round Table",
-  },
-  {
-    id: "ch",
-    label: "CH Series – Standard",
-    seats: ["CH-A", "CH-B", "CH-C", "CH-D", "CH-E", "CH-F", "CH-G"],
-    price: 1500,
-    color: "#A08040",
-    description: "Comfortable standard seating",
-  },
-//   {
-//     id: "visitor",
-//     label: "CH – Visitor Pass",
-//     seats: ["CH-Visitor"],
-//     price: 300,
-//     color: "#806030",
-//     description: "General visitor standing / overflow pass",
-//   },
-];
+/* category list for the pricing cards section */
+const PRICE_CARDS = Object.values(SECTION_META).filter((s) => s.price > 0);
 
 /* ──────────────────────────────────────────────
    PARTICLE BACKGROUND (canvas‑based)
@@ -297,13 +257,19 @@ interface BookingFormData {
   count: number;
 }
 
+interface BookingCategory {
+  label: string;
+  price: number;
+  color: string;
+}
+
 function BookingForm({
   selectedSeat,
   category,
   onClose,
 }: {
   selectedSeat: string;
-  category: SeatCategory;
+  category: BookingCategory;
   onClose: () => void;
 }) {
   const [form, setForm] = useState<BookingFormData>({
@@ -551,94 +517,7 @@ function BookingForm({
   );
 }
 
-/* ──────────────────────────────────────────────
-   SEAT CARD COMPONENT
-   ────────────────────────────────────────────── */
-
-function SeatCard({
-  seat,
-  category,
-  isSelected,
-  onSelect,
-}: {
-  seat: string;
-  category: SeatCategory;
-  isSelected: boolean;
-  onSelect: () => void;
-}) {
-  return (
-    <motion.button
-      whileHover={{ scale: 1.05, y: -4 }}
-      whileTap={{ scale: 0.95 }}
-      onClick={onSelect}
-      className="relative px-5 py-3 rounded-xl text-sm font-bold uppercase tracking-wider transition-all"
-      style={{
-        background: isSelected
-          ? `linear-gradient(135deg, ${category.color}, ${category.color}88)`
-          : "rgba(255,255,255,0.03)",
-        border: `1px solid ${isSelected ? category.color : "rgba(255,215,0,0.1)"}`,
-        color: isSelected ? "#000" : category.color,
-        boxShadow: isSelected
-          ? `0 0 25px ${category.color}33`
-          : "0 0 0 transparent",
-      }}
-    >
-      {seat}
-      {isSelected && (
-        <motion.span
-          layoutId="seat-check"
-          className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full flex items-center justify-center text-[10px]"
-          style={{ background: category.color, color: "#000" }}
-        >
-          ✓
-        </motion.span>
-      )}
-    </motion.button>
-  );
-}
-
-/* ──────────────────────────────────────────────
-   STAGE VISUAL
-   ────────────────────────────────────────────── */
-
-function StageVisual() {
-  return (
-    <div className="w-full flex flex-col items-center mb-8">
-      <motion.div
-        className="relative w-full max-w-lg h-14 rounded-t-[100%] flex items-center justify-center overflow-hidden"
-        style={{
-          background:
-            "linear-gradient(180deg, rgba(255,215,0,0.2), rgba(255,215,0,0.05))",
-          border: "1px solid rgba(255,215,0,0.15)",
-          borderBottom: "2px solid rgba(255,215,0,0.3)",
-        }}
-      >
-        <motion.div
-          className="absolute inset-0"
-          style={{
-            background:
-              "linear-gradient(90deg, transparent, rgba(255,215,0,0.1), transparent)",
-          }}
-          animate={{ x: ["-100%", "100%"] }}
-          transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-        />
-        <span
-          className="text-xs uppercase tracking-[0.3em] font-semibold relative z-10"
-          style={{ color: "rgba(255,215,0,0.7)" }}
-        >
-          ✦ Stage ✦
-        </span>
-      </motion.div>
-      <div
-        className="w-3/4 h-px"
-        style={{
-          background:
-            "linear-gradient(90deg, transparent, rgba(255,215,0,0.2), transparent)",
-        }}
-      />
-    </div>
-  );
-}
+/* SeatCard and StageVisual moved to VenueMap.tsx */
 
 /* ──────────────────────────────────────────────
    MAIN PAGE COMPONENT
@@ -646,18 +525,17 @@ function StageVisual() {
 
 export default function AnnualDay2026() {
   const countdown = useCountdown(EVENT_DATE);
-  const [selectedSeat, setSelectedSeat] = useState<string | null>(null);
+  const [selectedSeatObj, setSelectedSeatObj] = useState<Seat | null>(null);
   const [showBooking, setShowBooking] = useState(false);
 
-  const selectedCategory = useMemo(
-    () =>
-      SEAT_CATEGORIES.find((c) => c.seats.includes(selectedSeat || "")) ||
-      null,
-    [selectedSeat]
-  );
+  const selectedCategory: BookingCategory | null = useMemo(() => {
+    if (!selectedSeatObj) return null;
+    const meta = SECTION_META[selectedSeatObj.section];
+    return { label: meta.label, price: meta.price, color: meta.color };
+  }, [selectedSeatObj]);
 
   const handleProceedToBook = () => {
-    if (selectedSeat && selectedCategory) {
+    if (selectedSeatObj && selectedCategory) {
       setShowBooking(true);
     }
   };
@@ -911,14 +789,14 @@ export default function AnnualDay2026() {
       </section>
 
       {/* ── TICKET / SEAT SELECTION SECTION ── */}
-      <section className="relative z-10 px-4 py-20 max-w-5xl mx-auto">
+      <section className="relative z-10 px-4 py-20 max-w-6xl mx-auto">
         {/* Section header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="text-center mb-16"
+          className="text-center mb-12"
         >
           <span
             className="text-xs uppercase tracking-[0.3em] font-medium"
@@ -929,91 +807,39 @@ export default function AnnualDay2026() {
           <h2
             className="text-3xl sm:text-4xl md:text-5xl font-black mt-2"
             style={{
-              background:
-                "linear-gradient(135deg, #FFD700, #FFA500)",
+              background: "linear-gradient(135deg, #FFD700, #FFA500)",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
             }}
           >
-            Choose Your Seat
+            Venue Seating Map
           </h2>
           <p
             className="mt-3 max-w-lg mx-auto text-sm"
             style={{ color: "rgba(255,215,0,0.4)" }}
           >
-            Select your preferred seating category and position below
+            Tap any seat to select it, then proceed to book
           </p>
         </motion.div>
 
-        {/* Stage */}
-        <StageVisual />
-
-        {/* Seat categories */}
-        <div className="space-y-8">
-          {SEAT_CATEGORIES.map((cat, catIdx) => (
-            <motion.div
-              key={cat.id}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: catIdx * 0.1 }}
-              className="rounded-2xl p-6 sm:p-8"
-              style={{
-                background:
-                  "linear-gradient(135deg, rgba(255,255,255,0.02), rgba(0,0,0,0.3))",
-                border: "1px solid rgba(255,215,0,0.06)",
-              }}
-            >
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-5">
-                <div>
-                  <h3
-                    className="text-lg font-bold"
-                    style={{ color: cat.color }}
-                  >
-                    {cat.label}
-                  </h3>
-                  <p className="text-xs text-gray-500 mt-0.5">
-                    {cat.description}
-                  </p>
-                </div>
-                <div
-                  className="text-xl sm:text-2xl font-black"
-                  style={{ color: cat.color }}
-                >
-                  ₹{cat.price.toLocaleString("en-IN")}
-                  <span
-                    className="text-xs font-normal ml-1"
-                    style={{ color: `${cat.color}88` }}
-                  >
-                    / seat
-                  </span>
-                </div>
-              </div>
-              <div className="flex flex-wrap gap-3">
-                {cat.seats.map((seat) => (
-                  <SeatCard
-                    key={seat}
-                    seat={seat}
-                    category={cat}
-                    isSelected={selectedSeat === seat}
-                    onSelect={() =>
-                      setSelectedSeat(selectedSeat === seat ? null : seat)
-                    }
-                  />
-                ))}
-              </div>
-            </motion.div>
-          ))}
-        </div>
+        {/* Interactive Venue Map */}
+        <VenueMap
+          selectedSeatId={selectedSeatObj?.id || null}
+          onSeatSelect={(seat) =>
+            setSelectedSeatObj(
+              selectedSeatObj?.id === seat.id ? null : seat
+            )
+          }
+        />
 
         {/* Proceed button */}
         <AnimatePresence>
-          {selectedSeat && selectedCategory && (
+          {selectedSeatObj && selectedCategory && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 20 }}
-              className="mt-12 text-center"
+              className="mt-10 text-center"
             >
               <div
                 className="inline-flex flex-col items-center gap-4 p-6 rounded-2xl"
@@ -1027,7 +853,7 @@ export default function AnnualDay2026() {
                 <p className="text-sm text-amber-400/60">
                   Selected:{" "}
                   <span className="font-bold text-amber-400">
-                    {selectedSeat}
+                    {selectedSeatObj.id}
                   </span>{" "}
                   •{" "}
                   <span style={{ color: selectedCategory.color }}>
@@ -1045,8 +871,7 @@ export default function AnnualDay2026() {
                     boxShadow: "0 4px 30px rgba(255,215,0,0.3)",
                   }}
                 >
-                  <span>🎟️</span>
-                  Buy Your Ticket – ₹
+                  Book {selectedSeatObj.id} – ₹
                   {selectedCategory.price.toLocaleString("en-IN")}
                 </motion.button>
               </div>
@@ -1067,8 +892,7 @@ export default function AnnualDay2026() {
           <h2
             className="text-3xl sm:text-4xl font-black"
             style={{
-              background:
-                "linear-gradient(135deg, #FFD700, #FFA500)",
+              background: "linear-gradient(135deg, #FFD700, #FFA500)",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
             }}
@@ -1077,8 +901,8 @@ export default function AnnualDay2026() {
           </h2>
         </motion.div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {SEAT_CATEGORIES.map((cat, i) => (
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          {PRICE_CARDS.map((cat, i) => (
             <motion.div
               key={cat.id}
               initial={{ opacity: 0, y: 20 }}
@@ -1093,13 +917,11 @@ export default function AnnualDay2026() {
                 border: `1px solid ${cat.color}22`,
               }}
               onClick={() => {
-                setSelectedSeat(cat.seats[0]);
                 document
                   .getElementById("seat-section")
                   ?.scrollIntoView({ behavior: "smooth" });
               }}
             >
-              {/* Glow on hover */}
               <div
                 className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
                 style={{
@@ -1131,7 +953,7 @@ export default function AnnualDay2026() {
                 {cat.label}
               </div>
               <div className="text-xs text-gray-600">
-                {cat.seats.join(" • ")}
+                {cat.description}
               </div>
               <motion.div
                 className="mt-4 text-xs font-semibold uppercase tracking-wider"
@@ -1178,9 +1000,9 @@ export default function AnnualDay2026() {
 
       {/* ── BOOKING MODAL ── */}
       <AnimatePresence>
-        {showBooking && selectedSeat && selectedCategory && (
+        {showBooking && selectedSeatObj && selectedCategory && (
           <BookingForm
-            selectedSeat={selectedSeat}
+            selectedSeat={selectedSeatObj.id}
             category={selectedCategory}
             onClose={() => setShowBooking(false)}
           />
@@ -1189,7 +1011,7 @@ export default function AnnualDay2026() {
 
       {/* Floating CTA for mobile */}
       <AnimatePresence>
-        {selectedSeat && selectedCategory && !showBooking && (
+        {selectedSeatObj && selectedCategory && !showBooking && (
           <motion.div
             initial={{ y: 100, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
@@ -1210,7 +1032,7 @@ export default function AnnualDay2026() {
                 boxShadow: "0 -4px 30px rgba(255,215,0,0.2)",
               }}
             >
-              🎟️ Book {selectedSeat} – ₹
+              🎟️ Book {selectedSeatObj.id} – ₹
               {selectedCategory.price.toLocaleString("en-IN")}
             </motion.button>
           </motion.div>
