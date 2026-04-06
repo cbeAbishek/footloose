@@ -8,6 +8,7 @@ import { Analytics } from "@vercel/analytics/next";
 
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
+import { ConditionalLayout } from "@/components/layout/conditional-layout";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
 import { LoadingScreen } from "@/components/loading-screen";
@@ -236,19 +237,12 @@ export default function RootLayout({
           `}
         </Script>
         <ThemeProvider attribute="class" enableSystem defaultTheme="system">
-          <div className="flex min-h-screen flex-col bg-background text-foreground">
-            <a
-              href="#main-content"
-              className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-foreground focus:px-4 focus:py-2 focus:text-background"
-            >
-              Skip to content
-            </a>
-            <SiteHeader />
-            <main id="main-content" className="flex-1 pt-14 sm:pt-16 md:pt-20">
-              <Suspense>{children}</Suspense>
-            </main>
-            <SiteFooter />
-          </div>
+          <ConditionalLayout
+            header={<SiteHeader />}
+            footer={<SiteFooter />}
+          >
+            <Suspense>{children}</Suspense>
+          </ConditionalLayout>
 
           <Analytics />
           <Toaster />
