@@ -2,8 +2,16 @@
 
 import React, { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Rubik_Glitch } from "next/font/google";
+import { HeroGeometric } from "@/components/ui/shape-landing-hero";
 import VenueMap from "./VenueMap";
 import { type Seat, SECTION_META } from "./venue-data";
+
+const rubikGlitch = Rubik_Glitch({
+  weight: "400",
+  subsets: ["latin"],
+  display: "swap",
+});
 
 /* ──────────────────────────────────────────────
    CONSTANTS
@@ -12,8 +20,7 @@ import { type Seat, SECTION_META } from "./venue-data";
 const EVENT_DATE = new Date("2026-04-12T17:00:00+05:30");
 const WHATSAPP_NUMBER = "919500885608";
 const VENUE_NAME = "Hindustan Concert Ground";
-const VENUE_MAP_LINK =
-  "https://maps.app.goo.gl/PJStNrJ18h5PuxR28";
+const VENUE_MAP_LINK = "https://maps.app.goo.gl/PJStNrJ18h5PuxR28";
 
 /* category list for the pricing cards section */
 const PRICE_CARDS = Object.values(SECTION_META).filter((s) => s.price > 0);
@@ -131,13 +138,7 @@ function useCountdown(target: Date) {
   return { days, hours, minutes, seconds, isPast: diff === 0 };
 }
 
-function CountdownBlock({
-  value,
-  label,
-}: {
-  value: number;
-  label: string;
-}) {
+function CountdownBlock({ value, label }: { value: number; label: string }) {
   return (
     <div className="flex flex-col items-center">
       <div
@@ -292,12 +293,13 @@ function BookingForm({
         `💺 Seat: ${selectedSeat} (${category.label})\n` +
         `🎟️ Tickets: ${form.count}\n` +
         `💰 Total: ₹${totalPrice.toLocaleString("en-IN")}\n\n` +
-        `Please confirm my booking. Thank you!`
+        `Please confirm my booking. Thank you!`,
     );
     window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${message}`, "_blank");
   };
 
-  const isValid = form.name.trim() && form.phone.trim() && form.studentName.trim();
+  const isValid =
+    form.name.trim() && form.phone.trim() && form.studentName.trim();
 
   return (
     <motion.div
@@ -340,10 +342,7 @@ function BookingForm({
           >
             🎟️
           </motion.div> */}
-          <h3
-            className="text-xl font-bold"
-            style={{ color: "#FFD700" }}
-          >
+          <h3 className="text-xl font-bold" style={{ color: "#FFD700" }}>
             Book Your Ticket
           </h3>
           <p className="text-amber-400/60 text-sm mt-1">
@@ -428,7 +427,7 @@ function BookingForm({
           {/* Ticket count */}
           <div>
             <label className="block text-xs uppercase tracking-wider text-amber-400/60 mb-1.5">
-             Number of Tickets
+              Number of Tickets
             </label>
             <div className="flex items-center gap-3">
               <button
@@ -473,10 +472,7 @@ function BookingForm({
             }}
           >
             <span className="text-sm text-amber-400/70">Total Amount</span>
-            <span
-              className="text-2xl font-bold"
-              style={{ color: "#FFD700" }}
-            >
+            <span className="text-2xl font-bold" style={{ color: "#FFD700" }}>
               ₹{totalPrice.toLocaleString("en-IN")}
             </span>
           </div>
@@ -492,9 +488,7 @@ function BookingForm({
               background: isValid
                 ? "linear-gradient(135deg, #FFD700, #FFA500)"
                 : "rgba(255,215,0,0.2)",
-              boxShadow: isValid
-                ? "0 4px 30px rgba(255,215,0,0.3)"
-                : "none",
+              boxShadow: isValid ? "0 4px 30px rgba(255,215,0,0.3)" : "none",
             }}
           >
             <svg
@@ -551,9 +545,84 @@ export default function AnnualDay2026() {
       <AIGridDecoration />
 
       {/* ── HERO SECTION ── */}
-      <section className="relative z-10 flex flex-col items-center justify-center min-h-[100vh] px-4 text-center">
-        {/* Top AI eye decoration */}
-        {/* <motion.div
+      <section className="relative z-10">
+        <HeroGeometric
+          badge="2026"
+          title1="FEDSI"
+          title2="Annual Day"
+          quote="The Future is Here"
+          titleClassName={rubikGlitch.className}
+        >
+          <motion.div className="flex gap-4 sm:gap-6 justify-center">
+            <CountdownBlock value={countdown.days} label="Days" />
+            <CountdownBlock value={countdown.hours} label="Hours" />
+            <CountdownBlock value={countdown.minutes} label="Mins" />
+            <CountdownBlock value={countdown.seconds} label="Secs" />
+          </motion.div>
+
+          <motion.div className="mt-6 flex flex-col items-center gap-3">
+            <div
+              className="flex items-center gap-2 text-sm"
+              style={{ color: "rgba(255,215,0,0.7)" }}
+            >
+              <span>{VENUE_NAME}</span>
+            </div>
+            <motion.a
+              href={VENUE_MAP_LINK}
+              target="_blank"
+              rel="noopener noreferrer"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="flex items-center gap-2 px-5 py-2 rounded-full text-sm font-semibold transition-all"
+              style={{
+                background: "rgba(255,215,0,0.1)",
+                border: "1px solid rgba(255,215,0,0.2)",
+                color: "#FFD700",
+              }}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                <circle cx="12" cy="10" r="3" />
+              </svg>
+              Get Location
+            </motion.a>
+          </motion.div>
+
+          <motion.button
+            type="button"
+            onClick={() =>
+              document
+                .getElementById("seat-section")
+                ?.scrollIntoView({ behavior: "smooth" })
+            }
+            className="mt-6 inline-flex flex-col items-center gap-2 text-xs sm:text-sm uppercase tracking-[0.22em]"
+            style={{ color: "rgba(255,231,160,0.85)" }}
+            animate={{ y: [0, 8, 0] }}
+            transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+          >
+            <span>To Book Tickets</span>
+            <span className="text-lg" style={{ color: "#FFD700" }}>
+              ↓
+            </span>
+          </motion.button>
+        </HeroGeometric>
+      </section>
+
+      {/* Legacy hero fallback */}
+      {false && (
+        <section className="relative z-10 flex flex-col items-center justify-center min-h-[100vh] px-4 text-center">
+          {/* Top AI eye decoration */}
+          {/* <motion.div
           initial={{ opacity: 0, scale: 0.5 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1.2, ease: "easeOut" }}
@@ -597,199 +666,203 @@ export default function AnnualDay2026() {
           </div>
         </motion.div> */}
 
-        {/* FEDSI branding */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.3 }}
-          className="mb-2"
-        >
-          <span
-            className="text-xs sm:text-sm uppercase tracking-[0.4em] font-medium"
-            style={{ color: "rgba(255,215,0,0.5)" }}
+          {/* FEDSI branding */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="mb-2"
           >
-            Footloose Edwin&apos;s Dance Company Presents
-          </span>
-        </motion.div>
+            <span
+              className="text-xs sm:text-sm uppercase tracking-[0.4em] font-medium"
+              style={{ color: "rgba(255,215,0,0.5)" }}
+            >
+              Footloose Edwin&apos;s Dance Company Presents
+            </span>
+          </motion.div>
 
-        {/* Main title */}
-        <motion.h1
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.5 }}
-          className="relative"
-        >
-          <span
-            className="block text-6xl sm:text-8xl md:text-9xl font-black tracking-tight"
-            style={{
-              background: "linear-gradient(135deg, #FFD700, #FFA500, #FFD700)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              filter: "drop-shadow(0 0 30px rgba(255,215,0,0.2))",
-            }}
+          {/* Main title */}
+          <motion.h1
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.5 }}
+            className="relative"
           >
-            Annual Day
-          </span>
-          <motion.span
-            className="block text-lg sm:text-xl md:text-2xl font-light tracking-[0.5em] mt-2"
-            style={{ color: "rgba(255,215,0,0.6)" }}
-            animate={{ opacity: [0.5, 1, 0.5] }}
-            transition={{ duration: 3, repeat: Infinity }}
-          >
-            2 0 2 6
-          </motion.span>
-        </motion.h1>
+            <span
+              className="block text-6xl sm:text-8xl md:text-9xl font-black tracking-tight"
+              style={{
+                background:
+                  "linear-gradient(135deg, #FFD700, #FFA500, #FFD700)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                filter: "drop-shadow(0 0 30px rgba(255,215,0,0.2))",
+              }}
+            >
+              Annual Day
+            </span>
+            <motion.span
+              className="block text-lg sm:text-xl md:text-2xl font-light tracking-[0.5em] mt-2"
+              style={{ color: "rgba(255,215,0,0.6)" }}
+              animate={{ opacity: [0.5, 1, 0.5] }}
+              transition={{ duration: 3, repeat: Infinity }}
+            >
+              2 0 2 6
+            </motion.span>
+          </motion.h1>
 
-        {/* FEDSI badge */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, delay: 0.8 }}
-          className="mt-6 mb-4"
-        >
-          <div
-            className="inline-flex items-center gap-3 px-6 py-3 rounded-xl"
-            style={{
-              background:
-                "linear-gradient(135deg, rgba(255,215,0,0.1), rgba(0,0,0,0.5))",
-              border: "1px solid rgba(255,215,0,0.2)",
-              boxShadow: "0 0 30px rgba(255,215,0,0.05)",
-            }}
+          {/* FEDSI badge */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, delay: 0.8 }}
+            className="mt-6 mb-4"
           >
-            {/* <motion.div
+            <div
+              className="inline-flex items-center gap-3 px-6 py-3 rounded-xl"
+              style={{
+                background:
+                  "linear-gradient(135deg, rgba(255,215,0,0.1), rgba(0,0,0,0.5))",
+                border: "1px solid rgba(255,215,0,0.2)",
+                boxShadow: "0 0 30px rgba(255,215,0,0.05)",
+              }}
+            >
+              {/* <motion.div
               className="w-2 h-2 rounded-full"
               style={{ background: "#FFD700" }}
               animate={{ opacity: [1, 0.3, 1] }}
               transition={{ duration: 1.5, repeat: Infinity }}
             /> */}
-            <span
-              className="text-2xl sm:text-3xl md:text-4xl font-black tracking-[0.2em]"
-              style={{ color: "#FFD700" }}
-            >
-              FEDSI
-            </span>
-            {/* <motion.div
+              <span
+                className={`${rubikGlitch.className} text-2xl sm:text-3xl md:text-4xl tracking-[0.2em]`}
+                style={{ color: "#FFD700" }}
+              >
+                FEDSI
+              </span>
+              {/* <motion.div
               className="w-2 h-2 rounded-full"
               style={{ background: "#FFD700" }}
               animate={{ opacity: [0.3, 1, 0.3] }}
               transition={{ duration: 1.5, repeat: Infinity }}
             /> */}
-          </div>
-        </motion.div>
+            </div>
+          </motion.div>
 
-        {/* Quote */}
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 1 }}
-          className="text-lg sm:text-xl md:text-2xl font-light italic tracking-wide"
-          style={{ color: "rgba(255,215,0,0.7)" }}
-        >
-          &ldquo;The Future is Here&rdquo;
-        </motion.p>
-
-        {/* Countdown */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 1.3 }}
-          className="mt-10 flex gap-4 sm:gap-6"
-        >
-          <CountdownBlock value={countdown.days} label="Days" />
-          <CountdownBlock value={countdown.hours} label="Hours" />
-          <CountdownBlock value={countdown.minutes} label="Mins" />
-          <CountdownBlock value={countdown.seconds} label="Secs" />
-        </motion.div>
-
-        {/* Event info badges */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 1.6 }}
-          className="mt-10 flex flex-col sm:flex-row items-center gap-4"
-        >
-          <div
-            className="flex items-center gap-2 px-5 py-2.5 rounded-full text-sm"
-            style={{
-              background: "rgba(255,215,0,0.06)",
-              border: "1px solid rgba(255,215,0,0.12)",
-              color: "rgba(255,215,0,0.8)",
-            }}
+          {/* Quote */}
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 1 }}
+            className="text-lg sm:text-xl md:text-2xl font-light italic tracking-wide"
+            style={{ color: "rgba(255,215,0,0.7)" }}
           >
-            <span></span>
-            <span className="font-semibold">12th April 2026</span>
-            <span className="text-amber-400/40">|</span>
-            <span>5:00 PM Onwards</span>
-          </div>
-        </motion.div>
+            &ldquo;The Future is Here&rdquo;
+          </motion.p>
 
-        {/* Venue */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 1.8 }}
-          className="mt-4 flex flex-col items-center gap-3"
-        >
-          <div
-            className="flex items-center gap-2 text-sm"
-            style={{ color: "rgba(255,215,0,0.6)" }}
+          {/* Countdown */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 1.3 }}
+            className="mt-10 flex gap-4 sm:gap-6"
           >
-            
-            <span>{VENUE_NAME}</span>
-          </div>
-          <motion.a
-            href={VENUE_MAP_LINK}
-            target="_blank"
-            rel="noopener noreferrer"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="flex items-center gap-2 px-5 py-2 rounded-full text-sm font-semibold transition-all"
-            style={{
-              background: "rgba(255,215,0,0.1)",
-              border: "1px solid rgba(255,215,0,0.2)",
-              color: "#FFD700",
-            }}
+            <CountdownBlock value={countdown.days} label="Days" />
+            <CountdownBlock value={countdown.hours} label="Hours" />
+            <CountdownBlock value={countdown.minutes} label="Mins" />
+            <CountdownBlock value={countdown.seconds} label="Secs" />
+          </motion.div>
+
+          {/* Event info badges */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 1.6 }}
+            className="mt-10 flex flex-col sm:flex-row items-center gap-4"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
+            <div
+              className="flex items-center gap-2 px-5 py-2.5 rounded-full text-sm"
+              style={{
+                background: "rgba(255,215,0,0.06)",
+                border: "1px solid rgba(255,215,0,0.12)",
+                color: "rgba(255,215,0,0.8)",
+              }}
             >
-              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-              <circle cx="12" cy="10" r="3" />
-            </svg>
-            Get Location
-          </motion.a>
-        </motion.div>
+              <span></span>
+              <span className="font-semibold">12th April 2026</span>
+              <span className="text-amber-400/40">|</span>
+              <span>5:00 PM Onwards</span>
+            </div>
+          </motion.div>
 
-        {/* Scroll indicator */}
-        <motion.div
-          className="absolute bottom-8 left-1/2 -translate-x-1/2"
-          animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 1.5, repeat: Infinity }}
-        >
-          <div
-            className="w-6 h-10 rounded-full flex items-start justify-center pt-2"
-            style={{ border: "1px solid rgba(255,215,0,0.2)" }}
+          {/* Venue */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 1.8 }}
+            className="mt-4 flex flex-col items-center gap-3"
           >
-            <motion.div
-              className="w-1.5 h-3 rounded-full"
-              style={{ background: "rgba(255,215,0,0.4)" }}
-              animate={{ opacity: [1, 0.3, 1] }}
-              transition={{ duration: 1.5, repeat: Infinity }}
-            />
-          </div>
-        </motion.div>
-      </section>
+            <div
+              className="flex items-center gap-2 text-sm"
+              style={{ color: "rgba(255,215,0,0.6)" }}
+            >
+              <span>{VENUE_NAME}</span>
+            </div>
+            <motion.a
+              href={VENUE_MAP_LINK}
+              target="_blank"
+              rel="noopener noreferrer"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="flex items-center gap-2 px-5 py-2 rounded-full text-sm font-semibold transition-all"
+              style={{
+                background: "rgba(255,215,0,0.1)",
+                border: "1px solid rgba(255,215,0,0.2)",
+                color: "#FFD700",
+              }}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                <circle cx="12" cy="10" r="3" />
+              </svg>
+              Get Location
+            </motion.a>
+          </motion.div>
+
+          {/* Scroll indicator */}
+          <motion.div
+            className="absolute bottom-8 left-1/2 -translate-x-1/2"
+            animate={{ y: [0, 8, 0] }}
+            transition={{ duration: 1.5, repeat: Infinity }}
+          >
+            <div
+              className="w-6 h-10 rounded-full flex items-start justify-center pt-2"
+              style={{ border: "1px solid rgba(255,215,0,0.2)" }}
+            >
+              <motion.div
+                className="w-1.5 h-3 rounded-full"
+                style={{ background: "rgba(255,215,0,0.4)" }}
+                animate={{ opacity: [1, 0.3, 1] }}
+                transition={{ duration: 1.5, repeat: Infinity }}
+              />
+            </div>
+          </motion.div>
+        </section>
+      )}
 
       {/* ── TICKET / SEAT SELECTION SECTION ── */}
-      <section className="relative z-10 px-4 py-20 max-w-6xl mx-auto">
+      <section
+        id="seat-section"
+        className="relative z-10 px-4 py-20 max-w-6xl mx-auto"
+      >
         {/* Section header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -826,9 +899,7 @@ export default function AnnualDay2026() {
         <VenueMap
           selectedSeatId={selectedSeatObj?.id || null}
           onSeatSelect={(seat) =>
-            setSelectedSeatObj(
-              selectedSeatObj?.id === seat.id ? null : seat
-            )
+            setSelectedSeatObj(selectedSeatObj?.id === seat.id ? null : seat)
           }
         />
 
@@ -866,8 +937,7 @@ export default function AnnualDay2026() {
                   onClick={handleProceedToBook}
                   className="px-10 py-4 rounded-xl text-black font-bold text-base uppercase tracking-wider flex items-center gap-3"
                   style={{
-                    background:
-                      "linear-gradient(135deg, #FFD700, #FFA500)",
+                    background: "linear-gradient(135deg, #FFD700, #FFA500)",
                     boxShadow: "0 4px 30px rgba(255,215,0,0.3)",
                   }}
                 >
@@ -952,9 +1022,7 @@ export default function AnnualDay2026() {
               >
                 {cat.label}
               </div>
-              <div className="text-xs text-gray-600">
-                {cat.description}
-              </div>
+              <div className="text-xs text-gray-600">{cat.description}</div>
               <motion.div
                 className="mt-4 text-xs font-semibold uppercase tracking-wider"
                 style={{ color: cat.color }}
@@ -989,10 +1057,7 @@ export default function AnnualDay2026() {
           >
             Footloose Edwin&apos;s Dance Company
           </p>
-          <p
-            className="text-xs"
-            style={{ color: "rgba(255,215,0,0.15)" }}
-          >
+          <p className="text-xs" style={{ color: "rgba(255,215,0,0.15)" }}>
             ANNUALE 2026 • FEDSI • &ldquo;The Future is Here&rdquo;
           </p>
         </motion.div>
@@ -1027,8 +1092,7 @@ export default function AnnualDay2026() {
               onClick={handleProceedToBook}
               className="w-full py-3.5 rounded-xl text-black font-bold text-sm uppercase tracking-wider flex items-center justify-center gap-2"
               style={{
-                background:
-                  "linear-gradient(135deg, #FFD700, #FFA500)",
+                background: "linear-gradient(135deg, #FFD700, #FFA500)",
                 boxShadow: "0 -4px 30px rgba(255,215,0,0.2)",
               }}
             >
