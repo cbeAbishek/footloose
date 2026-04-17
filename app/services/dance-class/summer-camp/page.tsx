@@ -47,13 +47,8 @@ export default function SummerCampPage() {
         phoneDigits.length >= 8
           ? ""
           : "Enter a valid phone number with at least 8 digits",
-      enquiryContent:
-        formValues.enquiryContent.trim().length >= 10
-          ? ""
-          : "Add at least 10 characters in the enquiry content",
     }),
     [
-      formValues.enquiryContent,
       formValues.parentName,
       formValues.studentAge,
       formValues.studentName,
@@ -81,7 +76,7 @@ export default function SummerCampPage() {
       `Mobile Number: ${values.phoneNumber}`,
       "",
       "Additional Information Need to Know:",
-      values.enquiryContent,
+      values.enquiryContent.trim() || "Not provided",
       "",
       "Please share the next steps and fee details. Thank you!",
     ].join("\n");
@@ -204,7 +199,7 @@ export default function SummerCampPage() {
 
               <div className="space-y-2">
                 <Label htmlFor="enquiryContent">
-                  Additional Information Need to Know *
+                  Additional Information Need to Know
                 </Label>
                 <Textarea
                   id="enquiryContent"
@@ -215,16 +210,10 @@ export default function SummerCampPage() {
                     updateField("enquiryContent", event.target.value)
                   }
                 />
-                {showValidation && errors.enquiryContent ? (
-                  <p className="text-xs text-red-500">
-                    {errors.enquiryContent}
-                  </p>
-                ) : (
-                  <p className="text-xs text-zinc-500 dark:text-zinc-400">
-                    This content will be added directly to the preloaded
-                    WhatsApp message.
-                  </p>
-                )}
+                <p className="text-xs text-zinc-500 dark:text-zinc-400">
+                  This content is optional and will be added to the preloaded
+                  WhatsApp message if provided.
+                </p>
               </div>
 
               <Button
